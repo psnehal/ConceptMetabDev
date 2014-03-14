@@ -20,6 +20,30 @@
     }
 
 
+    function validation(source)
+    {
+
+    	checkboxes = document.getElementsByName('statement');
+		
+		var check = true;
+
+		 for (var i =0, n=checkboxes.length;i<n;i++)
+		  {
+		  if(checkboxes[i].checked)
+			  {
+
+				check = false;
+			  }
+		  }
+
+		  if(check)
+			  {
+
+				alert("Please atlest select one database to see results");
+			  }
+
+        }
+
    
 </script>
 
@@ -116,16 +140,13 @@
   <body>
    
   
-   <g:form action="redirectView" method="get" id="myform">
-   
+   <g:form action="redirectView" method="get" id="myform">   
 	<table id ="chart"> 
 	<tr><td> <div id="chart_div" ></div></td>
-	<td>  
-	     
+	<td>       
 	      <table id = "chart">
 	      <td><span class="formText">Select database to see results</span></td>
 	      <tr>
-	     
 	      </tr>
 	      	<g:each in="${map}" status="i" var="test">
 			 <tr>
@@ -134,29 +155,25 @@
 			<td>${test.getValue() }</td> </tr> 
 		    </g:each>
 		    <td><g:checkBox name="checkAllAuto" value="all" id="checkAllAuto" onclick="checkAll(this);" checked="false" />All</p></td><td>${rsize }</td>
-		    <td><g:submitButton name="chart" class="submit"/></td>
+		    <td><g:submitButton name="chart" class="submit" /></td>
 		    </table>
 	</td>
 	</tr>
-
-   <tr><td><br/><br/> <h1>Visualize / Check Results</h1></td>
-   <tr> <g:hiddenField name="id2"  value="${params.id2 }"/>
+   <tr><td><br/><br/> </td>
+   <tr></tr>
+   </table>
+   <center>
+   <h1>Visualize / Check Results</h1>
+    <g:hiddenField name="id2"  value="${params.id2 }"/>
 	   <g:hiddenField name="id1"  value="1.45e-323"/>
 	   <g:hiddenField name="q" value="${params.q}" />
 	   <g:hiddenField name="odds" value="${params.odds}" />
 	   <g:hiddenField name="fil" value="${params.fil}" />
-	   <td><g:submitButton name="network" class="submit"/>	
-	   <g:submitButton name="table" class="submit"/>
-	   <g:submitButton name="heatmap" class="submit"/>
-	   <g:submitButton name="CompleteNetwork" class="submit"/></td>
-	  
-	   </tr>
-   
-   </table>
-  
-   
-	  
-
+	   <g:submitButton name="network" value="Network" class="submit"/>	
+	   <g:submitButton name="table" value="Table" class="submit" onclick="validation(this);"/>
+	   <g:submitButton name="heatmap" value="Heatmap" class="submit"/>
+	   <g:submitButton name="CompleteNetwork" value="Complete Network" class="submit"/>
+  </center>   
 	   </g:form>   
   
   </body>

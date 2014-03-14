@@ -10,8 +10,7 @@
   <link rel="stylesheet" href="${resource(dir: 'css', file: 'myTheme.css')}" type="text/css" media="screen">
        
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
- 
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> 
   <g:javascript src="mockup/jQueryRotate.js" />
   <g:javascript src="mockup/jquery.fixedheadertable.js" />
   

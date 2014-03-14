@@ -395,7 +395,8 @@ function favBrowser()
                           <td> <g:textField name="id2" id="id2" value="${params.id2 }"/></td>
                         </tr>
                            
-                          <% def list = params.statement %>   
+                          <% def list = db %>   
+                        
                         <tr> 
                            <td><span class="formTextExp">Odds Ratio </span></td>
                            <td><g:textField name="odds" id="odds" value="${params.odds}" maxlength ="10"/></td> 
@@ -407,8 +408,9 @@ function favBrowser()
 	                    <g:if test="${params.containsKey("slider")}">
 			                          <g:hiddenField name="slider"  value="slider"/>
 			             <tr>
-			             		<td><span class="formText">Databases are :</td>
+			             		<td><span class="formText">Databases are : </td>
 			                           ${list}</span> 
+			                        
 			             </tr>
 			                          <g:hiddenField name="statement" value= '${params.statement}' />
 	                    </g:if>
@@ -420,46 +422,25 @@ function favBrowser()
 					 
 					    </g:else>
 					    <tr>
-					    <td colspan="2"><br/><center><g:submitButton name="Submit"/></center></td>
+					    <td colspan="2">
 					    
-					    
-					    
-                        </tr>
-                        <tr><td><g:submitButton name="CompleteNetwork"/></td></tr>   
+					    <center>
+					    <g:submitButton name="Submit"/>
+					    </center>
+					    </td>
+					    </tr>
+                        <tr> <td colspan="2"><center><g:submitButton name="CompleteNetwork"/></center></td></tr>   
                   </g:form>
                   
                		</table>   
                 </div>
-				<form>
-							Select value:
-							<select id="myList">
-							  <option></option>
-							  <option>Pvalue</option>
-							  <option>Qvalue</option>  
-							</select>
-								 
-							<label for="amount-test"> <span class="footnote">Pvalue range:</span></label>
-							
-								<input type="text" id="amount-test" style="border:0; color:#f6931f; font-weight:bold;" />
-								<div id="slidertest"></div>
-							
-				</form>
+				
 				
 				
 				
 			 
 				
-				<div id = "fieldpanel">
-						Parameters are id1 = ${params.id1} and id2 = ${params.id2} and q= ${params.q } and filter  = ${params.fil} 
-						<g:set var="id1" value="${params.id1}"/>	
-						<g:set var="id2" value="${params.id2}"/>	
-						<g:set var="q" value="${params.q}"/>	
-						<g:set var="fil" value="${params.fil}"/>
-						<g:set var="odds" value="${params.odds}"/>
-						<q:set var ="statement" value ="['MeSH Anatomy', 'MeSH Phenomena and Processes']" />
-						${params.statement.toList()}
-						<span class="property-value" aria-labelledby="original_id-label">	<g:link controller="Enrichments" action="createJson" params="[id1:id1,id2:id2,q:q,fil:fil,odds:odds,statement:statement ]">Click here for complete network</g:link></span>
-				</div>	
+			
 	</div>
 	</body>
 	</html>

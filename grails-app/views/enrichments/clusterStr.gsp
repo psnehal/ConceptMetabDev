@@ -14,35 +14,23 @@
   
        
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
- 
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> 
   <g:javascript src="clusterStr/jQueryRotate.js" />
   <g:javascript src="clusterStr/jquery.fixedheadertable.js" />
   
-   
-        
-      
-  
-  
-  
-      <script>
+  <script>
   $(function() {
   	var w = 100;
   	var h = 40;
     var ang = 90;
     var top = 180;
-console.log('w is' + w + 'h is '+ h);
+    console.log('w is' + w + 'h is '+ h);
     $(".title").rotate({angle:ang});
-    
-   
     });
   </script>
   
   <script>
 //http://jimmybonney.com/articles/column_header_rotation_css/  
- 
-
-	   
   $(function() {
   	var w = 200;
   	var h = 10;

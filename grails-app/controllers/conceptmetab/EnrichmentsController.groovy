@@ -182,8 +182,17 @@ class EnrichmentsController {
 		def con = params.q.toString();
 		def id1 = params.id1.toString();
 		def id2 = params.id2.toString();
-		
-		def db = params.statement.toList()
+		def db = []
+		 
+		 if(params.statement instanceof java.lang.String)
+		 {
+			println("Statement is only one string")
+			db.add(params.statement);
+		 }
+		 else
+		 {
+			 db = params.statement.toList()
+		 }
 	   
 		HashMap jsonMapN = new HashMap()
 		println("db  is"+ db.class)
@@ -605,18 +614,16 @@ def createDb(){
  
  def redirectView()
  {
-	 println("from redirectView"+params)
+	 println("from redirectView"+params.keySet())
 	 def filter = params.fil;
 	 def con = params.q.toString();
 	 def id1 = params.id1.toString();
 	 def id2 = params.id2.toString();
 	 def db = []
-
-	 
-	 
 	 
 	 if(params.statement instanceof java.lang.String)
 	 {
+		println("Statement is only one string")
 		db.add(params.statement);
 	 }
 	 else
@@ -633,7 +640,7 @@ def createDb(){
 	 def map
 	 
 
- 
+ //**************************************************************For Sorting *****************************************
  String fil =params.sort
  String order =params.order
  if(params?.sort && fil.equals("name") && order.equals("asc"))
@@ -655,13 +662,14 @@ println("Sorting by pval")
 	//println("Sorting by qval")
 	map = map.sort{it.qval}
  }
-	 
+ //**************************************************************For Chart Still Working *****************************************
+ 
 if (params.containsKey("chart"))
 {
 		   forward(action: "createChart", params:params)
 }
 
-
+//************************************************************Parameter handling *****************************************
 	 
 	 
 	
@@ -694,7 +702,7 @@ if (params.containsKey("chart"))
 						 //println(dbname.class)
 					
 				
-			println("map size from redirect view is"+map.size())
+			println("Map size from redirect view is : "+map.size())
 			println('params are'+ params)
 			println('db is '+ db + 'db type is' + db.class)
 			println"Class of the Statement param"+(params.statement.class)
@@ -784,6 +792,7 @@ if (params.containsKey("chart"))
 			}
 			*/
 	}
+	 
  }
  def cluster(){
 	 
@@ -1383,12 +1392,24 @@ if (params.containsKey("chart"))
  def filterSlider()
  {
 		 
+		 
 	 println("FilterSlider params"+params)
 	 def check = params.check
 	 def q = params.q
 	 def con = Concepts.get(q.toInteger())
 	 def resultcount = params.ct
-	 def statement = params.statement.toList();
+	 def statement = params.statement;
+	 def db = []
+		  
+	  if(params.statement instanceof java.lang.String)
+	  {
+		 println("Statement is only one string")
+		 db.add(params.statement);
+	  }
+	  else
+	  {
+		  db = params.statement.toList()
+	  }
 	 
 	 if(params.containsKey("json"))
 	 {
@@ -1399,11 +1420,11 @@ if (params.containsKey("chart"))
 	 }
 	
 		 
-	 println("From controller" + check);
+	 println("From controller" + db);
 	 
 	 
 	 
-	 [check:check, resultcount:resultcount, con:con, statemnt:statement]
+	 [check:check, db:db, resultcount:resultcount, con:con]
 		
 		   
 		
@@ -1419,13 +1440,6 @@ if (params.containsKey("chart"))
 	def dbc = params.dbc
 	def q = params.q
 	def con = Concepts.get(q.toInteger())
-	
-	
-	
-	
-	
-	
-	
 	
 	[dbc:dbc, con:con]
 	/*
