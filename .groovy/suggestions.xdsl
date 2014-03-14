@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<projectSuggestions>
+<declaringtype type="java.lang.Object">
+<property isActive="true" isStatic="false" name="emptyList" type="java.util.List">
+<doc/>
+</property>
+</declaringtype>
+<declaringtype type="conceptmetab.SearchableControllerTests">
+<property isActive="true" isStatic="false" name="SearchableController" type="java.lang.Object">
+<doc/>
+</property>
+</declaringtype>
+</projectSuggestions>

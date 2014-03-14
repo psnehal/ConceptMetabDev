@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/cose
+END
+CoarseningEdge.as
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/cose/CoarseningEdge.as
+END
+CoSEEdge.as
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/cose/CoSEEdge.as
+END
+CoarseningNode.as
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/cose/CoarseningNode.as
+END
+CoSENode.as
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/cose/CoSENode.as
+END
+CoSEConstants.as
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/cose/CoSEConstants.as
+END
+CoSEGraphManager.as
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/cose/CoSEGraphManager.as
+END
+CoSELayout.as
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/cose/CoSELayout.as
+END
+CoarseningGraph.as
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/cose/CoarseningGraph.as
+END
+CoSEGraph.as
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/cose/CoSEGraph.as
+END

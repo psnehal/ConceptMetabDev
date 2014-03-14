@@ -1,0 +1,9 @@
+a = c(31, 87, 93, 204, 261, 1908)
+no_col <- max(count.fields("3_qval.csv", sep = ","))
+data = read.table("3_qval.csv",sep=",",fill=TRUE,col.names=1:no_col)
+enriched.concepts <- as.list(as.data.frame(t(data)))
+membership = t(sapply(enriched.concepts, function(enriched.concepts){ as.numeric(a %in% enriched.concepts) }))
+colnames(membership) = a
+rownames(membership) = data[,1]
+m_matrix <- data.matrix(membership)
+nba_heatmap <- heatmap(m_matrix, Rowv=NA, Colv=NA, col = heat.colors(256), scale="column", margins=c(5,10))

@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/29742/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/data
+END
+FirstNeighborsVOTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/18820/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/data/FirstNeighborsVOTest.as
+END
+VisualPropertyVOTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/23322/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/data/VisualPropertyVOTest.as
+END
+VizMapperVOTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/18820/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/data/VizMapperVOTest.as
+END
+InteractionVOTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/data/InteractionVOTest.as
+END
+DiscreteVizMapperVOTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/29742/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/data/DiscreteVizMapperVOTest.as
+END
+ContinuousVizMapperVOTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/21730/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/data/ContinuousVizMapperVOTest.as
+END
+VisualStyleVOTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/28670/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/data/VisualStyleVOTest.as
+END
+ConfigVOTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/19999/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/data/ConfigVOTest.as
+END
+VisualStyleBypassVOTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/23219/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/data/VisualStyleBypassVOTest.as
+END

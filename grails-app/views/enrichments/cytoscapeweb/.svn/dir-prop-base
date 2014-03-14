@@ -1,0 +1,12 @@
+K 10
+svn:ignore
+V 104
+.settings
+.actionScriptProperties
+.flexProperties
+.project
+build
+local.properties
+.externalToolBuilders
+
+END

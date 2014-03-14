@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/30504/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/converters
+END
+ExternalObjectConverterTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/converters/ExternalObjectConverterTest.as
+END
+SIFConverterTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/27247/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/converters/SIFConverterTest.as
+END
+XGMMLConverterTest.as
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/30504/cytoscapeweb/trunk/cytoscapeweb/src-test/org/cytoscapeweb/model/converters/XGMMLConverterTest.as
+END

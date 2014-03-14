@@ -1,0 +1,203 @@
+"584"	"1098"	"3307"	"3508"	"3534"
+"nuclear membrane"	0	0	0	0	0
+"chromosomal part"	0	0	0	0	0
+"guanosine-containing compound catabolic process"	0	0	1	0	0
+"guanosine-containing compound metabolic process"	0	0	0	0	0
+"regulation of purine nucleotide metabolic process"	0	1	0	0	0
+"positive regulation of cell motility"	0	0	0	1	1
+"regulation of cell motility"	0	1	1	0	0
+"chromosome"	0	0	0	1	1
+"cell leading edge"	0	0	0	0	0
+"phospholipase activity"	0	1	0	1	0
+"phospholipid binding"	0	1	0	0	0
+"calcium ion binding"	0	0	0	0	0
+"lipase activity"	0	0	0	0	0
+"glycerophospholipid biosynthetic process"	0	1	0	0	0
+"acylglycerol biosynthetic process"	0	0	0	0	0
+"neutral lipid biosynthetic process"	0	0	0	0	0
+"regulation of Ras protein signal transduction"	0	1	1	0	0
+"intracellular transport"	0	0	0	0	0
+"regulation of developmental growth"	1	1	1	1	1
+"developmental growth"	0	0	1	0	0
+"neuron projection morphogenesis"	0	1	1	0	0
+"generation of neurons"	0	0	0	0	0
+"cell morphogenesis involved in neuron differentiation"	0	1	1	0	0
+"neuron development"	0	0	0	0	0
+"positive regulation of developmental growth"	1	1	1	1	1
+"cell projection morphogenesis"	0	1	1	0	0
+"regulation of neurogenesis"	0	0	1	0	0
+"regulation of neuron differentiation"	0	1	0	0	1
+"GTP metabolic process"	0	0	0	0	0
+"positive regulation of growth"	0	0	1	1	0
+"purine ribonucleoside catabolic process"	0	1	0	0	0
+"positive regulation of protein serine/threonine kinase activity"	0	0	0	0	1
+"regulation of cellular response to stress"	0	1	1	1	0
+"cognition"	0	1	1	0	0
+"leukocyte migration"	0	0	0	0	0
+"regulation of small GTPase mediated signal transduction"	0	1	1	0	0
+"positive regulation of protein metabolic process"	0	0	0	0	0
+"interphase of mitotic cell cycle"	0	0	0	0	0
+"interphase"	0	0	0	0	0
+"regulation of cellular component movement"	0	0	0	0	1
+"positive regulation of cellular component movement"	0	0	0	1	1
+"regulation of nervous system development"	0	0	1	0	0
+"positive regulation of calcium ion transport"	0	1	1	0	0
+"calcium ion transport into cytosol"	0	1	0	0	0
+"cytosolic calcium ion transport"	0	1	0	0	0
+"regulation of cell development"	0	0	1	0	0
+"positive regulation of lipase activity"	0	0	0	0	1
+"pallium development"	0	0	0	1	0
+"telencephalon development"	0	0	0	0	0
+"regulation of anatomical structure morphogenesis"	0	0	0	0	0
+"cerebral cortex development"	0	1	0	0	0
+"cell projection organization"	0	0	0	0	0
+"positive regulation of cell migration"	0	0	0	0	0
+"regulation of cell migration"	0	0	0	0	0
+"neuron differentiation"	0	0	0	0	0
+"regulation of nucleotide catabolic process"	0	1	0	0	1
+"negative regulation of cell projection organization"	0	1	1	0	0
+"regulation of cell projection organization"	0	1	0	0	0
+"regulation of cellular catabolic process"	0	0	0	0	0
+"neuron projection development"	0	1	0	0	0
+"regulation of Ras GTPase activity"	0	0	1	1	1
+"regulation of neuron projection development"	0	1	0	0	0
+"cell migration"	0	0	0	0	0
+"positive regulation of locomotion"	0	0	0	1	1
+"regulation of locomotion"	0	1	1	0	0
+"taxis"	0	0	1	0	0
+"ribonucleoside catabolic process"	0	0	0	0	0
+"regulation of GTPase activity"	0	1	1	1	0
+"positive regulation of MAP kinase activity"	0	1	0	0	0
+"positive regulation of ion transport"	0	1	0	0	0
+"cell part morphogenesis"	0	0	0	0	0
+"cellular component morphogenesis"	0	0	0	0	0
+"regulation of GTP catabolic process"	0	1	0	0	0
+"regulation of purine nucleotide catabolic process"	0	1	0	0	1
+"purine nucleoside catabolic process"	0	1	0	0	0
+"regulation of nucleotide metabolic process"	0	0	0	0	0
+"GTP catabolic process"	0	1	0	0	0
+"glycerophospholipid metabolic process"	0	0	0	0	0
+"activation of MAPK activity"	0	1	0	0	0
+"M phase"	0	0	0	0	0
+"G2/M transition of mitotic cell cycle"	1	1	1	1	1
+"cell morphogenesis"	0	0	0	0	0
+"cell morphogenesis involved in differentiation"	0	1	0	0	0
+"regulation of leukocyte migration"	0	1	1	0	0
+"positive regulation of immune system process"	0	0	0	0	0
+"purine ribonucleotide catabolic process"	0	0	0	0	0
+"purine nucleoside triphosphate catabolic process"	0	0	0	0	0
+"purine nucleoside triphosphate metabolic process"	0	0	0	0	0
+"nucleoside triphosphate catabolic process"	0	0	0	0	0
+"ribonucleotide catabolic process"	0	0	0	0	0
+"ribonucleoside triphosphate catabolic process"	0	0	0	0	0
+"purine ribonucleoside triphosphate catabolic process"	0	0	0	0	0
+"purine ribonucleoside triphosphate metabolic process"	0	0	0	0	0
+"ribonucleoside triphosphate metabolic process"	0	0	0	0	0
+"regulation of catabolic process"	0	0	0	0	0
+"positive regulation of phospholipase activity"	0	0	0	0	1
+"chemotaxis"	0	0	1	0	0
+"cytoskeleton organization"	0	0	0	0	0
+"axon guidance"	0	1	0	0	0
+"axonogenesis"	0	1	0	1	0
+"learning or memory"	0	1	1	0	0
+"nuclear membrane"	0	0	0	0	0
+"chromosomal part"	0	0	0	0	0
+"guanosine-containing compound catabolic process"	0	0	1	0	0
+"guanosine-containing compound metabolic process"	0	0	0	0	0
+"regulation of purine nucleotide metabolic process"	0	1	0	0	0
+"positive regulation of cell motility"	0	0	0	1	1
+"regulation of cell motility"	0	1	1	0	0
+"chromosome"	0	0	0	1	1
+"cell leading edge"	0	0	0	0	0
+"phospholipase activity"	0	1	0	1	0
+"phospholipid binding"	0	1	0	0	0
+"calcium ion binding"	0	0	0	0	0
+"lipase activity"	0	0	0	0	0
+"glycerophospholipid biosynthetic process"	0	1	0	0	0
+"acylglycerol biosynthetic process"	0	0	0	0	0
+"neutral lipid biosynthetic process"	0	0	0	0	0
+"regulation of Ras protein signal transduction"	0	1	1	0	0
+"intracellular transport"	0	0	0	0	0
+"regulation of developmental growth"	1	1	1	1	1
+"developmental growth"	0	0	1	0	0
+"neuron projection morphogenesis"	0	1	1	0	0
+"generation of neurons"	0	0	0	0	0
+"cell morphogenesis involved in neuron differentiation"	0	1	1	0	0
+"neuron development"	0	0	0	0	0
+"positive regulation of developmental growth"	1	1	1	1	1
+"cell projection morphogenesis"	0	1	1	0	0
+"regulation of neurogenesis"	0	0	1	0	0
+"regulation of neuron differentiation"	0	1	0	0	1
+"GTP metabolic process"	0	0	0	0	0
+"positive regulation of growth"	0	0	1	1	0
+"purine ribonucleoside catabolic process"	0	1	0	0	0
+"positive regulation of protein serine/threonine kinase activity"	0	0	0	0	1
+"regulation of cellular response to stress"	0	1	1	1	0
+"cognition"	0	1	1	0	0
+"leukocyte migration"	0	0	0	0	0
+"regulation of small GTPase mediated signal transduction"	0	1	1	0	0
+"positive regulation of protein metabolic process"	0	0	0	0	0
+"interphase of mitotic cell cycle"	0	0	0	0	0
+"interphase"	0	0	0	0	0
+"regulation of cellular component movement"	0	0	0	0	1
+"positive regulation of cellular component movement"	0	0	0	1	1
+"regulation of nervous system development"	0	0	1	0	0
+"positive regulation of calcium ion transport"	0	1	1	0	0
+"calcium ion transport into cytosol"	0	1	0	0	0
+"cytosolic calcium ion transport"	0	1	0	0	0
+"regulation of cell development"	0	0	1	0	0
+"positive regulation of lipase activity"	0	0	0	0	1
+"pallium development"	0	0	0	1	0
+"telencephalon development"	0	0	0	0	0
+"regulation of anatomical structure morphogenesis"	0	0	0	0	0
+"cerebral cortex development"	0	1	0	0	0
+"cell projection organization"	0	0	0	0	0
+"positive regulation of cell migration"	0	0	0	0	0
+"regulation of cell migration"	0	0	0	0	0
+"neuron differentiation"	0	0	0	0	0
+"regulation of nucleotide catabolic process"	0	1	0	0	1
+"negative regulation of cell projection organization"	0	1	1	0	0
+"regulation of cell projection organization"	0	1	0	0	0
+"regulation of cellular catabolic process"	0	0	0	0	0
+"neuron projection development"	0	1	0	0	0
+"regulation of Ras GTPase activity"	0	0	1	1	1
+"regulation of neuron projection development"	0	1	0	0	0
+"cell migration"	0	0	0	0	0
+"positive regulation of locomotion"	0	0	0	1	1
+"regulation of locomotion"	0	1	1	0	0
+"taxis"	0	0	1	0	0
+"ribonucleoside catabolic process"	0	0	0	0	0
+"regulation of GTPase activity"	0	1	1	1	0
+"positive regulation of MAP kinase activity"	0	1	0	0	0
+"positive regulation of ion transport"	0	1	0	0	0
+"cell part morphogenesis"	0	0	0	0	0
+"cellular component morphogenesis"	0	0	0	0	0
+"regulation of GTP catabolic process"	0	1	0	0	0
+"regulation of purine nucleotide catabolic process"	0	1	0	0	1
+"purine nucleoside catabolic process"	0	1	0	0	0
+"regulation of nucleotide metabolic process"	0	0	0	0	0
+"GTP catabolic process"	0	1	0	0	0
+"glycerophospholipid metabolic process"	0	0	0	0	0
+"activation of MAPK activity"	0	1	0	0	0
+"M phase"	0	0	0	0	0
+"G2/M transition of mitotic cell cycle"	1	1	1	1	1
+"cell morphogenesis"	0	0	0	0	0
+"cell morphogenesis involved in differentiation"	0	1	0	0	0
+"regulation of leukocyte migration"	0	1	1	0	0
+"positive regulation of immune system process"	0	0	0	0	0
+"purine ribonucleotide catabolic process"	0	0	0	0	0
+"purine nucleoside triphosphate catabolic process"	0	0	0	0	0
+"purine nucleoside triphosphate metabolic process"	0	0	0	0	0
+"nucleoside triphosphate catabolic process"	0	0	0	0	0
+"ribonucleotide catabolic process"	0	0	0	0	0
+"ribonucleoside triphosphate catabolic process"	0	0	0	0	0
+"purine ribonucleoside triphosphate catabolic process"	0	0	0	0	0
+"purine ribonucleoside triphosphate metabolic process"	0	0	0	0	0
+"ribonucleoside triphosphate metabolic process"	0	0	0	0	0
+"regulation of catabolic process"	0	0	0	0	0
+"positive regulation of phospholipase activity"	0	0	0	0	1
+"chemotaxis"	0	0	1	0	0
+"cytoskeleton organization"	0	0	0	0	0
+"axon guidance"	0	1	0	0	0
+"axonogenesis"	0	1	0	1	0
+"learning or memory"	0	1	1	0	0

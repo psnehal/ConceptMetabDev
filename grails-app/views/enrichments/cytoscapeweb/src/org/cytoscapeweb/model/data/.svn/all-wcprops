@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/29258/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data
+END
+CustomVizMapperVO.as
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/19999/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/CustomVizMapperVO.as
+END
+FirstNeighborsVO.as
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/26957/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/FirstNeighborsVO.as
+END
+VisualPropertyVO.as
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/23322/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/VisualPropertyVO.as
+END
+GraphicsDataTable.as
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/18820/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/GraphicsDataTable.as
+END
+VizMapperVO.as
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/18820/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/VizMapperVO.as
+END
+InteractionVO.as
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/29258/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/InteractionVO.as
+END
+DiscreteVizMapperVO.as
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/22485/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/DiscreteVizMapperVO.as
+END
+ContinuousVizMapperVO.as
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/23322/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/ContinuousVizMapperVO.as
+END
+VisualStyleVO.as
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/28670/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/VisualStyleVO.as
+END
+ConfigVO.as
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/ConfigVO.as
+END
+PassthroughVizMapperVO.as
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/19999/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/PassthroughVizMapperVO.as
+END
+VisualStyleBypassVO.as
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/23219/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/model/data/VisualStyleBypassVO.as
+END

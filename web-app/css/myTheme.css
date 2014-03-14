@@ -1,0 +1,328 @@
+
+#header {
+  background: #FFFFFF;
+  padding: 1.5em 1em 0.1em 1em;
+  margin-top: 20px;
+
+}
+
+
+h1 {
+	color: #0F226E;
+	font-weight: normal;
+	font-size: 1.25em;
+	margin: 0.8em 0 0.3em 0;
+}
+
+.text {
+    color: #666666;
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:12;
+   
+}
+
+table#result {
+	border-top: 1px solid #FFFAF0;
+	
+	font-family:sans-serif;
+	font-size: 20px;
+	border-collapse: collapse;
+	border :1;
+	margin-bottom: 1em;
+}
+
+table#result td {
+	padding: 5px;
+	clear: both;
+	vertical-align: center;
+	font-family: sans-serif;
+	font-size: 12px;
+	color: black;
+	
+}
+
+
+
+
+a.header-main:link, a.header-main:visited {
+  color: #C2E0FF;
+  font-size: 2em;
+  font-weight: bold;
+ 
+}
+
+.header-sub {
+  color: #227207;
+  font-size: 1.15em;
+  font-style: italic;
+   font-weight: bold;
+   align:left;
+}
+
+html {
+	background-color: #ddd;
+	background-image: -moz-linear-gradient(center top, #aaa, #ddd);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #aaa), color-stop(1, #ddd));
+	background-image: linear-gradient(top, #aaa, #ddd);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#aaaaaa', EndColorStr = '#dddddd');
+	background-repeat: no-repeat;
+	height: 100%;
+	/* change the box model to exclude the padding from the calculation of 100% height (IE8+) */
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+
+html.no-cssgradients {
+	background-color: #aaa;
+}
+
+.ie6 html {
+	height: 100%;
+}
+
+html * {
+	margin: 0;
+}
+
+
+#fieldpanel{
+border: thin;
+	
+	
+    padding: 0.4em 1em 0.1em 1em;
+}
+
+
+.divider {
+	margin-top: 40px;
+	}
+	
+.button {
+	/* appearance */
+	background-color: #3f3f3f;
+	background-image: -moz-linear-gradient(
+		top,
+		rgba(255,255,255,0.0) 0%,
+		rgba(255,255,255,0.1) 50%);
+	
+	background-image: -webkit-gradient(
+		linear, left top, left bottom,
+		color-stop(100%,rgba(255,255,255,0.0)),
+		color-stop(50%,rgba(255,255,255,0.1)));
+	border: 1px solid #000000;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 1px 0 rgba(139,139,139,1) inset, 0 1px 0 rgba(88,88,88,1);
+	-moz-box-shadow: 0 1px 0 rgba(139,139,139,1) inset, 0 1px 0 rgba(88,88,88,1);
+	box-shadow: 0 1px 0 rgba(139,139,139,1) inset, 0 1px 0 rgba(88,88,88,1);
+	cursor: pointer;
+	
+	/* position */
+	display: inline-block;
+	margin: 10px;
+	
+	/* size */
+	padding: 0 10px;
+	
+	/* text */
+	color: #eaeaea;
+	font-size: 12px;
+	line-height: 30px;
+	text-decoration: none;
+	white-space: nowrap;
+	}
+.button:hover {
+	/* appearance */
+	background-color: #6495ed;
+	-webkit-box-shadow: 0 0 3px #6495ed;
+	-moz-box-shadow: 0 0 3px #6495ed;
+	box-shadow: 0 0 3px #6495ed;
+	}
+	
+	#title{
+	background:#F7F8E0;
+    -moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+border-radius: 10px; /* future proofing */
+-khtml-border-radius: 10px;
+border-style:outset;
+
+}
+
+
+
+
+
+
+
+.myTableWrapper {
+	width: 600px;
+	height: 800px;
+	}
+
+.height250 {
+        height: 250px;
+        overflow-x: auto;
+        overflow-y: auto;
+}
+
+.height400 {
+        height: 400px;
+        overflow-x: auto;
+        overflow-y: auto;
+}
+
+
+.scrollable-table {
+	  width: 600px;
+  height:800px;
+ 
+   background-color: #efefef;
+	background-image: -moz-linear-gradient(top, #ffffff, #eaeaea);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(1, #eaeaea));
+	    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#ffffff', EndColorStr = '#eaeaea');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#eaeaea')";
+
+	
+}
+
+
+
+
+.table-header-rotated{
+
+	width: 100%;
+	
+
+}
+.table-header-rotated:th:hover, .table-header-rotated:tr:hover {
+	background: #E1F2B6;
+}
+
+.table-header-rotated th.row-header{
+	  width: 30px;
+  height: 30px;
+  
+ vertical-align: middle;
+  text-align: right;
+    color: black;
+	font-size: 11px;
+	font-weight: bold;
+	white-space: nowrap;
+	font-family: sans-serif;
+	 border-width:thin;
+	background-color: #efefef;
+	  border-width:thin;
+  border-top: 0.5px solid #dddddd;
+  border-left: 0.5x solid #dddddd;
+  border-right: 0.5px solid #dddddd;
+  
+  background-color: #efefef;
+	background-image: -moz-linear-gradient(top, #ffffff, #eaeaea);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(1, #eaeaea));
+	    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#ffffff', EndColorStr = '#eaeaea');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#eaeaea')";
+	
+	
+  
+ 
+	
+}
+
+.table-header-rotated td{
+  width: 30px;
+  height: 30px;
+   vertical-align: middle;
+   max-width:30px;
+  text-align: center;
+  color: black;  
+  border-width:thin;
+  border-top: 0.5px solid #dddddd;
+  border-left: 0.5x solid #dddddd;
+  border-right: 0.5px solid #dddddd;
+  white-space: nowrap;
+ 
+	font-size: 11px;
+	font-weight: normal;
+	
+	font-family: sans-serif;
+	
+}
+
+
+
+.table-header-rotated th.rotate-45{
+  height: 150px;
+  width: 20px;
+  min-width: 40px;
+  max-width: 30px;
+  position: relative;
+  vertical-align: bottom;
+  padding: 0;
+  color: black;
+	font-size: 10px;
+	font-weight: bold;
+  line-height: 0.4;
+  font-family:sans-serif;
+}
+
+.table-header-rotated th.rotate-45 > div{
+  position: relative;
+  top: 0px;
+  left: 80px; /* 80 * tan(45) / 2 = 40 where 80 is the height on the cell and 45 is the transform angle*/
+  height: 100%;
+  -ms-transform:skew(-45deg,0deg);
+  -moz-transform:skew(-45deg,0deg);
+  -webkit-transform:skew(-45deg,0deg);
+  -o-transform:skew(-45deg,0deg);
+  transform:skew(-45deg,0deg);
+  overflow: hidden;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
+background-color: #efefef;
+	background-image: -moz-linear-gradient(top, #ffffff, #eaeaea);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(1, #eaeaea));
+	    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#ffffff', EndColorStr = '#eaeaea');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#eaeaea')";
+  
+  
+}
+
+.table-header-rotated th.rotate-45 span {
+  -ms-transform:skew(45deg,0deg) rotate(315deg);
+  -moz-transform:skew(45deg,0deg) rotate(315deg);
+  -webkit-transform:skew(45deg,0deg) rotate(315deg);
+  -o-transform:skew(45deg,0deg) rotate(315deg);
+  transform:skew(45deg,0deg) rotate(315deg);
+  position: absolute;
+  bottom: 30px; /* 40 cos(45) = 28 with an additional 2px margin*/
+  left: -25px; /*Because it looked good, but there is probably a mathematical link here as well*/
+  display: inline-block;
+  // width: 100%;
+  width: 85px; /* 80 / cos(45) - 40 cos (45) = 85 where 80 is the height of the cell, 40 the width of the cell and 45 the transform angle*/
+  text-align: left;
+   white-space: nowrap; /*whether to display in one line or not*/
+}
+
+
+.rotate {/* Safari */
+-webkit-transform: rotate(-90deg);
+
+/* Firefox */
+-moz-transform: rotate(-90deg);
+
+/* IE */
+-ms-transform: rotate(-90deg);
+
+/* Opera */
+-o-transform: rotate(-90deg);
+
+/* Internet Explorer */
+filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+}
+

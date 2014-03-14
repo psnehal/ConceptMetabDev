@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/31180/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout
+END
+LGraph.as
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/LGraph.as
+END
+Layout.as
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/Layout.as
+END
+LEdge.as
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/LEdge.as
+END
+LNode.as
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/LNode.as
+END
+Updatable.as
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/Updatable.as
+END
+LGraphObject.as
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/LGraphObject.as
+END
+CoSEOptions.as
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/CoSEOptions.as
+END
+LGraphManager.as
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/LGraphManager.as
+END
+LayoutOptionsPack.as
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/!svn/ver/31180/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/LayoutOptionsPack.as
+END
+GeneralOptions.as
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/GeneralOptions.as
+END
+LayoutConstants.as
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/27220/cytoscapeweb/trunk/cytoscapeweb/src/org/cytoscapeweb/view/layout/ivis/layout/LayoutConstants.as
+END

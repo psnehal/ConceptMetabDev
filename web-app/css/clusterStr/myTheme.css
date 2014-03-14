@@ -1,0 +1,442 @@
+
+
+#header {
+  background: #FFFFFF;
+  padding: 1.5em 1em 0.1em 1em;
+  margin-top: 20px;
+
+}
+
+
+h1 {
+	color: #0F226E;
+	font-weight: normal;
+	font-size: 1.25em;
+	margin: 0.8em 0 0.3em 0;
+}
+
+.text {
+    color: #666666;
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:12;
+   
+}
+
+table#result {
+	border-top: 1px solid #FFFAF0;
+	
+	font-family:sans-serif;
+	font-size: 20px;
+	border-collapse: collapse;
+	border :1;
+	margin-bottom: 1em;
+}
+
+table#result td {
+	padding: 5px;
+	clear: both;
+	vertical-align: center;
+	font-family: sans-serif;
+	font-size: 12px;
+	color: black;
+	
+}
+
+
+
+
+a.header-main:link, a.header-main:visited {
+  color: #C2E0FF;
+  font-size: 2em;
+  font-weight: bold;
+ 
+}
+
+.header-sub {
+  color: #227207;
+  font-size: 1.15em;
+  font-style: italic;
+   font-weight: bold;
+   align:left;
+}
+
+html {
+	background-color: #ddd;
+	background-image: -moz-linear-gradient(center top, #aaa, #ddd);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #aaa), color-stop(1, #ddd));
+	background-image: linear-gradient(top, #aaa, #ddd);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#aaaaaa', EndColorStr = '#dddddd');
+	background-repeat: no-repeat;
+	
+	/* change the box model to exclude the padding from the calculation of 100% height (IE8+) */
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+
+html.no-cssgradients {
+	background-color: #aaa;
+}
+
+.ie6 html {
+	height: 100%;
+}
+
+html * {
+	margin: 0;
+}
+
+
+#fieldpanel{
+border: thin;
+	
+	
+    padding: 0.4em 1em 0.1em 1em;
+}
+
+
+	#title{
+	background:#F7F8E0;
+    -moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+border-radius: 10px; /* future proofing */
+-khtml-border-radius: 10px;
+border-style:outset;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.divider {
+	margin-top: 40px;
+	}
+	
+.button {
+	/* appearance */
+	background-color: #3f3f3f;
+	background-image: -moz-linear-gradient(
+		top,
+		rgba(255,255,255,0.0) 0%,
+		rgba(255,255,255,0.1) 50%);
+	
+	background-image: -webkit-gradient(
+		linear, left top, left bottom,
+		color-stop(100%,rgba(255,255,255,0.0)),
+		color-stop(50%,rgba(255,255,255,0.1)));
+	border: 1px solid #000000;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 1px 0 rgba(139,139,139,1) inset, 0 1px 0 rgba(88,88,88,1);
+	-moz-box-shadow: 0 1px 0 rgba(139,139,139,1) inset, 0 1px 0 rgba(88,88,88,1);
+	box-shadow: 0 1px 0 rgba(139,139,139,1) inset, 0 1px 0 rgba(88,88,88,1);
+	cursor: pointer;
+	
+	/* position */
+	display: inline-block;
+	margin: 10px;
+	
+	/* size */
+	padding: 0 10px;
+	
+	/* text */
+	color: #eaeaea;
+	font-size: 12px;
+	line-height: 30px;
+	text-decoration: none;
+	white-space: nowrap;
+	}
+.button:hover {
+	/* appearance */
+	background-color: #6495ed;
+	-webkit-box-shadow: 0 0 3px #6495ed;
+	-moz-box-shadow: 0 0 3px #6495ed;
+	box-shadow: 0 0 3px #6495ed;
+	}
+
+.myTableWrapper {
+	width: 800px;
+	height: 500px;
+	}
+
+.height250 {
+        height: 250px;
+        overflow-x: auto;
+        overflow-y: auto;
+}
+
+.height400 {
+        height: 400px;
+        overflow-x: auto;
+        overflow-y: auto;
+}
+
+.scrollable-table {
+	  width: 600px;
+      height:800px; 
+      background-color: #efefef;
+	  background-image: -moz-linear-gradient(top, #ffffff, #eaeaea);
+	  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(1, #eaeaea));
+	  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#ffffff', EndColorStr = '#eaeaea');
+	  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#eaeaea')";
+}
+
+.area{
+	height:100%; 
+	width:100%;
+	
+	display:inline-block;
+	 line-height: 23px;
+	
+    vertical-align:middle;
+	
+	
+	
+}
+
+.fancyTable td, .fancyTable th {
+	/* appearance */
+	border: 1px solid #778899;
+	
+	
+	
+	
+	}
+
+.fancyTable {
+	/* text */
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	width:100%;
+	max-width:100%;
+	
+
+	 
+	}
+
+.fancyTable tbody tr td {
+	 max-width:35px;
+	 min-width:25px;	
+	  width : 35px;
+	  text-align: center;
+	  color: black;  
+	  padding:0;
+	  border-width:thin;
+	  border-top: 0.5px solid #dddddd;
+	  border-left: 0.5x solid #dddddd;
+	  border-right: 0.5px solid #dddddd;
+	  white-space: nowrap;
+	  font-size: 11px;
+	  font-weight: normal;
+      font-family: sans-serif;
+   
+	}
+
+.fancyTable tbody tr.odd td {
+		 max-width:35px;
+	 max-width:25px;
+	
+	  width : 35px;
+	/* appearance */
+	background-color: #d6e0ef;
+	padding:0;
+	font-size: 11px;
+	font-weight: bold;
+	white-space: nowrap;
+	
+
+	}
+
+.fancyTable thead tr th,
+.fancyTable thead tr td,
+.fancyTable tfoot tr th, 
+.fancyTable tfoot tr td {
+	/* appearance */
+	background-color: #efefef;		 
+
+	
+	/* text */
+	 font-family: sans-serif;
+	color: #121517;
+	font-size: 11px;
+	font-weight: bold;
+	white-space: nowrap;
+	 max-width:25px;
+	 min-width:25px;
+	
+	  width : 25px;
+ text-align: center;
+	  
+	   
+	
+       
+	
+	
+     
+	
+	}
+	
+	
+.fancyTable td.row-header{	 
+     max-width:200px;		 
+     height:23px;	
+	 text-align: right;
+     color: black;
+	 font-size: 11px;
+	 font-weight: bold;	  
+	 vertical-align:middle;	
+	 font-family: sans-serif;
+	 border-width:thin;
+	 background-color: #efefef;
+	 border-width:thin;
+     border-top: 0.5px solid #dddddd;
+     border-left: 0.5x solid #dddddd;
+     border-right: 0.5px solid #dddddd;  
+     background-color: #efefef;
+	 background-image: -moz-linear-gradient(top, #ffffff, #eaeaea);
+	 background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(1, #eaeaea));
+	 filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#ffffff', EndColorStr = '#eaeaea');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#eaeaea')";	
+}
+
+.fancyTable  tr td:last-child {
+    width: 90%;
+    
+    
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+/* Fancy Dark Table */	
+.fancyDarkTable .numeric {
+	/* text */
+	text-align: right;
+	}
+
+.fancyDarkTable td, .fancyDarkTable th {
+	border: 1px solid #000000;
+	padding: 5px;
+}
+
+.fancyDarkTable thead tr th {
+	padding: 10px 5px 10px 5px;
+	}
+
+.fancyDarkTable {
+	/*border-collapse: separate;*/
+	
+	/* text */
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	}
+
+.fancyDarkTable tbody tr td {
+	/* appearance */
+	background-color: #48535e;
+	background-image: -moz-linear-gradient(
+		top,
+		rgba(255,255,255,0.0) 0%,
+		rgba(255,255,255,0.02) 100%);
+	
+	background-image: -webkit-gradient(
+		linear, left top, left bottom,
+		color-stop(0%,rgba(255,255,255,0.0)),
+		color-stop(100%,rgba(255,255,255,0.02)));
+	border-bottom-color: #22272e;
+	border-top-color: #708090;
+	border-right-color: #000;
+	border-left-color: #3c454f;
+
+	/* size */
+	padding: 10px 5px 30px 5px;
+
+	/* text */
+	color: #FFFFFF;
+	font-size: 11px;
+	font-weight: bold;
+	text-shadow: 0 -1px 1px #000000;
+	}
+
+.fancyDarkTable tbody tr.odd td {
+	/* appearance */
+	background-color: #3c454f;
+	background-image: -moz-linear-gradient(
+		top,
+		rgba(255,255,255,0.0) 0%,
+		rgba(255,255,255,0.02) 100%);
+	
+	background-image: -webkit-gradient(
+		linear, left top, left bottom,
+		color-stop(0%,rgba(255,255,255,0.0)),
+		color-stop(100%,rgba(255,255,255,0.02)));
+	border-right-color: #000;
+	}
+
+.fancyDarkTable thead tr th,
+.fancyDarkTable tfoot tr td {
+	/* appearance */
+	background-color: #0b0d10;
+	background-image: -moz-linear-gradient(
+		top,
+		rgba(255,255,255,0.4) 0%,
+		rgba(255,255,255,0.2) 50%,
+		rgba(255,255,255,0.1) 51%,
+		rgba(255,255,255,0.0) 100%);
+	
+	background-image: -webkit-gradient(
+		linear, left top, left bottom,
+		color-stop(0%,rgba(255,255,255,0.4)),
+		color-stop(50%,rgba(255,255,255,0.2)),
+		color-stop(51%,rgba(255,255,255,0.1)),
+		color-stop(100%,rgba(255,255,255,0.0)));
+		
+	/* text */
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: bold;
+	text-shadow: 0 -1px 1px #000;
+	}
+	
+.fancyDarkTable .fht-head {
+	-webkit-box-shadow: 0 5px 10px #000;
+	z-index: 1;
+	position: relative;
+	}

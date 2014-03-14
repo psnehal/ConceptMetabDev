@@ -1,0 +1,11 @@
+#Grails Metadata file
+#Thu Oct 10 15:25:31 EDT 2013
+app.grails.version=2.2.3
+app.name=conceptmetab
+app.version=0.1
+plugins.export=1.5
+plugins.google-visualization=0.6.2
+plugins.j2d=0.4.2
+plugins.jquery-ui=1.8.24
+plugins.rendering=0.4.4
+plugins.searchable=0.6.4
