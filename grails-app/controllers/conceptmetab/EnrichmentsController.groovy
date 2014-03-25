@@ -422,9 +422,7 @@ def createDb(){
 
 //***********************************************************LIST,CREATE,SAVE,SHOW,EDIT,UPDATE,DELETE**************************************************************************
  def createChart() {
-		 
-		   println(params)
-		
+		 println(params)
 		 def filter
 		 def con
 		 def id1_inter
@@ -612,6 +610,192 @@ def createDb(){
 	 
  }
  
+ 
+ def createChartnew()
+ {
+	 println("Statement is only one string")
+	 def filter = params.fil;
+	 def con = params.q.toString();
+	 def id1 = params.id1.toString();
+	 def id2 = params.id2.toString();
+	 def db = []
+	 def odds = params.odds
+	 HashMap jsonMap = new HashMap()
+	 
+	 
+	//Error handling for single database selectiom 
+	 if(params.statement instanceof java.lang.String)
+	 {
+		println("Statement is only one string")
+		db.add(params.statement);
+	 }
+	 else
+	 {
+		 db = params.statement.toList()
+	 }
+	 
+	 
+	 //Error handling for no odds ration selection:
+	 
+	 
+	 if (odds.length() ==0)
+	 {
+		 odds = '4.5035996273705e+15'
+	 }
+			 
+	
+	 
+	 
+	def mapR = createEnrichedConceptService.showEnrichedConcepts(filter, con,  id1, id2,odds, db)
+	
+	println("from Show"+params)
+	
+	println("Map paramaters from CreateChart form Enrichment controller is : fillter"+filter + "con: "+ con + "db " + db)
+	 
+	println("Map size from CreateChart form Enrichment controller is : "+mapR.size())
+	
+	
+	
+	def allid = mapR.collect {en ->
+			 return en.ctfull
+				//println("Id1 is concept of interest")	
+		}
+	
+	def query = Concepts.get(con)
+	def conId = [id: query.id.toString(),label:query.name.capitalize(), comNo:query.num_compounds,conTypes:query.concept_types.getName() ]
+	
+	
+	println(allid)
+	def map = [:]  //1
+	allid.each {  //2
+		if(map.containsKey(it)) map[it] = map[it] + 1  //3
+		else map[it] = 1;
+	}
+	
+	
+	println("Map is" +map.size())
+	
+	def emptyList = []
+	map.each{
+	   //println("this is start of loop"+it.getKey())
+		if(it.getKey().equals("GO Biological Process"))
+		{
+		   
+			def index =map.findIndexOf {it.key =='GO Biological Process'}
+			emptyList.addAll(index, "#227207")
+		}
+		if(it.getKey().equals("GO Cellular Component"))
+		{
+	   
+			def index =map.findIndexOf {it.key=='GO Cellular Component'}
+			emptyList.addAll(index, "#98E6CA")
+		}
+		if(it.getKey().equals("GO Molecular Function"))
+		{
+			
+			def index =map.findIndexOf {it.key=='GO Molecular Function'}
+			emptyList.addAll(index, "#49FFB9")
+		}
+		if(it.getKey().equals("Enzyme"))
+		{
+		   
+			def index =map.findIndexOf {it.key=='Enzyme'}
+			emptyList.addAll(index, "#BE3A40")
+		}
+		if(it.getKey().equals("KEGG Pathway"))
+		{
+			
+			def index =map.findIndexOf {it.key=='KEGG Pathway'}
+			emptyList.addAll(index, "#CC2EFA")
+		}
+	   if(it.getKey().equals("Chemical Clusters"))
+		{
+		   
+			def index =map.findIndexOf {it.key=='Chemical Clusters'}
+		   //println("index of cluster is)" + index)
+			emptyList.addAll(index, "#ffab9b")
+		}
+		if(it.getKey().equals("MeSH Anatomy"))
+		{
+		   
+			def index =map.findIndexOf {it.key=='MeSH Anatomy'}
+			emptyList.addAll(index, "#7B3F00")
+		}
+		if(it.getKey().equals("MeSH Diseases"))
+		{
+		   
+			def index =map.findIndexOf {it.key=='MeSH Diseases'}
+			emptyList.addAll(index, "#F47D00")
+		}
+		if(it.getKey().equals("MeSH Chemicals and Drugs"))
+		{
+		   
+			def index =map.findIndexOf {it.key=='MeSH Chemicals and Drugs'}
+			emptyList.addAll(index, "#FFB86D")
+		}
+		if(it.getKey().equals("MeSH Organisms"))
+		{
+		   
+			def index =map.findIndexOf {it.key=='MeSH Organisms'}
+			emptyList.addAll(index, "#FCDC3B")
+		}
+		if(it.getKey().equals("MeSH Phenomena and Processes"))
+		{
+		   
+			def index =map.findIndexOf {it.key=='MeSH Phenomena and Processes'}
+			emptyList.addAll(index, "#F7EA2B")
+		}
+		if(it.getKey().equals("MeSH Psychology and Psychiatry"))
+		{
+		   
+			def index =map.findIndexOf {it.key=='MeSH Psychology and Psychiatry'}
+			emptyList.addAll(index, "#00F5FF")
+		}
+		if(it.getKey().equals("MeSH Technology, Industry, and Agriculture"))
+		{
+		   
+			def index =map.findIndexOf {it.key=='MeSH Technology, Industry, and Agriculture'}
+			emptyList.addAll(index, "#00C5CD")
+		}
+	   //println(em
+	}
+	  
+def columns = []
+   columns << ["id": 'Col1',"label": 'database', "type": 'string']
+   columns << ["id": 'Col2',"label": 'no', "type": 'number']
+  // println(columns)
+ 
+   def rows = []
+   def cells
+   map.each {
+   cells = []
+   cells << [v: it.getKey()] << [v: it.getValue()]
+   rows << ['c': cells]
+   }
+ 
+   def table = [cols: columns, rows: rows]
+   jsonMap.table = table
+  println map
+   
+   println("jsonMap is+" +  emptyList)
+ 
+   //def allR =map.collect {ids -> return [ids.getKey().toString(),ids.getValue()]}
+   
+ 
+ 
+  //render map
+  def dbc = table as JSON
+  
+  
+  def clst = emptyList as grails.converters.JSON
+  
+  println emptyList.getAt(0)
+	  [dbc:dbc, map:map,clst:clst,rsize:mapR.size(),emptyList:emptyList]
+	 
+	 
+	 
+ }
+ 
  def redirectView()
  {
 	 println("from redirectView"+params.keySet())
@@ -664,10 +848,6 @@ println("Sorting by pval")
  }
  //**************************************************************For Chart Still Working *****************************************
  
-if (params.containsKey("chart"))
-{
-		   forward(action: "createChart", params:params)
-}
 
 //************************************************************Parameter handling *****************************************
 	 
@@ -684,6 +864,10 @@ if (params.containsKey("chart"))
 		 forward(action: "createJson", params:params)
 		 
 	 }
+	
+	
+		 
+	
 	else {
 				 if(params.containsKey("slider"))
 					{
@@ -729,6 +913,13 @@ if (params.containsKey("chart"))
 						  println(jsonMapN)
 						 [check:check, resultcount : map.size()]
 					 forward(action: "filterSlider", params:[check:check, ct:map.size(),q:con])
+				 }
+				 
+				 else if (params.containsKey("chart"))
+				 {
+					
+					 forward(controller:"concepts", action:"show", id: params.q,params:[map:map])
+					
 				 }
 				 
 				 

@@ -5,9 +5,7 @@
 <head>
 <title>Heat Map </title>
   
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-   
-  
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />    
   <link rel="stylesheet" href="${resource(dir: 'css/clusterStr', file: 'myTheme.css')}" type="text/css" media="screen">
   <link rel="stylesheet" href="${resource(dir: 'css/clusterStr', file: '960.css')}" type="text/css" media="screen">
   <link rel="stylesheet" href="${resource(dir: 'css/clusterStr', file: 'defaultTheme.css')}" type="text/css" media="screen">
@@ -50,7 +48,7 @@ console.log(w + " and h is "+ h);
         'fixedColumn'       : true,
         'footer'            : true,
         'height'            : '550',
-        'width'             : '950',
+        'width'             : '850',
         'autoShow'          : true,
         'cloneHeadToFoot'   : false
     });
@@ -64,40 +62,44 @@ console.log(w + " and h is "+ h);
 
 <body>
 <div id= "fieldpanel">
+
+	
+</div>	
+	
+<div id ="body" >
 <center>
 				<a href="${createLink(uri: '/')}"><img src="${resource(dir: 'images', file: 'logoconceptmetab.gif')}" alt="Grails"  style="max-height: 400px; max-width: 400px;"/></a>
 				<br/>
 				<span class="header-sub">Metabolite Set Network Tool</span>
 	</center>
-	
-</div>	
-	
-<div >
 <center>
-<table id = "title">
+<table>
 <tr>
-	<td>
+	<td colspan="2">
 				<div id ="title">
-					<table id ="result">
-					<br/>
+								
+					 <h1>Concept  Information</h1>
+					 <hr/>
+					 <br/>
 					
-					<tr> <h1>Concept  Information</h1></tr>
-					
-					<tr><td>Concept name: </td><td> ${con.name} </td><tr>
-					<tr><td>Concept Id:</td><td> ${con.original_id}</td></tr>
-					<tr><td>Concept Type:</td><td> ${con.concept_types.getFullname()}</td><tr>
-					<tr><td>Number of Compounds:</td><td> ${con.num_compounds}</td><tr>
-					</table>
+					<ul class="list">			
+					<li>1. Concept name: ${con.name} </li>
+					<li>2. Concept Id:${con.original_id}</li>
+					<li>3. Concept Type: ${con.concept_types.getFullname()}</li>
+					<li>4. Number of Compounds:${con.num_compounds}</li>
+					</ul>
+						
 				</div>
-		</td>
-		<td rowspan = 2 >
-		<div class="title" >
+
+</tr>
+<tr>		
+		<td>
+		<div class="title" id ="title"> 
 		<ii:imageTag indirect-imagename="test2.png"  /> 
 		</div>
 		</td>
-</tr>
-<tr>
-<td ><table class="fancyTable" id="myTable05" cellpadding="0" cellspacing="0">
+
+<td ><div id ="title"> <table class="fancyTable" id="myTable05" cellpadding="0" cellspacing="0">
 		<thead>
 		    <tr class="colhead">
 		 	<td class='row-header'><img src="${resource(dir: 'images', file: 'tableImage.png')}" alt="Grails"  style="max-height: 300px; max-width: 200px"/></td>
@@ -127,6 +129,7 @@ console.log(w + " and h is "+ h);
 </tr>
 
 </table>
+</div>
 </center>
 </div>
 

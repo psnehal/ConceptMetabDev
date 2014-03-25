@@ -223,14 +223,36 @@ class ConceptsController {
     }
 
     def show(Long id) {
-        def conceptsInstance = Concepts.get(id)
-        if (!conceptsInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'concepts.label', default: 'Concepts'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [conceptsInstance: conceptsInstance]
+		
+		def conceptsInstance = Concepts.get(id)
+		String url
+		println ("Concept type is " + conceptsInstance.concept_types.fullname )
+		if (!conceptsInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'concepts.label', default: 'Concepts'), id])
+			redirect(action: "list")
+			return
+		}
+		if(conceptsInstance.concept_types.fullname.contains('MeSH'))
+		{
+			def meshlink = conceptsInstance.name			
+			url = "http://www.ncbi.nlm.nih.gov/mesh/?term="+meshlink
+			println ("found mesh term")
+		}
+		else if(conceptsInstance.concept_types.fullname.contains('GO'))
+		{
+			url = "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term="+conceptsInstance?.original_id
+		}
+		else if(conceptsInstance.concept_types.fullname.contains('KEGG'))
+		{
+			url = "http://www.kegg.jp/kegg-bin/show_pathway?"+conceptsInstance?.original_id
+		}
+		else if(conceptsInstance.concept_types.fullname.contains('Enzyme'))
+		{
+			url = "http://www.ncbi.nlm.nih.gov/mesh/?term="+conceptsInstance?.original_id
+		}
+		println("url is "+ url)
+		[conceptsInstance: conceptsInstance, url:url]
+        
     }
 
     def edit(Long id) {

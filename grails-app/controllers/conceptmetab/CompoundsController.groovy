@@ -46,6 +46,9 @@ class CompoundsController {
 
     def show(Long id) {
         def compoundsInstance = Compounds.get(id)
+		def conceptsInstance
+		def message = ""
+		
         if (!compoundsInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'compounds.label', default: 'Compounds'), id])
             redirect(action: "list")
@@ -53,32 +56,27 @@ class CompoundsController {
         }
 		
 		
-		def ccl =Compounds_in_concepts.createCriteria()
-		
-		def result= ccl.list {
-			
-			eq('compound.id',compoundsInstance.internal_id)
-			
-			
+		def ccl =Compounds_in_concepts.createCriteria()		
+		def result= ccl.list {			
+			eq('compound.id',compoundsInstance.internal_id)			
 		}
 		
-		println(result.size());
-		
-		
-		def concept = result.collect { ids -> return (ids.concept.id)}
-		
-		println(concept)
-		
-		def conRes= Concepts.createCriteria()
-		
-		def conceptsInstance = conRes.list {
-			'in' ('id', concept)
+		println("result size fromCompounds_in_concepts"+result.size());		
+		if(result.size() == 0)
+		{
+			
+			conceptsInstance = null
+			
 		}
-		
-		
-		
-		
-		println( conceptsInstance.size())
+		else
+		{			
+			def concept = result.collect { ids -> return (ids.concept.id)}
+			println(concept)
+			def conRes= Concepts.createCriteria()
+			 conceptsInstance = conRes.list {'in' ('id', concept) }
+			println( "No of concepts compounds belong to"+ conceptsInstance.size())
+			
+		}
         [compoundsInstance: compoundsInstance,conceptsInstance: conceptsInstance ]
     }
 

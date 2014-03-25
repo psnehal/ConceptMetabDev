@@ -56,8 +56,8 @@ class CreateEnrichedConceptService {
 		}
 		
 		
-		println("map from service"+map)
-		println("Size is"+ map.size() +"   map: === " + map )
+		//println("map from service"+map)
+		//println("Size is"+ map.size() +"   map: === " + map )
 		int c = 1
 		
 		List re = new ArrayList()
@@ -78,7 +78,7 @@ class CreateEnrichedConceptService {
 			}
 		}
 		
-		println("Claas for filter"+ re.class + "Class for tets"+ re)
+		//println("Claas for filter"+ re.class + "Class for tets"+ re)
 		
 		//println("Claas for map"+ map.class + "Class for tets"+ test.class)
 		//println("after loops" + test)

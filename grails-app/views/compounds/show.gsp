@@ -68,8 +68,12 @@
 		<br/><br/>
 		<hr/>
 		
-		 <div id="list-concepts" class="content scaffold-list" role="main">
-		<table>						
+		<g:if test="${conceptsInstance == null}">
+		<span class="property-value" aria-labelledby="name-label">This compound doesn't belong to any concepts</span>
+		</g:if>
+		<g:else>
+		  <div id="list-concepts" class="content scaffold-list" role="main">
+		  <table>						
 				<thead>
 				<tr>
 				
@@ -96,6 +100,7 @@
 				</g:each>
 				</tbody>
 			</table>
-	</div>
+	    </div>
+	  </g:else>	
 	</body>
 </html>

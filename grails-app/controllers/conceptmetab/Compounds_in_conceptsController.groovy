@@ -54,11 +54,11 @@ class Compounds_in_conceptsController {
 		def colName
 		if(concept.concept_types.fullname.contains("MeSH"))
 		{
-			 colName = "Pubchem"
+			 colName = "mesh"
 		}
 		else
 		{
-			colName = "KEGG"
+			colName = "kegg"
 		}
 		
 		println("Download is " + download)

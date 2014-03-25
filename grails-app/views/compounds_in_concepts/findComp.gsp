@@ -17,9 +17,12 @@
     
     <div>
      <br/><br/>
-     <center> <export:formats formats="['csv', 'excel']" params="[q:"${params.q}"]" />
+     <center> 
+     <export:formats formats="['csv', 'excel']" params="[q:"${params.q}"]" />
+     <g:if test="${colName.equals('kegg')}">
 	   <% url = "http://portal.ncibi.org/cytoscape/3/cytoscape.php?cids="+"${map.values().keid}"+"&networkType=C-G"  %>
-	                     <a href="<%=url %>" target="_blank">  Open Compound gene network in MetScape</a>      
+	   <a href="<%=url %>" target="_blank">  Open Compound gene network in MetScape</a>     
+	           </g:if>           
       </center>
     <g:set var="i" value="1"/>
      
@@ -27,22 +30,22 @@
 					<thead>
 					<tr>
 					<th>Index</th>
-					<th>Compound Name</th>
-					<th>Pubchem id</th>
-					<th>Kegg id</th>		
+					<th width ='50%'>Compound Name</th>
+					<th width ='20%'>Pubchem id</th>
+					<th width ='20%'>Kegg id</th>		
 							
 					</thead>
 					<tbody>
                     <g:each in="${ map}" status="i" var="var" >
                    
                     <tr>
-                          <td>${i+1 }</td>       
-                       
-                        <td>${var.value.names }</td>
-                        <td>${var.value.pubid }</td>
-                        <td>${var.value.keid }</td>
-                        
-                        <tr>
+                         <td>${i+1 }</td>       
+                         <td width ='50%'>${var.value.names }</td>
+                         <g:if test="${var.value.pubid == null ||  var.value.pubid.equals('NULL')  }"> <td>--</td></g:if>                         
+                        	<g:else><td width ='20%'> ${var.value.pubid }</td></g:else>
+                       	<g:if test="${var.value.keid == null ||  var.value.keid.equals('NULL')  }"> <td>--</td></g:if>                         
+                        	<g:else><td width ='20%'> ${var.value.keid }</td></g:else>
+                    <tr>
                     </g:each>
                    </tbody> 
                    

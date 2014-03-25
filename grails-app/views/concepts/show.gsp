@@ -10,6 +10,7 @@
         <title><g:message code="default.show.label" args="[entityName]" /></title>
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <tooltip:resources/>
     </head>
     <body>
         <div id="show-concepts" class="content scaffold-show" role="main">
@@ -32,19 +33,8 @@
 	                    <li class="fieldcontain">
 	                        <span id="original_id-label" class="property-label"><g:message code="concepts.original_id.label" default="Concept Id" /></span>
 	                        <g:set var="ctype" value="${conceptsInstance.concept_types}"/>    
-	                         <g:if test="${ctype.fullname.contains('MeSH')}">
-	                                   <% url = "http://www.ncbi.nlm.nih.gov/mesh/?term="+"${conceptsInstance?.original_id}"  %>
-	                         </g:if>
-	                          <g:if test="${ctype.fullname.contains('GO')}">
-	                                   <% url = "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term="+"${conceptsInstance?.original_id}"  %>
-	                         </g:if>
-	                          <g:if test="${ctype.fullname.contains('KEGG')}">
-	                                   <% url = "http://www.kegg.jp/kegg-bin/show_pathway?"+"${conceptsInstance?.original_id}"  %>
-	                         </g:if>
-	                          <g:if test="${ctype.fullname.contains('Enzyme')}">
-	                                   <% url = "http://www.ncbi.nlm.nih.gov/mesh/?term="+"${conceptsInstance?.original_id}"  %>
-	                         </g:if>
-	                         <a href="<%=url %>" target="_blank">                    
+	                        
+	                         <a href="${url}" target="_blank">                    
 	                         <span class="property-value" aria-labelledby="original_id-label"><g:fieldValue bean="${conceptsInstance}" field="original_id"/></span>    </a>
 	                    </li>
 	                    <li class="fieldcontain">
@@ -65,6 +55,7 @@
 	                  <g:form action="show" method="get">
 	                   <ol class="property-list concepts">
 	                   <li class= "fieldcontain">
+	                   <tooltip:tip value="Benjamini-Hochberg FDR correction"> Q-value</tooltip:tip>
 	                   <span class="filter-label"><g:radioGroup name="fil" values="['pval','qval']" value="qval" labels = "['P-value','Q-value']">
 	                        ${it.radio} <g:message code="${it.label}" />
 	                        </g:radioGroup>  </span>
@@ -88,7 +79,7 @@
 		              <g:set var="id2" value="${params?.id2}"/>    
 		              <g:set var="odds" value="${params?.odds}"/>    
 		              <g:set var="fil" value="${params?.fil}"/>  
-		               <g:include controller="enrichments" action=  "createChart" params="[id1:1e-45,id2:id2,odds:odds,q:cnm,fil:fil]"/>
+		               <g:include controller="enrichments" action=  "createChart" params="[id1:1e-45,id2:id2,odds:odds,q:cnm,fil:fil, statement :['all']]"/>
 		         </div>
            
            </div> 
