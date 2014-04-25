@@ -280,7 +280,7 @@ fieldset,
 }
 
 .fieldcontain .property-value {
-    display: block;
+     display: table-row;
     font-family: Arial, Helvetica, sans-serif;
     font-size:90%;
 }
@@ -929,4 +929,11 @@ a.header-main:link, a.header-main:visited {
 
 }
 
+
+.footnote {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: italic;
+	color: #777777;
+}
 

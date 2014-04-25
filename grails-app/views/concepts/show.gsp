@@ -10,7 +10,7 @@
         <title><g:message code="default.show.label" args="[entityName]" /></title>
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-        <tooltip:resources/>
+      <gui:resources components="['toolTip']" mode='raw'/>
     </head>
     <body>
         <div id="show-concepts" class="content scaffold-show" role="main">
@@ -20,13 +20,13 @@
 	            </g:if>
 	            <div id ="title" style="width: 676px; height: 250px;float:left ;border = 1">
 	             <h1>Concept Information</h1>
-	             
+	            <div style="width:${width}; height: 250px;float:left ;border = 1">
 	            <ol class="property-list concepts">	            
 	                <g:if test="${conceptsInstance?.name}">
 	                <li class="fieldcontain">
 	                    <span id="name-label" class="property-label"><g:message code="concepts.name.label" default="Name" /></span>
 	                    <g:set var="cnm" value="${conceptsInstance?.id}"/>                        
-	                    <span class="property-value" aria-labelledby="original_id-label">    <g:link controller="Enrichments" action="filterSlider" params="[id1:1e-45,id2:0.01,q:cnm,fil:'qval' ]"><b>${conceptsInstance?.name.capitalize()}</b></g:link></span>
+	                    <span class="property-value" aria-labelledby="original_id-label">${conceptsInstance?.name.capitalize()}</span>
 	                </li>
 	                </g:if>  
 	                <g:if test= "${conceptsInstance?.original_id}">
@@ -50,20 +50,35 @@
 	                </li> 
 	                </g:if>
 	            </ol>
+	            
+	             
 	            </div>
-	            <div id ="title" style="width: 250px; height: 250px; float:right ; ">          
+	            <g:if test="${conceptsInstance.concept_types.fullname.contains('MeSH')}">
+		            <div style="width: 80px; height: 250px;float:left ;border = 1">
+		            <br/><br/>		         
+		             <% directLink = "http://metab2mesh.ncibi.org/?term="+"${conceptsInstance?.name} "+"&qtype=mesh&exact=on&m2msearchbutton=Metab2MeSH+Search"  %>
+		            <a href="<%=directLink %>" target="_blank"><img src="${resource(dir: 'images', file: 'Metab2Mesh.jpg')}" alt="Metab2mesh"  title="View metabolite connected to this mesh term" style="max-height: 150px; max-width: 150px;padding:5px;"/></a>
+					<br/>
+		            </div>
+		             </g:if>
+	            </div>
+	           
+	            
+	            <div id ="title" style="width: 250px; height: 250px; float:right ; ">  
+	  
+	        
 	                  <g:form action="show" method="get">
 	                   <ol class="property-list concepts">
 	                   <li class= "fieldcontain">
-	                   <tooltip:tip value="Benjamini-Hochberg FDR correction"> Q-value</tooltip:tip>
-	                   <span class="filter-label"><g:radioGroup name="fil" values="['pval','qval']" value="qval" labels = "['P-value','Q-value']">
-	                        ${it.radio} <g:message code="${it.label}" />
-	                        </g:radioGroup>  </span>
+	                   <span class="filter-label"> P-value: <input type="radio" name="fil" value="pval"/></span>
+					   <span class="filter-label"  title="Benjamini-Hochberg FDR correction"> Q-value <input type="radio" name="fil" value="qval" title="Benjamini-Hochberg FDR correction" checked="checked"  />
+	                    </span>
 	                         <span class="filter-label"><g:textField name="id2" id="id2" value="${params.id2 }"/></span>
 	                   </li>
 	                  <li class= "fieldcontain">      
 	                    <span class="filter-label">Odds Ratio</span><br/>
 	                        <span class="filter-label"> <g:textField name="odds" id="odds" value="${params.odds}"/></span>
+	                         <span class="footnote">Increase value to restrict result</span> 
 	                        <g:hiddenField name="id" value="${params.id}" />
 	                  </li>
 	                  <li class= "fieldcontain">

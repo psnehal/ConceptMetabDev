@@ -48,11 +48,62 @@ RConnection c = new RConnection();
 			
 			try{
 				println("its in png block")
-			    connection.voidEval("png(filename ='/tmp/images/test2.png'),bg = '#F7F8E0' ")
+			    connection.voidEval("png(filename ='/tmp/test2.png',bg = '#F7F8E0') ")
 			}
 			catch(e) {		
 				println("its in pdf block")
-				connection.voidEval("pdf('/tmp/images/test3.pdf')")				
+				connection.voidEval("pdf('/tmp/test3.pdf')")				
+			}
+			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none" )')
+			connection.voidEval("dev.off()")
+			int[] rowOrd = connection.eval('test2$rowInd').asIntegers();
+			int[] colOrd = connection.eval('test2$colInd').asIntegers();;
+			println("Got results")
+			def mapOrd = ["rowOrd": rowOrd, "colOrd": colOrd]
+			
+			
+			return mapOrd
+			
+			}
+			
+			
+			def drawImage(def te)
+			{
+				println("inside Service")
+					RConnection connection;
+			connection = new RConnection("localhost",
+				   6311);
+			   
+			   println("Connected to R")
+			   
+			connection.assign("mat", te);
+			connection.voidEval("library('rjson')");
+			connection.voidEval("library('gplots')");
+			connection.voidEval("test <- fromJSON (mat)");
+			connection.voidEval("m = do.call(rbind, test)");
+			connection.voidEval("data = data.frame(m[2:nrow(m), 2:ncol(m)], row.names=m[2:nrow(m),1],stringsAsFactors=F)");
+			connection.voidEval("colnames(data) = m[1,2:ncol(m)]");
+			//		/pdf("heatmap.pdf", height=10, width=10)
+			/*
+			connection.voidEval('hmcols<-colorRampPalette(c("white","yellow","red"))(256)')
+			//connection.voidEval('test2 =heatmap(data.matrix(data),col=hmcols)')
+			connection.voidEval("png('/tmp/images/test.png')")
+			connection.voidEval("test2 =heatmap(data.matrix(data),col=hmcols))");
+			connection.voidEval("dev.off()")
+			*/
+			
+			connection.voidEval('hclust.ave <- function(x) hclust(x, method="average")')
+			connection.voidEval('par(bg="#F7F8E0")')
+			connection.voidEval('myCol <- c("white","#ffffcc","#ffff99","#ffff66","#ffff33","#FFFF00","#FFCC00","#ff9900","#ff6600","#FF3300","red" )')
+			connection.voidEval(' myBreaks <- c(0,1, 10, 20,30,40,50,60,70,80,90,100)')
+			
+			try{
+				println("its in png block")
+				connection.voidEval("png(filename ='/tmp/test2.png'),bg = '#F7F8E0' ")
+			}
+			catch(e) {
+				println("its in pdf block")
+				connection.voidEval("pdf('/tmp/test3.pdf')")
 			}
 			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none" )')
 			connection.voidEval("dev.off()")

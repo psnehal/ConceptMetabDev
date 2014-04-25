@@ -20,7 +20,21 @@ public final class ChipEnrichRServer
 	{
 		try
 		{
+			
 			connection = new RConnection(serverAddress, serverPort);
+			connection.voidEval("library('gplots')");
+			connection.voidEval("m = read.table('/tmp/no.txt', header = TRUE,sep=\"" +";"+"\" )");
+			connection.voidEval("data = data.frame(m[2:nrow(m), 2:ncol(m)], row.names=m[2:nrow(m),1],stringsAsFactors=F)");
+			connection.voidEval("hclust.ave <- function(x) hclust(x, method='average')");
+			connection.voidEval("par(bg='#F7F8E0')");
+			connection.voidEval("myCol <- c('white','#ffffcc','#ffff99','#ffff66','#ffff33','#FFFF00','#FFCC00','#ff9900','#ff6600','#FF3300','red' )");
+			connection.voidEval(" myBreaks <- c(0,1, 10, 20,30,40,50,60,70,80,90,100)");
+			
+			//println("its in pdf block");
+				connection.voidEval("pdf('/tmp/test3.pdf')");				
+			
+			connection.voidEval("test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace='none' )");
+			connection.voidEval("dev.off()");
 		}
 		catch (RserveException e)
 		{

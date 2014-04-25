@@ -10,6 +10,7 @@ import org.rosuda.REngine.*;
 import org.apache.commons.io.output.WriterOutputStream
 
 //import org.conceptmetab.java.CreateHeatmap
+import org.conceptmetab.java.DrawHeatMap
 import org.conceptmetab.java.HeatMapNewJS
 import org.conceptmetab.java.JDBCConnectionTest;
 import org.conceptmetab.java.MockupHeatMap
@@ -482,7 +483,7 @@ def createDb(){
 					 }
 				 
 				 }
-		 println(allid)
+		// println(allid)
 		  def map = [:]  //1
 		  allid.each {  //2
 			  if(map.containsKey(it)) map[it] = map[it] + 1  //3
@@ -593,18 +594,12 @@ def createDb(){
 		 jsonMap.table = table
 		println map
 		 
-		 println("jsonMap is+" +  emptyList)
-	   
-		 //def allR =map.collect {ids -> return [ids.getKey().toString(),ids.getValue()]}
-		 
-	   
-	   
+		// println("jsonMap is+" +  emptyList)
+		 //def allR =map.collect {ids -> return [ids.getKey().toString(),ids.getValue()]}	   
 		//render map
+		
 		def dbc = table as JSON
-		
-		
 		def clst = emptyList as grails.converters.JSON
-		
 		println emptyList.getAt(0)
 			[dbc:dbc, map:map,clst:clst,rsize:result.size(),emptyList:emptyList]
 	 
@@ -798,13 +793,15 @@ def columns = []
  
  def redirectView()
  {
-	 println("from redirectView"+params.keySet())
+	// println("from redirectView"+params.keySet())
 	 def filter = params.fil;
 	 def con = params.q.toString();
 	 def id1 = params.id1.toString();
 	 def id2 = params.id2.toString();
 	 def db = []
-	 
+	 HashMap jsonMapN = new HashMap()
+     String odds = params.odds.toString()
+	 def map	 
 	 if(params.statement instanceof java.lang.String)
 	 {
 		println("Statement is only one string")
@@ -813,45 +810,32 @@ def columns = []
 	 else
 	 {
 		 db = params.statement.toList()
+	 } 
+	
+	 //**************************************************************For Sorting *****************************************
+	 String fil =params.sort
+	 String order =params.order
+	 if(params?.sort && fil.equals("name") && order.equals("asc"))
+	 {
+		println("Sorting by name")
+		map = map.sort{it.name}
 	 }
-	 
-	 
-	 
-	
-	 HashMap jsonMapN = new HashMap()
-	 println("db  is"+ db.class)
-	 String odds = params.odds.toString()
-	 def map
-	 
 
- //**************************************************************For Sorting *****************************************
- String fil =params.sort
- String order =params.order
- if(params?.sort && fil.equals("name") && order.equals("asc"))
- {
-	println("Sorting by name")
-	map = map.sort{it.name}
- }
-
- if(params?.sort && fil.equals("pval"))
- {
-	
-println("Sorting by pval")
-	map = map.sort{it.pval}
- }
+	 if(params?.sort && fil.equals("pval"))
+	 {
+		
+		 println("Sorting by pval")
+		map = map.sort{it.pval}
+	 }
  
- if(params?.sort && fil.equals("qval"))
- {
-	
-	//println("Sorting by qval")
-	map = map.sort{it.qval}
- }
- //**************************************************************For Chart Still Working *****************************************
- 
+	 if(params?.sort && fil.equals("qval"))
+	 {
+		
+		//println("Sorting by qval")
+		map = map.sort{it.qval}
+	 }
 
 //************************************************************Parameter handling *****************************************
-	 
-	 
 	
 	 if (odds.length() ==0)
 	 {
@@ -864,9 +848,12 @@ println("Sorting by pval")
 		 forward(action: "createJson", params:params)
 		 
 	 }
-	
-	
+	 if(params.containsKey("heatmap"))
+	 {
 		 
+		 forward(action: "drawHeatmap", params:params)
+		 
+	 }		 
 	
 	else {
 				 if(params.containsKey("slider"))
@@ -966,9 +953,21 @@ println("Sorting by pval")
 					 
 				 }
 				 else{
-					redirect(action: "clusterStr", params: params)
+					 /*
+					 //map size for no of concepts selected and 
+					 def con_com = Concepts.get(con.toInteger()).num_compounds
+					 if (map.size > 300 || con_com > 300 )
+					 {
+					redirect(action: "drawHeatmap", params: params)
+					 }
+					 else
+					 {
+						 redirect(action: "clusterStr", params: params)
+					 }
 					//redirect(action: "mockup", params: params)
-					//redirect(action: "test", params: params)
+					//redirect(action: "test", params: params) */
+					 
+					 render "Please select atlest on option"
 				 }
 				 
 				 /*
@@ -1157,6 +1156,62 @@ println("Sorting by pval")
 	 }
 	 println(html2)
 	 [html:html,html2:html2,con:con]
+	 
+ }
+ 
+ 
+ def drawHeatmap()
+ {
+	 def fil = params.fil
+	 def id2 = params.id2
+	  def db = []
+	 
+	 if(params.statement instanceof java.lang.String)
+	 {
+		db.add(params.statement);
+	 }
+	 else
+	 {
+		 db = params.statement.toList()
+	 }
+	 
+	 def odds= params.odds
+	 DrawHeatMap hm = new DrawHeatMap();
+	 String dbname = "";
+	 db.each{ dbname = dbname+"'"+it+"'"+"," }
+	 println("DBNAME is "+dbname)
+	 dbname =dbname.substring(0,dbname.lastIndexOf(","))
+	 def  filename = hm.getConcept(params.q.toInteger(), fil, id2,odds,dbname);
+	def bimage = filename+".png"
+	def textimage = filename+".txt"
+	
+	
+	
+	[bimage:bimage,textimage:textimage]
+	 
+ }
+ 
+ def downloadFile()
+ {
+	 
+	 println params;
+	 InputStream contentStream
+	
+		 String filepath = "/tmp/"+params.filename		
+		 def file = new File(filepath)
+		 response.setContentType("text/csv") // or or image/JPEG or text/xml or whatever type the file is
+		 response.setHeader("Content-disposition", "attachment;filename=${file.name}")
+		 response.outputStream << file.bytes		
+	
+	
+ }
+ 
+ 
+ def detailedHeatmap()
+ {
+	 println "detalied heatmap"+ params;
+	 
+	 println params.statement.class
 	 
  }
  
@@ -1528,38 +1583,45 @@ println("Sorting by pval")
 	 [html:html,html2:html2,name:name]
  }
  def test()
+ 
  {
+	 
+	 println("from test params are"+params)
 	 //def id = params.id
-	 println("from test"+params)
 	 def fil = params.fil
 	 def id2 = params.id2
-	 def db = params.statement.toList()
-	 def odds= params.odds
+	  def db = []
 	 
-	 /*
-	 JDBCConnectionTest jbc = new JDBCConnectionTest();
-	 String dbname = "";
-	 db.each{ dbname = dbname+"'"+it+"'"+"," }
-	 println("DBNAME is "+dbname)
-	 dbname =dbname.substring(0,dbname.lastIndexOf(","))
-	  //Object[][] BufferedImage
-	  BufferedImage image =jbc.getConcept(params.q.toInteger(), fil, id2,odds,dbname);
-	 // def img = image.bytes
-	 /*
-	 OutputStream outputStream = response.getOutputStream();
-	 ImageIO.write(image, "png", outputStream)*/
-	 BufferedImage bimage, ximage, yimage;
+	 if(params.statement instanceof java.lang.String)
+	 {
+		db.add(params.statement);
+	 }
+	 else
+	 {
+		 db = params.statement.toList()
+	 }
+	 
+	 def odds= params.odds	
+	 
+
+	 String bimage, ximage, yimage;
 	 Image bi, xi, yi;
 	 HeatMapNewJS hm = new HeatMapNewJS();
 	 String dbname = "";
 	 db.each{ dbname = dbname+"'"+it+"'"+"," }
 	 println("DBNAME is "+dbname)
 	 dbname =dbname.substring(0,dbname.lastIndexOf(","))
-	 Map<String,BufferedImage> mapImages  = hm.getConcept(params.q.toInteger(), fil, id2,odds,dbname);
+	 //def test = hm.getConcept(params.q.toInteger(), fil, id2,odds,dbname);
+	 Map<String,String> mapImages  = hm.getConcept(params.q.toInteger(), fil, id2,odds,dbname);
 	//  ImageIO.write(image, "PNG", response.outputStream)
 	 //render image
+	 def height , width
+	 println("from test"+mapImages)
 	for (Map.Entry<String, String> mapE : mapImages.entrySet())
 	 {
+		 
+		 
+		 println("insilde for loop")
 		 System.out.println(mapE.getKey() + "/" + mapE.getValue());
 		 String image = mapE.getKey();
 		if(image.equals("image"))
@@ -1571,13 +1633,28 @@ println("Sorting by pval")
 		{
 			 ximage=  mapE.getValue();
 		}
+		else if(image.equals("height"))
+		{
+			 height=  mapE.getValue().toBigInteger();
+		}
+		else if(image.equals("width"))
+		{
+			 width=  mapE.getValue().toBigInteger();
+		}
 		else{
 			yimage=  mapE.getValue();
 		}
 	 }
-	 OutputStream outputStream = response.getOutputStream();
-	 OutputStream outputStream2 = response.getOutputStream();
-	 [bimage:ImageIO.write(bimage, "png", outputStream), ximage:ImageIO.write(ximage, "png", outputStream2), yimage:ImageIO.write(yimage, "png", outputStream)]
+	 
+	 println("from test"+bimage + "x " + ximage + "y " + yimage)
+	 
+	 
+	 
+	
+	 
+	 [ximage:ximage,bimage:bimage,yimage:yimage,height:height,width:width] 
+	//// render test
+	 
  }
  
  def filterSlider()

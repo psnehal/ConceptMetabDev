@@ -226,6 +226,7 @@ class ConceptsController {
 		
 		def conceptsInstance = Concepts.get(id)
 		String url
+		def width = "676px"
 		println ("Concept type is " + conceptsInstance.concept_types.fullname )
 		if (!conceptsInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'concepts.label', default: 'Concepts'), id])
@@ -237,6 +238,7 @@ class ConceptsController {
 			def meshlink = conceptsInstance.name			
 			url = "http://www.ncbi.nlm.nih.gov/mesh/?term="+meshlink
 			println ("found mesh term")
+			 width = "500px"
 		}
 		else if(conceptsInstance.concept_types.fullname.contains('GO'))
 		{
@@ -248,10 +250,10 @@ class ConceptsController {
 		}
 		else if(conceptsInstance.concept_types.fullname.contains('Enzyme'))
 		{
-			url = "http://www.ncbi.nlm.nih.gov/mesh/?term="+conceptsInstance?.original_id
+			url = "http://www.genome.jp/dbget-bin/www_bget?"+conceptsInstance?.original_id
 		}
 		println("url is "+ url)
-		[conceptsInstance: conceptsInstance, url:url]
+		[conceptsInstance: conceptsInstance, url:url,width:width]
         
     }
 

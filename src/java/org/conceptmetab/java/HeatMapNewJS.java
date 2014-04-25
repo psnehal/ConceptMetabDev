@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
@@ -59,10 +60,10 @@ public class HeatMapNewJS {
        
     }
    
-    public Map<String, BufferedImage> getConcept(int id,String fil, String id2, String odds, String dbL) throws ClassNotFoundException, SQLException
+    public Map<String, String> getConcept(int id,String fil, String id2, String odds, String dbL) throws ClassNotFoundException, SQLException
     {
        
-        Connection c;
+    	Connection c;
         Statement s;
         ArrayList<Concepts> concepts =   new ArrayList<Concepts>(); //Object with name and id
          //Array of only ids
@@ -82,10 +83,10 @@ public class HeatMapNewJS {
         int count = 0;
         String sql = "SELECT concepts.id, concepts.name, concept_types.name, concepts.num_compounds, enrichments.intersection, " +
                 "enrichments.pval, enrichments.qval FROM enrichments JOIN concepts ON enrichments.id2_id = concepts.id JOIN concept_types " +
-                "ON concept_types.id = concepts.concept_types_id WHERE enrichments.id1_id = ? and ("+fil+" < ?) and (odds > ?) and concept_types.fullname in ("+dbL+") "+
+                "ON concept_types.id = concepts.concept_types_id WHERE enrichments.id1_id = ? and ("+fil+" <= ?) and (odds >= ?) and concept_types.fullname in ("+dbL+") "+
                 "UNION SELECT concepts.id, concepts.name,concept_types.name, concepts.num_compounds, enrichments.intersection, enrichments.pval, enrichments.qval FROM " +
                 "enrichments JOIN concepts ON enrichments.id1_id = concepts.id JOIN concept_types ON concept_types.id = " +
-                "concepts.concept_types_id WHERE enrichments.id2_id = ? and ("+fil+"< ?) and (odds > ?) and concept_types.fullname in ("+dbL+")";
+                "concepts.concept_types_id WHERE enrichments.id2_id = ? and ("+fil+"<= ?) and (odds >= ?) and concept_types.fullname in ("+dbL+")";
         System.out.println("dbname from java"+ dbL);
         
        // String sqlDb = String.format(sql, preparePlaceHolders(dbnames.length),preparePlaceHolders(dbnames.length));
@@ -175,13 +176,13 @@ public class HeatMapNewJS {
                
             }
         }
-        System.out.println("Size of Compounds of Interest = "+ com_int.size());
-        //System.out.println("************************Concepts size :" + concepts.size()+ "Compounds size is : "+ com_int.size() +  "size of hashmap is :" + frequencies.size()  );
+        
+        ArrayList<Compounds> exactComInt = new ArrayList<Compounds>();
+        exactComInt = createExactComInt(com_int);
        
-       
-        Object[][] board = createImage(com_int,frequencies,concepts,id );
+        Object[][] board = createImage(exactComInt,frequencies,concepts,id );       
         Object[][] mtr= createClusteredMatrix(board);
-        Map<String, BufferedImage> bImage =createBufferredImage(mtr,id);
+        Map<String, String> bImage =createBufferredImage(mtr,id);
         resultOfInt.close();
         s.close();
         rs.close();
@@ -190,8 +191,43 @@ public class HeatMapNewJS {
         preparedStatement.close();
         c.close();
         //bImage
+        
+        System.out.println("COlumn in old matrix is" + board.length + "in new one : " + board.length);
         return bImage ;
     }
+    
+    private ArrayList<Compounds> createExactComInt(ArrayList<Compounds> com_int) {
+    	
+    	ArrayList<Compounds> exactComInt = new ArrayList<Compounds>();
+    	Map<Long,String > mapComInt = new HashMap<Long,String >();
+    	String name;
+    	
+    	for (int i = 0; i < com_int.size(); i++){
+    		Long id = com_int.get(i).getId();
+    		String comName = com_int.get(i).getName();
+    		//System.out.println("id from input list " + id  + "name is " + comName);
+    		if (!(mapComInt.containsKey(id))){
+    			//System.out.println("inside loop " + id  + "name is " + comName);
+    			mapComInt.put(id, comName);
+    		}
+    		
+    			
+    	}
+    	
+    	for (Map.Entry entry : mapComInt.entrySet()) {
+    		
+    		Long mid = (Long) entry.getKey();
+    		String mname = (String) entry.getValue();
+    		exactComInt.add(new Compounds(mname, mid));
+    	
+    	}
+    	
+    	System.out.println("compound original was"+ com_int.size() + "  modified size id  " + exactComInt.size());
+    	
+    	
+    	
+    	return exactComInt;
+    	}
    
 public Object[][] createImage(ArrayList<Compounds> compList,HashMap<String, ArrayList<Long>> frequencies,ArrayList<Concepts> concepts ,int id) throws ClassNotFoundException, SQLException
     {
@@ -199,6 +235,8 @@ public Object[][] createImage(ArrayList<Compounds> compList,HashMap<String, Arra
     int total = 0 ;
     int row =frequencies.size() +2; // for total and compounds
     int col = compList.size()+1; // for concpets name
+    ArrayList track = new ArrayList();
+    
    
     Object [][] board = new Object[row][col];
     //System.out.println("matrix no of rows"+board.length + "size of hashmap" + frequencies.size());
@@ -225,6 +263,7 @@ public Object[][] createImage(ArrayList<Compounds> compList,HashMap<String, Arra
             board[j][i] = compList.get(countComp).getName();//Add compound name in first row starting from second column
             j++;
         }
+      
        
                
        
@@ -269,7 +308,15 @@ public Object[][] createImage(ArrayList<Compounds> compList,HashMap<String, Arra
                  }//For loop
                
                     board[j][i]=count;
-                //    System.out.println(" [j , i] "+ j+","+ i + "count is" + count);
+                    
+                    if( !(count == 0))
+                    		{
+                    System.out.println("count is" + count);
+                    
+                    track.add(i);
+                    
+                 //   board =deleteColumn(board, col);
+                    		}
    
          
          
@@ -292,9 +339,78 @@ public Object[][] createImage(ArrayList<Compounds> compList,HashMap<String, Arra
             // TODO Auto-generated catch block
             e.printStackTrace();
     }
-    System.out.println(total);*/
+    */
+    
+    System.out.println("Board row no is" + board.length  + "column no is " + board[1].length);
+    board =deleteColumn (board,track);
+    
+    System.out.println("After effect: Board row no is" + board.length  + "column no is " + board[1].length  + " track size is :" + track.size());
+    
                 return board;
     }
+
+
+
+public static Object[][] deleteColumn(Object[][] board,ArrayList track)
+{
+	Object[][] nargs = new Object [board.length][track.size()];
+	
+	//System.out.println("row size is " +  board.length + " col size is " +  track.size());
+	//System.out.println( "row size for nargs is " + nargs.length + "column size is " + nargs[1].length);
+	int col = 0;
+	for (int i = 0; i < track.size();i++)
+	{
+	
+		for(int row = 0 ; row< board.length; row++)
+		{
+			if (i == 0)
+			{
+				nargs[row][col] = board[row][0]	;
+				
+			}
+			else
+			{
+				//System.out.println ("adding at row  " + row + " at col " + col + " value " + board[row][(Integer) track.get(i)] );
+				nargs[row][i] = board[row][(Integer) track.get(i)];				
+			}
+			}
+		
+	}
+    return nargs;
+}
+
+
+static Object[][] cleanM;
+public Object[][] cleanMatrix (Object[][] board)
+{
+	int coumpound = board[1].length;
+	 int totCol = board.length -1;
+	 
+	 System.out.println("compound no is " + coumpound);
+	
+	 for (int i=1; i < board.length; i++) 
+	{
+		
+		 int colTotal =  (Integer) board[ totCol][i];
+		 int newColIdx = 1;
+		 for (int j=1; j < board[i].length; j++){
+			System.out.println("ColTotal is" + colTotal );
+				 if(!(colTotal == 0))
+				 {
+					 System.out.println ("found zero :::"  + board[i][j]);
+				
+					 cleanM[i][newColIdx] = board[i][j];
+	                    newColIdx++;
+					 
+				 }
+				 
+		 }		 
+		
+	}
+	
+	
+	return cleanM;
+}
    
 public Object[][] createClusteredMatrix(Object[][] board) throws ClassNotFoundException, SQLException
 {
@@ -329,7 +445,7 @@ public Object[][] createClusteredMatrix(Object[][] board) throws ClassNotFoundEx
    
 }
 
-public Map<String, BufferedImage> createBufferredImage(Object[][] board, int id )
+public Map<String, String> createBufferredImage(Object[][] board, int id )
 {
            
 
@@ -387,10 +503,10 @@ public Map<String, BufferedImage> createBufferredImage(Object[][] board, int id 
                  colname = colname.substring(0, 30);
                 }
              gXaxis.setColor(Color.red);
-             gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 15 ));                   
+             gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 25 ));                   
                
                
-             System.out.println("Colname is " +  colname + "added to "  + "[" + 0 +"," +col +"]" + "with x  and y cor" + ch + "and 0"  );
+          //   System.out.println("Colname is " +  colname + "added to "  + "[" + 0 +"," +col +"]" + "with x  and y cor" + ch + "and 0"  );
              gXaxis.drawString(colname, ch, 0);
                
              gXaxis.setTransform(saved);           
@@ -411,7 +527,7 @@ public Map<String, BufferedImage> createBufferredImage(Object[][] board, int id 
                         gYaxis.setFont(new Font( "Sansserif", Font.BOLD, 20 ));
                         int ch2 = compoundsize*20 +10;
                         gYaxis.drawString(rowname, x_cor, y_fcor);
-                    System.out.println("Rowname is " +  rowname + "added to "  + "[" + row +"," +col +"]" + "with x "+x_cor+" and y cor" + y_fcor  );
+                  //  System.out.println("Rowname is " +  rowname + "added to "  + "[" + row +"," +col +"]" + "with x "+x_cor+" and y cor" + y_fcor  );
                         y_fcor = y_fcor+ rc_height;
                            
                      }
@@ -464,16 +580,21 @@ public Map<String, BufferedImage> createBufferredImage(Object[][] board, int id 
        
     }//For loop of compound
    
-    Map<String,BufferedImage > mapImages = new HashMap<String, BufferedImage>();
-    mapImages.put("image",bImage );
-    mapImages.put("xaxis", bXaxis);
-    mapImages.put("yaxis", bYaxis);
+    Map<String,String > mapImages = new HashMap<String, String>();
+ 
+    UUID uuid = UUID.randomUUID();
    
                 try {
-                     String fileName = "sans_new_"+id+".png";
+                     String fileName = "/tmp/"+uuid+"_"+ id+".png";
                     
-                     String fileXaxis = "sans_new_Xaxis"+id+".png";
-                     String fileYaxis = "sans_new_Yaxis"+id+".png";
+                     String fileXaxis ="/tmp/"+ uuid+"_"+ id+"_Xaxis"+id+".png";
+                     String fileYaxis = "/tmp/"+uuid+"_"+ id+"_Yaxis"+id+".png";
+                     
+                     mapImages.put("image",fileName.replace("/tmp/", "") );
+                     mapImages.put("xaxis", fileXaxis.replace("/tmp/", ""));
+                     mapImages.put("yaxis", fileYaxis.replace("/tmp/", ""));
+                     mapImages.put("height", ""+BI_HEIGHT);
+                     mapImages.put("width", ""+BI_WIDTH);
                        if (ImageIO.write(bImage, "png", new File(fileName)))
                        {
                            System.out.println("-- saved" +  fileName);
@@ -672,8 +793,8 @@ return g;
            
              for (Entry<String, ArrayList<Long>> entry : frequencies.entrySet())
              {
-                System.out.println("Concepts is --->" +  entry.getKey());
-                System.out.println("Compounds is -->" +  entry.getValue().get(1));
+              //  System.out.println("Concepts is --->" +  entry.getKey());
+              //  System.out.println("Compounds is -->" +  entry.getValue().get(1));
                  
              }
            

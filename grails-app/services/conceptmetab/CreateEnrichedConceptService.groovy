@@ -71,7 +71,7 @@ class CreateEnrichedConceptService {
 			{
 					map.each{
 						if (it.ctfull.equals(db.get(i))) {
-							println("ct full is"+ it.ctfull + "db is "+ db.get(i))
+							//println("ct full is"+ it.ctfull + "db is "+ db.get(i))
 							re.add(it)
 						}
 					}

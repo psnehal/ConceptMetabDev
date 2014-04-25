@@ -61,7 +61,7 @@ grails.hibernate.cache.queries = false
 
 
 
-imageindirect.basePath='/tmp/images'
+imageindirect.basePath='/tmp'
 
 environments {
     development {
