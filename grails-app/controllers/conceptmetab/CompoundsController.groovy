@@ -3,6 +3,8 @@ package conceptmetab
 import org.springframework.dao.DataIntegrityViolationException
 
 class CompoundsController {
+	
+	def exportService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 	
@@ -45,6 +47,8 @@ class CompoundsController {
     }
 
     def show(Long id) {
+		
+		println(params)
         def compoundsInstance = Compounds.get(id)
 		def conceptsInstance
 		def message = ""
@@ -54,6 +58,8 @@ class CompoundsController {
             redirect(action: "list")
             return
         }
+		
+	
 		
 		
 		def ccl =Compounds_in_concepts.createCriteria()		
@@ -74,10 +80,43 @@ class CompoundsController {
 			println(concept)
 			def conRes= Concepts.createCriteria()
 			 conceptsInstance = conRes.list {'in' ('id', concept) }
-			println( "No of concepts compounds belong to"+ conceptsInstance.size())
+			println( "No of concepts compounds belong to"+ conceptsInstance)
 			
 		}
-        [compoundsInstance: compoundsInstance,conceptsInstance: conceptsInstance ]
+		
+		def conMod=conceptsInstance.collect {ids ->
+		
+			if(ids.concept_types.fullname.toString().contains("MeSH")){								 
+				
+				def meshid2treenumInstance = Meshid2treenum.findAllWhere(mesh_id : ids.original_id)
+				if(meshid2treenumInstance.size() !=0 )
+				{
+					return[ id:ids.id, name:ids.name, conid: meshid2treenumInstance.get(0).tree_id, numCom: ids.num_compounds, numEnc: ids.num_enriched, conTyp: ids.concept_types.fullname]
+				}	
+				else
+				{
+					return[ id:ids.id, name:ids.name, conid: ids.original_id, numCom: ids.num_compounds, numEnc: ids.num_enriched, conTyp: ids.concept_types.fullname]
+				}	
+		}
+			else
+			{
+				return[ id:ids.id, name:ids.name, conid: ids.original_id, numCom: ids.num_compounds, numEnc: ids.num_enriched, conTyp: ids.concept_types.fullname]
+			}
+		}
+		
+		def fields = ["name", "conid", "numCom","numEnc","conTyp"]
+		def labels = ["name": "Concept name","conid": "Concept ID", "numCom" :"Concept Size","numEnc" :"# of Enrichments","conType": "Concept Types"]
+		
+		
+		if(params?.format && params.format != "html"){ 
+			
+			response.contentType = grailsApplication.config.grails.mime.types[params.format] 
+			response.setHeader("Content-disposition", "attachment; filename=Concepts.${params.extension}")			
+			exportService.export(params.format, response.outputStream,conMod,fields,labels, [:], [:])
+		}
+		
+		
+        [compoundsInstance: compoundsInstance,conceptsInstance: conMod ]
     }
 
     def edit(Long id) {

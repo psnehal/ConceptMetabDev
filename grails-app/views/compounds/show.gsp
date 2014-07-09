@@ -1,106 +1,127 @@
 
 <%@ page import="conceptmetab.Compounds" %>
+<%@ page import="conceptmetab.Concept_types" %>
+<%@ page import="conceptmetab.Meshid2treenum" %>
+
+
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+	  <meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'compounds.label', default: 'Compounds')}" />
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
+		
+		 <g:javascript src="tablesorter/jquery-latest.js" /> 
+ 		<g:javascript src="tablesorter/jquery.tablesorter.js" />
+		<script>
+		$(document).ready(function() 
+			    {   $("#myTable").tablesorter();
+
+			    });  
+			    
+
+		</script>
+		 <r:require module="export"/>
+		 
+		 
 	</head>
 	<body>
-		<a href="#show-compounds" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div id ="title" style="width: 600px ;border = 1">
-		<div id="show-compounds" class="content scaffold-show" role="main">
-			<h1><g:message code="default.show.label" args="[entityName]" /></h1>
-			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<ol class="property-list compounds">
-			
-				<g:if test="${compoundsInstance?.name}">
-				<li class="fieldcontain">
-					<span id="name-label" class="com-label"><g:message code="compounds.name.label" default="Name" /></span>
-					<span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${compoundsInstance}" field="name"/></span>					
-				</li>
+	  <div id="show-concepts" class="content scaffold-show" role="main">
+	  		    <a href="#show-compounds" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+				<h1><g:message code="default.show.label" args="[entityName]" /></h1>
+				<g:if test="${flash.message}">
+				<div class="message" role="status">${flash.message}</div>
 				</g:if>
-			
-				<g:if test="${compoundsInstance?.kegg_id}">
-				<li class="fieldcontain">
-					<span id="compSrc-label" class="com-label"><g:message code="compounds.compSrc.label" default="Kegg Id" /></span>
-					<span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${compoundsInstance}" field="kegg_id"/></span>			
-				</li>
-				</g:if>
-				
-				<g:if test="${compoundsInstance?.pubchem_id}">
-				<li class="fieldcontain">
-					<span id="compSrc-label" class="com-label"><g:message code="compounds.compSrc.label" default="Pubchem Id" /></span>
-					<span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${compoundsInstance}" field="pubchem_id"/></span>						
-				</li>
-				</g:if>
-				
-				<g:if test="${compoundsInstance?.kegg_preferred_name}">
-				<li class="fieldcontain">
-					<span id="compSrc-label" class="com-label"><g:message code="compounds.compSrc.label" default="Kegg Preferred Name" /></span>
-					<span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${compoundsInstance}" field="kegg_preferred_name"/></span>						
-				</li>
-				</g:if>
-				
-					<g:if test="${compoundsInstance?.pubchem_preferred_name}">
-				<li class="fieldcontain">
-					<span id="compSrc-label" class="com-label"><g:message code="compounds.compSrc.label" default="Pubchem Preferred Name" /></span>
-					<span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${compoundsInstance}" field="pubchem_preferred_name"/></span>			
-				</li>
-				</g:if>
-				
-					<g:if test="${compoundsInstance?.internal_id}">
-				<li class="fieldcontain">
-					<span id="compSrc-label" class="com-label"><g:message code="compounds.compSrc.label" default="internal_id Id" /></span>
-					<span class="property-value" aria-labelledby="name-label"><g:fieldValue bean="${compoundsInstance}" field="internal_id"/></span>			
-				</li>
-				</g:if>
-			
-				
-			
-			</ol>
+	<div id ="title" style="width: 500px;border:1">
+	<table  cellpadding="10">
+		<tr>
+		<g:if test="${compoundsInstance?.name}">
+		<tr>
+		<td width="200px" height="20px"><span class="property-label">Name</span></td>
+		<td><span class="comtable"><g:fieldValue bean="${compoundsInstance}" field="name"/></span></td>	
+		</tr>
+		</g:if>
+
+		<g:if test="${compoundsInstance?.kegg_id}">
+		<tr>
+		<td  width="200px" height="20px"><span class="property-label">Kegg Id</span></td>
+		<td><span class="comtable"><g:fieldValue bean="${compoundsInstance}" field="kegg_id"/></span></td>
+		</tr>
+		</g:if>
+
+		<g:if test="${compoundsInstance?.pubchem_id}">
+		<tr>
+		<td  width="200px" height="20px"><span class="property-label">Pubchem Id</span></td>
+		<td><span class="comtable"><g:fieldValue bean="${compoundsInstance}" field="pubchem_id"/></span></td>
+		</tr>
+        	</g:if>	
+
+
+		<g:if test="${compoundsInstance?.kegg_preferred_name}">
+		<tr>
+		<td  width="200px" height="20px"><span class="property-label">Kegg Preferred Name</span></td>
+		<td><span class="comtable">${compoundsInstance.kegg_preferred_name.replace("NULL","--")}</span></td>
+		</tr>
+        	</g:if>	
+
+		<g:if test="${compoundsInstance?.pubchem_preferred_name}">
+		<tr>
+		<td  width="200px" height="20px"><span class="property-label">Pubchem Preferred Name</span></td>
+		<td><span class="comtable">${compoundsInstance.pubchem_preferred_name.replace("NULL", "--")}<span></td>
+		</tr>
+        	</g:if>	
+
+
+		<g:if test="${compoundsInstance?.num_concepts}">
+		<tr>
+		<td  width="200px" height="20px"><span class="property-label"># of Concepts</span></td>
+		<td><span class="comtable"><g:fieldValue bean="${compoundsInstance}" field="num_concepts"/></span></td>
+		</tr>
+        	</g:if>	
+</table>
+	</div>
 		
-		</div>
-		</div>
-		<br/><br/>
-		<hr/>
+		
+		<br/>
+		<br/>
+		
+		 <export:formats formats="['csv', 'excel']" action="show" id="${compoundsInstance.id}" params="[id:"${compoundsInstance.id}",id2: '0.05', odds: '0',fil:'qval']" />
 		
 		<g:if test="${conceptsInstance == null}">
 		<span class="property-value" aria-labelledby="name-label">This compound doesn't belong to any concepts</span>
 		</g:if>
 		<g:else>
 		  <div id="list-concepts" class="content scaffold-list" role="main">
-		  <table>						
+		  <table id="myTable" class="tablesorter"> 				
 				<thead>
 				<tr>
-				
-					<g:sortableColumn property="index" title="${message(code: 'concepts.original_id.label', default: 'Index')}"   />
-					<g:sortableColumn property="original_id" title ="External Concept Id" params="[name:"${params.name}"]"  />
-					<th>Concept Type</th>
-					<g:sortableColumn property="name" title ="Concept Name" params="[name:"${params.name}"]" />
-					<g:sortableColumn property="num_compounds" title="${message(code: 'concepts.num_compounds.label', default: 'Concept Size')}"   params="[name:"${params.name}"]" />
-					<g:sortableColumn property="num_enriched" title ="# of Enrichments" params="[name:"${params.name}"]" />
-				
-				</tr>
+				<th><g:message code="overlap" default="Index" /></th>
+				<th><g:message code="overlap" default="Concept ID" /></th>
+				<th><g:message code="overlap" default="Concept Name" /></th>
+			    <th><g:message code="overlap" default="Concept Type" /></th>
+				<th><g:message code="overlap" default="Concept Size" /></th>
+				<th><g:message code="overlap" default="# of Erichments" /></th>					
+				</tr>		
 				</thead>
 				<tbody>
 				<g:each in="${conceptsInstance}" status="i" var="concept">
 					<tr>
-						<td> ${i+1} </td>
-						<td><g:link controller = 'Concepts' action="show" id="${concept.id}" params="[id2: '0.05', odds: '0',fil:'qval']">${concept.id}</g:link></td>
-						<g:set var="cnm" value="${concept.concept_types.fullname}"/>		
-						 <td>${cnm} </td>
-						<td>${concept.name.capitalize()}</td>					
-						<td>${concept.num_compounds}</td>					
-						<td>${concept.num_enriched}</td>					
+						<td> ${i+1} </td>						
+						
+						<g:set var="cnm" value="${concept.conTyp}"/>		
+									
+					<td>${concept.conid }
+						  	
+						 <td>${concept.name.capitalize()}</td>	
+						 <td>${cnm} </td>										
+						<td>${concept.numCom}</td>					
+						<td>${concept.numEnc}</td>					
 					</tr>
 				</g:each>
 				</tbody>
 			</table>
 	    </div>
 	  </g:else>	
+	  </div>
 	</body>
 </html>

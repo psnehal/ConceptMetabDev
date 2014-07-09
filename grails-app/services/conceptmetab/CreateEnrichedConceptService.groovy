@@ -41,16 +41,20 @@ class CreateEnrichedConceptService {
 		DecimalFormat format2 = new DecimalFormat("0.###");
 		def map = result.collect {en ->
 			//println(en.id1.id  + "and con is " + con )
+			
+	//Flag id1 and id2 are added to the map to indentify position of conceptOfInterst in the table. If its at position at 1 then id1 else id2.
+	//This position is important to map the remation in subset ans set relation mapping.		
+					
 			if(en.id1.id == con )
 		{
 				
-				return [enid: en.id,id:en.id2.id,name:(Concepts.get(en.id2.id).getName()),comNo: (Concepts.get(en.id2.id).getNum_compounds()),eid: (Concepts.get(en.id2.id).getOriginal_id()),ctypes: en.id2.concept_types.getName(),ctfull: en.id2.concept_types.getFullname(),pval: format.format(en.pval),qval:format.format(en.qval),ins: en.intersection,odds:format2.format(en.odds)]
+				return [enid: en.id,id:en.id2.id,name:(Concepts.get(en.id2.id).getName()),comNo: (Concepts.get(en.id2.id).getNum_compounds()),eid: (Concepts.get(en.id2.id).getOriginal_id()),ctypes: en.id2.concept_types.getName(),ctfull: en.id2.concept_types.getFullname(),pval: format.format(en.pval),qval:format.format(en.qval),ins: en.intersection,odds:format2.format(en.odds),rel : en.relation,flag :"id1"]
 				//println("Id1 is concept of interest")
 				
 		}
 			else if (en.id2.id == con){
 				
-				return [enid: en.id,id:en.id1.id,name:(Concepts.get(en.id1.id).getName()), comNo: (Concepts.get(en.id1.id).getNum_compounds()),eid: (Concepts.get(en.id1.id).getOriginal_id()),ctypes: en.id1.concept_types.getName(),ctfull: en.id1.concept_types.getFullname(),pval: format.format(en.pval),qval:format.format(en.qval),ins:(en.intersection), odds:format2.format(en.odds)]
+				return [enid: en.id,id:en.id1.id,name:(Concepts.get(en.id1.id).getName()), comNo: (Concepts.get(en.id1.id).getNum_compounds()),eid: (Concepts.get(en.id1.id).getOriginal_id()),ctypes: en.id1.concept_types.getName(),ctfull: en.id1.concept_types.getFullname(),pval: format.format(en.pval),qval:format.format(en.qval),ins:(en.intersection), odds:format2.format(en.odds),rel : en.relation,flag:"id2"]
 			}
 		
 		}
@@ -100,6 +104,7 @@ class CreateEnrichedConceptService {
 		
 	
 		
+		//This one gets list of concepts enriched with concept of interest
 		
 	   def enrichL =Enrichments.createCriteria()
 	   result= enrichL.list {
@@ -110,7 +115,6 @@ class CreateEnrichedConceptService {
 			 
 			 le(filter, id2_inter)
 			 ge('odds',odds.toBigDecimal())
-			 maxResults(1000)
 			 order(filter)
 		 }
 		
@@ -118,6 +122,7 @@ class CreateEnrichedConceptService {
 	   
 		 println("list of interactions = "+result.size() +"   id1 = "+ id1_inter+"  id2 = "+ id2_inter+"  id  = "+ con +"  filter  = "+ filter)
 		 
+		 //Map is collection of concept ids 
 			 def map = result.collect {en ->
 							 //println(en.id1.id  + "and con is " + con )
 							 if(en.id1.id == con )
@@ -134,24 +139,26 @@ class CreateEnrichedConceptService {
 						 
 						 }
 			 
+			 
 			 def query = Concepts.get(con)
 			 def allCon = map+ query.id
 			 
+			 //This is too check the concept types or to extract the concept id which belong to the user selection of database
 			 
 			 List re =[]
 			 for (int i = 0; i<db.size(); i++)
 			 {
 					 map.each{
 						 def stdb = Concepts.get(it).concept_types.getFullname()
-						// println("ct full is"+ stdb  + "db is "+ db.get(i))
+						// println("ct full is =  "+ stdb  + "  db is = "+ db.get(i))
 						 if (stdb.equals(db.get(i))) {
-							
+							 println("ct full is =  "+ stdb  + "  db is = "+ db.get(i))
 							 re.add(it)
 						 }
 					 }
 			 }
 			 re.add(con)
-		//	 println("re.size" + re.size() + "re is    "+re + "re.class " + re.class  +"map.class is " + map.class)
+			 println("re.size" + re.size() + "re is    "+re + "re.class " + re.class  +"map.class is " + map.class)
 				
 			
 			 def conId = [id: query.id.toString(),label:query.name.capitalize(), comNo:query.num_compounds,conTypes:query.concept_types.getName() ]
@@ -170,13 +177,14 @@ class CreateEnrichedConceptService {
 				 
 			  }
 			 
-			 
-			 def id1= result.collect{ ids -> return [id:ids.id1.id.toString()]}
+			 /* def id1= result.collect{ ids -> return [id:ids.id1.id.toString()]}
 			 def id2= result.collect{ ids -> return [id:ids.id2.id.toString()]}
 			 def allid = (id1+id2)
 			 def allids = allid.unique()
-
 			 println("allids id" +  allids)
+			 
+			 */
+			 
 			 def allR =re.collect {ids -> return [id:ids.toString(),label:(Concepts.get(ids).getName()),comNo:(Concepts.get(ids).getNum_compounds()),conTypes:(Concepts.get(ids).concept_types.getName())]}
 			 
 			 jsonMap.nodes = allR
@@ -185,8 +193,9 @@ class CreateEnrichedConceptService {
 				
 				 if(re.contains(en.id1.id) && re.contains(en.id2.id))
 				 {
-				 return [source: en.id1.id.toString(), target: en.id2.id.toString(),id: (en.pval.toString()),db_id: en.id.toString(),thick: (en.intersection),label: (Concepts.get(en.id1.id).getOriginal_id())]
+				 return [source: en.id1.id.toString(), target: en.id2.id.toString(),id: (en.pval.toString()),db_id: en.id.toString(),thick: (en.intersection),label: (Concepts.get(en.id1.id).getOriginal_id()),rel : en.relation]
 			 //	println(Concepts.get(en.id1.id).getOriginal_id())
+				 //	return [enid: en.id,id:en.id1.id,name:(Concepts.get(en.id1.id).getName()), comNo: (Concepts.get(en.id1.id).getNum_compounds()),eid: (Concepts.get(en.id1.id).getOriginal_id()),ctypes: en.id1.concept_types.getName(),ctfull: en.id1.concept_types.getFullname(),pval: format.format(en.pval),qval:format.format(en.qval),ins:(en.intersection), odds:format2.format(en.odds),rel : en.relation,flag:"id2"]
 				 }
 			 }
 			 
@@ -196,7 +205,7 @@ class CreateEnrichedConceptService {
 			 jsonMap.edges = f2
 			 def check = jsonMap as JSON
 			 
-			[check:check]
+		 println("check is " +check)
 			return check
 		 
 		

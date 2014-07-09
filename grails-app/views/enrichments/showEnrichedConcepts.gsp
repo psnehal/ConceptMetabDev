@@ -53,14 +53,11 @@
        // dashboard.draw(data);
 
 
-        google.visualization.events.addListener(table, 'sort', function(event) {
-            if(event.column != 1) {
-                options.sortColumn = event.column;
-                options.sortAscending = event.ascending;
-                sortData.sort([{column: event.column, desc: !event.ascending}]);
-                table.draw(sortData, options);
-            }
-        });
+        google.visualization.events.addListener(table, 'sort',
+        	      function(event) {
+        	        data.sort([{column: event.column, desc: !event.ascending}]);
+        	        table.draw(data, {showRowNumber: true});
+        	      });
         	        
 
       

@@ -1,0 +1,5 @@
+0,(S)-3-Hydroxy-3-methylglutaryl-CoA,(R)-3-Hydroxybutanoate,Acetone,Acetoacetyl-CoA,Acetoacetate
+Mitochondria, Liver,33,100,100,66,100
+Diabetic Ketoacidosis,0,100,100,66,100
+Ketosis,0,100,100,0,100
+0,33,3,3,2,3

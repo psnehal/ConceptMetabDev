@@ -11,7 +11,10 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -50,7 +53,8 @@ public class HeatMapNewJS {
         db.add("GOCC");
         db.add("GOBP");
        
-        jbc.getConcept(254,"qval", "0.05","0","'GO Biological Process','GO Cellular Component','MeSH Diseases'");
+        jbc.getConcept(4710,"qval", "0.05","0","'GO Molecular Function', 'GO Cellular Component','MeSH Diseases','MeSH Anatomy','KEGG Pathway'");
+        //jbc.getConcept(178,"qval", "0.05","0","'GO Biological Process','MeSH Chemicals and Drugs','MeSH Psychology and Psychiatry','MeSH Technology, Industry, and Agriculture'");
         //jbc.createHashmap(3460);
     //jbc.createHashmap(456);
         //jbc.createImage(1514);
@@ -182,7 +186,8 @@ public class HeatMapNewJS {
        
         Object[][] board = createImage(exactComInt,frequencies,concepts,id );       
         Object[][] mtr= createClusteredMatrix(board);
-        Map<String, String> bImage =createBufferredImage(mtr,id);
+        Map<String, String> bImage =createBufferredImageMod(mtr,id);
+        writeArrayToFileRowise(mtr,"/tmp/mtr.txt");
         resultOfInt.close();
         s.close();
         rs.close();
@@ -196,255 +201,166 @@ public class HeatMapNewJS {
         return bImage ;
     }
     
+    public void writeArrayToFileRowise(Object[][] array, String filename){
+    	PrintStream ps;
+    	try {
+    	ps = new PrintStream(new FileOutputStream(filename));
+    	
+    	    	for(int row=0;row < array.length;row++){
+    	    			
+    	    		for(int col=0; col < array[1].length;col++ ){
+    	    			//System.out.println("column is" + row + "length"+array[row].length+  "value "+ array[row][col]);	    	
+    	    			
+    		    		if(col == (array[1].length-1))
+    		    		{
+    		    			 ps.print(array[row][col]+"\n");
+    		    		}
+    		    		else
+    		    		{
+    		    	         ps.print(array[row][col]+",");
+    		    		}
+    	    	}
+    	}
+    	ps.close();
+    	} catch (FileNotFoundException e) {
+    	System.out.println(e.getMessage());
+    	}
+    	}
+    
+    
     private ArrayList<Compounds> createExactComInt(ArrayList<Compounds> com_int) {
     	
-    	ArrayList<Compounds> exactComInt = new ArrayList<Compounds>();
-    	Map<Long,String > mapComInt = new HashMap<Long,String >();
-    	String name;
-    	
-    	for (int i = 0; i < com_int.size(); i++){
-    		Long id = com_int.get(i).getId();
-    		String comName = com_int.get(i).getName();
-    		//System.out.println("id from input list " + id  + "name is " + comName);
-    		if (!(mapComInt.containsKey(id))){
-    			//System.out.println("inside loop " + id  + "name is " + comName);
-    			mapComInt.put(id, comName);
-    		}
-    		
-    			
-    	}
-    	
-    	for (Map.Entry entry : mapComInt.entrySet()) {
-    		
-    		Long mid = (Long) entry.getKey();
-    		String mname = (String) entry.getValue();
-    		exactComInt.add(new Compounds(mname, mid));
-    	
-    	}
-    	
-    	System.out.println("compound original was"+ com_int.size() + "  modified size id  " + exactComInt.size());
-    	
-    	
-    	
-    	return exactComInt;
-    	}
-   
-public Object[][] createImage(ArrayList<Compounds> compList,HashMap<String, ArrayList<Long>> frequencies,ArrayList<Concepts> concepts ,int id) throws ClassNotFoundException, SQLException
-    {
-   
-    int total = 0 ;
-    int row =frequencies.size() +2; // for total and compounds
-    int col = compList.size()+1; // for concpets name
-    ArrayList track = new ArrayList();
+		ArrayList<Compounds> exactComInt = new ArrayList<Compounds>();
+		Map<Long,String > mapComInt = new HashMap<Long,String >();
+		for (int i = 0; i < com_int.size(); i++){
+			Long id = com_int.get(i).getId();
+			String comName = com_int.get(i).getName();
+			if (!(mapComInt.containsKey(id))){
+				//System.out.println("inside loop " + id  + "name is " + comName);
+				mapComInt.put(id, comName);
+			}
+		}
+		for (Map.Entry entry : mapComInt.entrySet()) {
+			Long mid = (Long) entry.getKey();
+			String mname = (String) entry.getValue();
+			exactComInt.add(new Compounds(mname, mid));
+		}
+		
+		return exactComInt;
+		}
     
    
-    Object [][] board = new Object[row][col];
-    //System.out.println("matrix no of rows"+board.length + "size of hashmap" + frequencies.size());
-    //Running for each compound
-    for (int i =0 ; i < col; i++)
+    public Object[][] createImage(ArrayList<Compounds> compList,HashMap<String, ArrayList<Long>> frequencies,ArrayList<Concepts> concepts ,int id) throws ClassNotFoundException, SQLException
     {
-        int countComp = i-1;
-        int j = 0;
-    //    System.out.println("Loop started with i " + i + " j =" +  j);
-        int count = 0;
-        if(i == 0 && j == 0)
-        {
-            board[j][i] =0;
-        //    System.out.println(" [0,0] i " + i + " j =" +  j);
-            j++;
-           
-           
-        }
-        else if(i > 0 && j == 0)//Addition for compound name
-        {
-           
-        //    System.out.println("[ " + j  +" ,"+  i + " ] ="+ "Added column Name: " + compList.get(countComp).getName());
-           
-            board[j][i] = compList.get(countComp).getName();//Add compound name in first row starting from second column
-            j++;
-        }
-      
-       
-               
-       
-                 for (Entry<String, ArrayList<Long>> entry : frequencies.entrySet())
-                   
-                 {
+	    int total = 0 ;
+	    int row =frequencies.size() +2; // for total and compounds
+	    int col = compList.size()+1; // for concpets name
+	    Object [][] board = new Object[row][col];
+	    ArrayList track = new ArrayList();
+	    //System.out.println("matrix no of rows"+board.length + "size of hashmap" + frequencies.size());
+	    //Running for each compound
+	    for (int i =0 ; i < col; i++)
+	    {
+	        int countComp = i-1;
+	        int j = 0;
+	    //    System.out.println("Loop started with i " + i + " j =" +  j);
+	        int count = 0;
+	        if(i == 0 && j == 0)
+	        {
+	            board[j][i] =0;
+	            j++;
+	        }
+	        else if(i > 0 && j == 0)//Addition for compound name
+	        {       
+	            board[j][i] = compList.get(countComp).getName().replace(",", "");//Add compound name in first row starting from second column
+	            j++;
+	        }
+	        for (Entry<String, ArrayList<Long>> entry : frequencies.entrySet()){
                     //First row is  name of the concept
                      String key = entry.getKey().toString();
                      ArrayList<Long> no = entry.getValue();
-                     
-                  //  System.out.println("for loop  " +countComp+"Key is " + key +"length of value is" + no.size() + no.toString());
-                    
-                     
-                     //For fist columns start adding names of concepts
                                  if(i==0)
                                  {
-                                     board[j][i]=key;
-                            //     System.out.println(" [ " + j + " i =" +  i + " ]   key " + key);
-                                     
+                                     board[j][i]=key.replace(",", "");
                                  }
                                  else
                                  { 
-                                     
                                      if(no.contains(compList.get(countComp).getId()))
                                      {
-                                         //System.out.println("match found for " +  key  + "for compoud is  " + compList.get(countComp).getId() + " [" + j + " ," + i + "]" ) ;
                                         count++;   
                                         total++;
                                         board[j][i] = 1;
-                                        // System.out.println("[" + j + "," + i +"]" + "for 1");
                                      }
                                      else
                                      {
-                                        // System.out.println("match not found for " +  key  + "for compoud is  " + compList.get(countComp).getId() + " [" + j + " ," + i + "]" ) ;
                                          board[j][i] = 0;
-                                        // System.out.println("[" + j + "," + i +"]" + "for 0");
                                      }
-                                 //  System.out.println("for compound  " +compList.get(countComp).getId() + "  count is  " +  count + "j here is " + j);
-                               
-                                 }//else
+                                }//else
                      j++;
-                 }//For loop
-               
-                    board[j][i]=count;
-                    
-                    if( !(count == 0))
-                    		{
-                    System.out.println("count is" + count);
-                    
-                    track.add(i);
-                    
-                 //   board =deleteColumn(board, col);
-                    		}
-   
-         
-         
+           }//For loop
+	       board[j][i]=count;                    
+           if( !(count == 0)){
+        	     	   
+        	   track.add(i);
+           }
     }
-   
-    // System.out.println("Newly formed leength is"+board[85][5]);
-    // System.out.println("Newly formed leength is"+board[86][5]);
-     
-/*    board= createClusteredMatrix(board);
-   
-    BufferedImage bImage = createBufferredImage(board);
-   
-    try {
-         String fileName = "oct23_obj_"+id+".png";
-            if (ImageIO.write(bImage, "png", new File(fileName)))
-            {
-                System.out.println("-- saved");
-            }
-    } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-    }
-    */
-    
-    System.out.println("Board row no is" + board.length  + "column no is " + board[1].length);
+    System.out.println("Board row no is : " + board.length  + " Column no is " + board[1].length);
     board =deleteColumn (board,track);
-    
-    System.out.println("After effect: Board row no is" + board.length  + "column no is " + board[1].length  + " track size is :" + track.size());
-    
-                return board;
-    }
-
-
-
-public static Object[][] deleteColumn(Object[][] board,ArrayList track)
-{
-	Object[][] nargs = new Object [board.length][track.size()];
-	
-	//System.out.println("row size is " +  board.length + " col size is " +  track.size());
-	//System.out.println( "row size for nargs is " + nargs.length + "column size is " + nargs[1].length);
-	int col = 0;
-	for (int i = 0; i < track.size();i++)
-	{
-	
-		for(int row = 0 ; row< board.length; row++)
-		{
-			if (i == 0)
-			{
-				nargs[row][col] = board[row][0]	;
-				
-			}
-			else
-			{
-				//System.out.println ("adding at row  " + row + " at col " + col + " value " + board[row][(Integer) track.get(i)] );
-				nargs[row][i] = board[row][(Integer) track.get(i)];				
-			}
-			}
-		
-	}
-    return nargs;
-}
-
-
-static Object[][] cleanM;
-public Object[][] cleanMatrix (Object[][] board)
-{
-	int coumpound = board[1].length;
-	 int totCol = board.length -1;
-	 
-	 System.out.println("compound no is " + coumpound);
-	
-	 for (int i=1; i < board.length; i++) 
-	{
-		
-		 int colTotal =  (Integer) board[ totCol][i];
-		 int newColIdx = 1;
-		 for (int j=1; j < board[i].length; j++){
-			System.out.println("ColTotal is" + colTotal );
-				 if(!(colTotal == 0))
-				 {
-					 System.out.println ("found zero :::"  + board[i][j]);
-				
-					 cleanM[i][newColIdx] = board[i][j];
-	                    newColIdx++;
-					 
-				 }
-				 
-		 }		 
-		
-	}
-	
-	
-	return cleanM;
-}
-   
-public Object[][] createClusteredMatrix(Object[][] board) throws ClassNotFoundException, SQLException
-{
-    DecimalFormat format2 = new DecimalFormat("0.###");
-    //System.out.println(board.length);
-    int coumpound = board[1].length;
-    int total = board.length -2;
-    int totCol = board.length -1;
-
-//    System.out.println("board length is = " + board.length + "column length is = " +coumpound );
-    for (int col=1; col < coumpound; col++) {
-       // System.out.println(col);
-        int colTotal =  (Integer) board[ totCol][col];
-       
-       // System.out.println("For compound "+ col + "colTotal is" +  colTotal);
-        // Loop through the columns in the rowth row.
-        for (int row=1; row < board.length; row++){
-        // Add the addMe value to the [row][col] entry
-        // in the array.
-                   
-         //   System.out.println(board[row][col]);
-            int test = (Integer) board[row][col];
-            if(test == 1)
-            {
-            board[row][col] = (colTotal*100)/total;
-            }
-           
-        }
-      
-    }
+    System.out.println("After effect: Board row no is : " + board.length  + ".Column no is :" + board[1].length  + "  & track size is :" + track.size());
     return board;
-   
-}
+    }
 
+
+
+    public static Object[][] deleteColumn(Object[][] board,ArrayList track)
+    {
+    		Object[][] nargs = new Object [board.length][track.size()+1];
+    		
+    		for (int i = 0; i < track.size()+1;i++)
+    		{
+
+    			int check = 0;
+    			for(int row = 0 ; row< board.length; row++)
+    			{
+    				if (i == 0)
+    				{
+    					//System.out.println(board[row][0]);
+    					nargs[row][0] = board[row][i];
+    					check++;
+    				}				
+    					//System.out.println(board[1][0] + "board[row][(Integer) track.get(i)]" + board[1][(Integer) track.get(i)] );
+    				else
+    				{
+    					nargs[row][i] = board[row][(Integer) track.get(i-1)];	
+    				}
+    				
+    			}
+    		}
+    	    return nargs;
+    }
+
+
+
+   
+    public Object[][] createClusteredMatrix(Object[][] board) throws ClassNotFoundException, SQLException
+    {
+    	    DecimalFormat format2 = new DecimalFormat("0.###");
+    	    int coumpound = board[1].length;
+    	    int total = board.length -2;
+    	    int totCol = board.length -1;
+    	    for (int col=1; col < coumpound; col++) {
+    	        int colTotal =  (Integer) board[ totCol][col];
+    	        for (int row=1; row < board.length; row++){	        
+    	            int test = (Integer) board[row][col];
+    	            if(test == 1)
+    	            {
+    	            board[row][col] = (colTotal*100)/total;
+    	            }
+    	        }
+    	    }
+    	    return board;
+    }
+    
 public Map<String, String> createBufferredImage(Object[][] board, int id )
 {
            
@@ -472,7 +388,12 @@ public Map<String, String> createBufferredImage(Object[][] board, int id )
     Graphics2D g2d = bImage.createGraphics();
     Graphics2D gXaxis = bXaxis.createGraphics();
     Graphics2D gYaxis = bYaxis.createGraphics();
-   
+    g2d.setBackground(Color.WHITE);
+    gXaxis.setBackground(Color.WHITE);
+    gYaxis.setBackground(Color.WHITE);
+    g2d.fillRect(0, 0, BI_WIDTH, BI_HEIGHT);
+    gXaxis.fillRect(0, 0, wXaxis, hXaxis);
+    gYaxis.fillRect(0, 0, wYaxis, hYaxix);
     //Loop for all the compounds
     //System.out.println("Compounds size is"+ compoundsize);
     StringBuffer sb = new StringBuffer();
@@ -490,7 +411,7 @@ public Map<String, String> createBufferredImage(Object[][] board, int id )
     {
        
        
-        int ch = x_cor+150;
+        int ch = x_cor+165;
         final AffineTransform saved = gXaxis.getTransform();
         final AffineTransform rotate = AffineTransform.getRotateInstance(-Math.PI /2, ch, 140);
         gXaxis.transform(rotate);
@@ -502,8 +423,16 @@ public Map<String, String> createBufferredImage(Object[][] board, int id )
                 {
                  colname = colname.substring(0, 30);
                 }
-             gXaxis.setColor(Color.red);
-             gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 25 ));                   
+             gXaxis.setColor(Color.black);
+             if (compoundsize < 50 )
+             {
+            	// System.out.println("compound size is less than 50 loop");
+             gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 15 ));   
+             }
+             else
+             {
+            	 gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 25 ));   
+             }
                
                
           //   System.out.println("Colname is " +  colname + "added to "  + "[" + 0 +"," +col +"]" + "with x  and y cor" + ch + "and 0"  );
@@ -523,7 +452,7 @@ public Map<String, String> createBufferredImage(Object[][] board, int id )
                             rowname = rowname.substring(0, 30);
                         }
                         */
-                        gYaxis.setColor(Color.red);
+                        gYaxis.setColor(Color.black);
                         gYaxis.setFont(new Font( "Sansserif", Font.BOLD, 20 ));
                         int ch2 = compoundsize*20 +10;
                         gYaxis.drawString(rowname, x_cor, y_fcor);
@@ -539,7 +468,7 @@ public Map<String, String> createBufferredImage(Object[][] board, int id )
                                           if(check == 0)
                                              {
                                                
-                                                  g2d.setPaint ( new Color ( 0,0,0 ) );
+                                                  g2d.setPaint ( new Color ( 255, 255, 255 ) );
                                            //System.out.println("Its for no with check" +check +"and cord "+x_cor+" " + y_cor+ " " );
                                                   g2d.fillRect(x_cor,y_cor,rc_width,rc_height);
                                                   y_cor = y_cor+ rc_height;
@@ -623,6 +552,196 @@ public Map<String, String> createBufferredImage(Object[][] board, int id )
     return mapImages;
 }
 
+public Map<String, String> createBufferredImageMod(Object[][] board, int id )
+{
+           
+
+    int rc_width = 30;
+    int compoundsize = board[1].length;
+    int BI_WIDTH =  board.length*30 ;
+    System.out.println("board.length"+ board.length +"   Width of rectangle "+ rc_width + "   Compounds no :"+ compoundsize + "    Total size of the rectacle is" + BI_WIDTH );
+   
+    int rc_height = 30;
+    int BI_HEIGHT =compoundsize *30;
+    System.out.println(" compoundsize" + compoundsize+ "  Height of rectangle :"+rc_height + "   Concepts length :"+  board.length + "     Total height of rectalgle is" + BI_HEIGHT );
+   
+   int wXaxis =  board.length*30 ;
+   int hXaxis = 150;
+   
+   int wYaxis = 250;
+   int hYaxix = compoundsize*30;
+   
+    System.out.println("Width of image : " + BI_WIDTH + "height is " + BI_HEIGHT );
+   
+    BufferedImage bImage = new BufferedImage(BI_WIDTH, BI_HEIGHT,BufferedImage.TYPE_INT_RGB);   
+    BufferedImage bXaxis = new BufferedImage(wXaxis, hXaxis,BufferedImage.TYPE_INT_RGB);   
+    BufferedImage bYaxis = new BufferedImage(wYaxis, hYaxix,BufferedImage.TYPE_INT_RGB);   
+    Graphics2D g2d = bImage.createGraphics();
+    Graphics2D gXaxis = bXaxis.createGraphics();
+    Graphics2D gYaxis = bYaxis.createGraphics();
+    g2d.setBackground(Color.WHITE);
+    gXaxis.setBackground(Color.WHITE);
+    gYaxis.setBackground(Color.WHITE);
+    g2d.fillRect(0, 0, BI_WIDTH, BI_HEIGHT);
+    gXaxis.fillRect(0, 0, wXaxis, hXaxis);
+    gYaxis.fillRect(0, 0, wYaxis, hYaxix);
+    //Loop for all the compounds
+    //System.out.println("Compounds size is"+ compoundsize);
+    StringBuffer sb = new StringBuffer();
+    int count = 0;
+    int y_cor = 0;
+    int x_cor = 0;
+    int y_fcor = 20;
+   
+   
+    int rowlen = board.length;
+    //System.out.println("Board length"+board.length);
+    //Row wise
+   
+    for(int row = 0; row< rowlen;row++)
+    {
+       
+       
+        int ch = x_cor+165;
+        final AffineTransform saved = gXaxis.getTransform();
+        final AffineTransform rotate = AffineTransform.getRotateInstance(-Math.PI /2, ch, 140);
+        gXaxis.transform(rotate);
+       
+       
+             String colname = board [row][0].toString();
+            // System.out.println("Entering column  " + col + "with colname"+ colname + "with x_cor" + ch);
+             if(colname.length() > 30)
+                {
+                 colname = colname.substring(0, 30);
+                }
+             gXaxis.setColor(Color.black);
+             if (compoundsize < 50 )
+             {
+            	// System.out.println("compound size is less than 50 loop");
+             gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 15 ));   
+             }
+             else
+             {
+            	 gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 25 ));   
+             }
+               
+               
+          //   System.out.println("Colname is " +  colname + "added to "  + "[" + 0 +"," +col +"]" + "with x  and y cor" + ch + "and 0"  );
+             gXaxis.drawString(colname, ch, 0);
+               
+             gXaxis.setTransform(saved);           
+                     
+        int comcheck = compoundsize-1;
+                 for(int col = 1 ;col < compoundsize;col ++)
+                 {
+                      if(row == 0 )
+                     {
+                       
+                        String rowname = board[0][col].toString();
+                        /*if(rowname.length() > 30)
+                        {
+                            rowname = rowname.substring(0, 30);
+                        }
+                        */
+                        gYaxis.setColor(Color.black);
+                        gYaxis.setFont(new Font( "Sansserif", Font.BOLD, 20 ));
+                        int ch2 = compoundsize*20 +10;
+                        gYaxis.drawString(rowname, x_cor, y_fcor);
+                    System.out.println("Rowname is " +  rowname + "added to "  + "[" + row +"," +col +"]" + "with x "+x_cor+" and y cor" + y_fcor  );
+                        y_fcor = y_fcor+ rc_height;
+                           
+                     }
+                      else{
+                     
+                          // System.out.println("added to "  + "[" + row +"," +col +"]" + "with x "+x_cor+" and y cor" + y_fcor  );
+                                          int check = (Integer) board[row][col];
+                                         
+                                          if(check == 0)
+                                             {
+                                               
+                                                  g2d.setPaint ( new Color ( 255, 255, 255 ) );
+                                          // System.out.println("Its for no with check" +check +"and cord "+x_cor+" " + y_cor+ " "  +" rc_width"+ rc_width+ " rc_height"+ rc_height);
+                                                  g2d.fillRect(x_cor,y_cor,rc_width,rc_height);
+                                                  y_cor = y_cor+ rc_height;
+                                                          
+                                               
+                                                 
+                                               
+                                             }
+                                             else
+                                             {
+                                                 int g = getColor(check);
+                                                    if(row == 85 && col == 5)
+                                                    {
+                                                     //   System.out.println("board is" + board [86][5] + " value of g is" +  g);
+                                                       
+                                                       
+                                                    }
+                                                     g2d.setPaint ( new Color ( 255,g,0 ) );
+                                                   // System.out.println("Its for yes with check" +check +"and cord "+x_cor+" " + y_cor+ " " );
+                                                     g2d.fillRect(x_cor,y_cor,rc_width,rc_height);
+                                                     y_cor = y_cor+ rc_height;
+                                                           
+                                               
+                                   
+                                         }
+                     
+                      }
+                     
+                     
+                 }//For loop of rows -concepts
+       
+               
+       
+       
+                 x_cor = x_cor+rc_height;   
+               
+        y_cor = 0;
+       
+    }//For loop of compound
+   
+    Map<String,String > mapImages = new HashMap<String, String>();
+ 
+    UUID uuid = UUID.randomUUID();
+   
+                try {
+                     String fileName = "/tmp/"+uuid+"_"+ id+".png";
+                    
+                     String fileXaxis ="/tmp/"+ uuid+"_"+ id+"_Xaxis"+id+".png";
+                     String fileYaxis = "/tmp/"+uuid+"_"+ id+"_Yaxis"+id+".png";
+                     
+                     mapImages.put("image",fileName.replace("/tmp/", "") );
+                     mapImages.put("xaxis", fileXaxis.replace("/tmp/", ""));
+                     mapImages.put("yaxis", fileYaxis.replace("/tmp/", ""));
+                     mapImages.put("height", ""+BI_HEIGHT);
+                     mapImages.put("width", ""+BI_WIDTH);
+                       if (ImageIO.write(bImage, "png", new File(fileName)))
+                       {
+                           System.out.println("-- saved" +  bImage.getWidth());
+                       }
+                       if (ImageIO.write(bXaxis, "png", new File(fileXaxis)))
+                       {
+                           System.out.println("-- saved" +  fileXaxis);
+                       }
+                       if (ImageIO.write(bYaxis, "png", new File(fileYaxis)))
+                       {
+                           System.out.println("-- saved" +  fileName);
+                       }
+                       
+                       
+               } catch (IOException e) {
+                       // TODO Auto-generated catch block
+                       e.printStackTrace();
+               }
+                
+                
+               
+                
+                
+               
+    System.out.println("-- saved" );      
+    return mapImages;
+}
 public int getColor(double per){
     int g =0;
     if(per < 10)
@@ -791,16 +910,11 @@ return g;
        
     //    System.out.println("Sixe of cmp"+frequencies.get(1293).size());
            
-             for (Entry<String, ArrayList<Long>> entry : frequencies.entrySet())
-             {
-              //  System.out.println("Concepts is --->" +  entry.getKey());
-              //  System.out.println("Compounds is -->" +  entry.getValue().get(1));
-                 
-             }
            
        
         return frequencies;
     }
+   
    
    
 //this approch is test column wise to create heatmap   

@@ -10,6 +10,7 @@ class Enrichments {
 	BigDecimal pval
 	BigDecimal qval
 	BigDecimal odds
+	Integer relation
 	
 	
 	static hasMany =[id1:Concepts, id2:Concepts]

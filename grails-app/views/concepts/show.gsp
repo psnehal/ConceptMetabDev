@@ -18,55 +18,56 @@
 	            <g:if test="${flash.message}">
 	            <div class="message" role="status">${flash.message}</div>
 	            </g:if>
-	            <div id ="title" style="width: 676px; height: 250px;float:left ;border = 1">
+	            <div id ="title" style="width: 676px; height: 220px;float:left;">
 	             <h1>Concept Information</h1>
-	            <div style="width:${width}; height: 250px;float:left ;border = 1">
-	            <ol class="property-list concepts">	            
-	                <g:if test="${conceptsInstance?.name}">
-	                <li class="fieldcontain">
-	                    <span id="name-label" class="property-label"><g:message code="concepts.name.label" default="Name" /></span>
-	                    <g:set var="cnm" value="${conceptsInstance?.id}"/>                        
-	                    <span class="property-value" aria-labelledby="original_id-label">${conceptsInstance?.name.capitalize()}</span>
-	                </li>
-	                </g:if>  
-	                <g:if test= "${conceptsInstance?.original_id}">
-	                    <li class="fieldcontain">
-	                        <span id="original_id-label" class="property-label"><g:message code="concepts.original_id.label" default="Concept Id" /></span>
-	                        <g:set var="ctype" value="${conceptsInstance.concept_types}"/>    
-	                        
-	                         <a href="${url}" target="_blank">                    
-	                         <span class="property-value" aria-labelledby="original_id-label"><g:fieldValue bean="${conceptsInstance}" field="original_id"/></span>    </a>
-	                    </li>
-	                    <li class="fieldcontain">
-	                        <span id="ctypes-label" class="property-label"><g:message code="concepts.ctypes.label" default="Concept Type" /></span>
-	                        <span class="property-value" aria-labelledby="ctypes-label">${conceptsInstance.concept_types}</span>
-	                    </li>
-	                </g:if>
-	                <g:if test="${conceptsInstance?.num_compounds}">
-	                <li class="fieldcontain">
-	                    <span id="num_compounds-label" class="property-label"># of Compounds</span>
-	                    <g:set var="cnm" value="${conceptsInstance?.id}"/>    
-	                    <span class="property-value" aria-labelledby="num_compounds-label">    <g:link controller="Compounds_in_concepts" action="findComp" params="[q:cnm]"><g:fieldValue bean="${conceptsInstance}" field="num_compounds" target="_blank"/></g:link></span>
-	                </li> 
-	                </g:if>
-	            </ol>
-	            
-	             
+	            <div style="width:${width}; height: 250px;float:left ;">
+		            <ol class="property-list concepts">	            
+		                <g:if test="${conceptsInstance?.name}">
+		                <li class="fieldcontain">
+		                    <span id="name-label" class="property-label"><g:message code="concepts.name.label" default="Name" /></span>
+		                    <g:set var="cnm" value="${conceptsInstance?.id}"/>                        
+		                    <span class="property-value" aria-labelledby="original_id-label">${conceptsInstance?.name.capitalize()}</span>
+		                </li>
+		                </g:if>  
+		                <g:if test= "${conceptsInstance?.original_id}">
+		                    <li class="fieldcontain">
+		                        <span id="original_id-label" class="property-label"><g:message code="concepts.original_id.label" default="Concept Id" /></span>
+	                        <g:if test="${conceptsInstance.concept_types.fullname.contains('MeSH')}">
+	                      		                    		 ${url }
+			 				</g:if>
+			 				<g:else>                     
+	                       		              
+	                        	 <a href="${url}" target="_blank">                    
+	                         	<span class="property-value" aria-labelledby="original_id-label"><g:fieldValue bean="${conceptsInstance}" field="original_id"/></span>    </a>
+	                         </g:else>
+		                         
+		                    </li>
+		                    <li class="fieldcontain">
+		                        <span id="ctypes-label" class="property-label"><g:message code="concepts.ctypes.label" default="Concept Type" /></span>
+		                        <span class="property-value" aria-labelledby="ctypes-label">${conceptsInstance.concept_types}</span>
+		                    </li>
+		                </g:if>
+		                <g:if test="${conceptsInstance?.num_compounds}">
+		                <li class="fieldcontain">
+		                    <span id="num_compounds-label" class="property-label"># of Compounds</span>
+		                    <g:set var="cnm" value="${conceptsInstance?.id}"/>    
+		                    <span class="property-value" aria-labelledby="num_compounds-label">    <g:link controller="Compounds_in_concepts" action="findComp" params="[q:cnm]"><g:fieldValue bean="${conceptsInstance}" field="num_compounds" target="_blank"/></g:link></span>
+		                </li> 
+		                </g:if>
+		            </ol>
 	            </div>
 	            <g:if test="${conceptsInstance.concept_types.fullname.contains('MeSH')}">
-		            <div style="width: 80px; height: 250px;float:left ;border = 1">
+		        <div style="width: 80px; height: 220px;float:left ;border = 1">
 		            <br/><br/>		         
 		             <% directLink = "http://metab2mesh.ncibi.org/?term="+"${conceptsInstance?.name} "+"&qtype=mesh&exact=on&m2msearchbutton=Metab2MeSH+Search"  %>
-		            <a href="<%=directLink %>" target="_blank"><img src="${resource(dir: 'images', file: 'Metab2Mesh.jpg')}" alt="Metab2mesh"  title="View metabolite connected to this mesh term" style="max-height: 150px; max-width: 150px;padding:5px;"/></a>
+		            <a href="<%=directLink %>" target="_blank"><img src="${resource(dir: 'images', file: 'Metab2Mesh.jpg')}" alt="Metab2mesh"  title="View metabolites annotated with this MeSH term" style="max-height: 150px; max-width: 150px;padding:5px;"/></a>
 					<br/>
-		            </div>
+		        </div>
 		             </g:if>
 	            </div>
-	           
+	         
 	            
-	            <div id ="title" style="width: 250px; height: 250px; float:right ; ">  
-	  
-	        
+	            <div id ="title" style="width: 250px; height: 220px; float:right ; ">  
 	                  <g:form action="show" method="get">
 	                   <ol class="property-list concepts">
 	                   <li class= "fieldcontain">
@@ -88,15 +89,19 @@
 	                </g:form>
 	            </div>
          
-               <br/> <br/>
-		        <div id ="fieldcontain" style="width: 100%; float:left ; ">   
+              
+               </div>
+             
+               
+                 <div class="SomeClass" id="nohover"style="width: 100%; float:left ; ">   
 		          <br/> <br/>         
 		              <g:set var="id2" value="${params?.id2}"/>    
 		              <g:set var="odds" value="${params?.odds}"/>    
 		              <g:set var="fil" value="${params?.fil}"/>  
 		               <g:include controller="enrichments" action=  "createChart" params="[id1:1e-45,id2:id2,odds:odds,q:cnm,fil:fil, statement :['all']]"/>
-		         </div>
+				 </div>
+		      
            
-           </div> 
+          
     </body>
 </html>

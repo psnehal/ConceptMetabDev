@@ -19,20 +19,22 @@ RConnection c = new RConnection();
 			def clusterAnalysis(def te)
 			{
 				println("inside Service")
-					RConnection connection;
-			connection = new RConnection("localhost",
-				   6311);
-			   
-			   println("Connected to R")
-			   
-			connection.assign("mat", te);
+			RConnection connection;
+			connection = new RConnection("localhost", 6311);		   
+			println("Connected to R")
+			def json_file ="/tmp/"+te
+			   println("te is" +json_file)
+			connection.assign("json_file", json_file);
 			connection.voidEval("library('rjson')");
 			connection.voidEval("library('gplots')");
-			connection.voidEval("test <- fromJSON (mat)");
-			connection.voidEval("m = do.call(rbind, test)");
-			connection.voidEval("data = data.frame(m[2:nrow(m), 2:ncol(m)], row.names=m[2:nrow(m),1],stringsAsFactors=F)");
-			connection.voidEval("colnames(data) = m[1,2:ncol(m)]");
-			//		/pdf("heatmap.pdf", height=10, width=10)
+			//connection.voidEval("test <- fromJSON (mat)");
+			//connection.voidEval("m = do.call(rbind, test)");
+			//connection.voidEval("data = data.frame(m[2:nrow(m), 2:ncol(m)], row.names=m[2:nrow(m),1],stringsAsFactors=F)");
+			connection.voidEval("m=read.csv(json_file, header=T)");
+			connection.voidEval("data=data.frame(m[1:nrow(m)-1, 2:ncol(m)], row.names=m[1:nrow(m)-1,1],stringsAsFactors=F)");
+			//connection.voidEval("colnames(data) = m[1,2:ncol(m)]");
+			//		/pdf("heatmap.pdf", height=10, width=10)mat =te
+			
 			/*
 			connection.voidEval('hmcols<-colorRampPalette(c("white","yellow","red"))(256)')
 			//connection.voidEval('test2 =heatmap(data.matrix(data),col=hmcols)')
@@ -54,15 +56,51 @@ RConnection c = new RConnection();
 				println("its in pdf block")
 				connection.voidEval("pdf('/tmp/test3.pdf')")				
 			}
-			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none" )')
+			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="" )')
 			connection.voidEval("dev.off()")
 			int[] rowOrd = connection.eval('test2$rowInd').asIntegers();
 			int[] colOrd = connection.eval('test2$colInd').asIntegers();;
 			println("Got results")
+			
+			
 			def mapOrd = ["rowOrd": rowOrd, "colOrd": colOrd]
-			
-			
 			return mapOrd
+			
+			}
+			
+			
+			def ComHeatmap(def filename)
+			{
+				println("inside Service")
+				
+				def bimage = '/tmp/'+filename+".png"
+				def textimage =  '/tmp/'+filename+".txt"
+			RConnection connection;
+			connection = new RConnection("localhost", 6311);
+			println("Connected to R")
+			   
+			connection.assign("json_file", textimage);
+			connection.assign("png_file", bimage);
+			connection.voidEval("library('gplots')");
+			connection.voidEval("m=read.csv(json_file, header=T)");
+			connection.voidEval("data=data.frame(m[1:nrow(m)-1, 2:ncol(m)], row.names=m[1:nrow(m)-1,1],stringsAsFactors=F)");
+			connection.voidEval('hclust.ave <- function(x) hclust(x, method="average")')
+			connection.voidEval('par(bg="#F7F8E0")')
+			connection.voidEval('myCol <- c("white","#FFFF00","#FFE100","#FFC800","#FFAF00","#FF9600","#FF7D00","#FF6400","#FF4B00","#FF3200","#FF0000" )')
+			connection.voidEval(' myBreaks <- c(0,1, 10, 20,30,40,50,60,70,80,90,100)')
+			
+			try{
+				println("its in png block")			
+				connection.voidEval("png(filename =png_file,bg = '#F7F8E0') ")
+			}
+			catch(e) {
+				println("its in pdf block")
+				connection.voidEval("pdf('/tmp/test4.pdf')")
+			}
+			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="" )')
+			connection.voidEval("dev.off()")
+			
+			return "done"
 			
 			}
 			
@@ -105,7 +143,7 @@ RConnection c = new RConnection();
 				println("its in pdf block")
 				connection.voidEval("pdf('/tmp/test3.pdf')")
 			}
-			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none" )')
+			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="")')
 			connection.voidEval("dev.off()")
 			int[] rowOrd = connection.eval('test2$rowInd').asIntegers();
 			int[] colOrd = connection.eval('test2$colInd').asIntegers();;

@@ -33,8 +33,7 @@ h1 {
 }
 
 table#result {
-	border-top: 1px solid #FFFAF0;
-	
+	border-top: 1px solid #FFFAF0;	
 	font-family:sans-serif;
 	font-size: 20px;
 	border-collapse: collapse;
@@ -51,6 +50,8 @@ table#result td {
 	color: black;
 	
 }
+
+
 
 
 
@@ -118,27 +119,9 @@ background: #ffffff;
 
 	#title{
 	background:#F7F8E0;
-    -moz-border-radius: 10px;
--webkit-border-radius: 10px;
-border-radius: 10px; /* future proofing */
--khtml-border-radius: 10px;
-border-style:outset;
+ 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .divider {
 	margin-top: 40px;

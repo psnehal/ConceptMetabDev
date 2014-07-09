@@ -57,7 +57,7 @@ public class DrawHeatMap {
         db.add("GOBP");
        
         //jbc.getConcept(4856,"qval", "0.05","0","'GO Biological Process','GO Cellular Component','MeSH Diseases'");
-        jbc.getConcept(3643,"qval", "0.05","0","'MeSH Chemicals and Drugs'");
+        jbc.getConcept(178,"qval", "0.05","0","'MeSH Psychology and Psychiatry'");
        
         //jbc.getConcept(254,"qval", "0.05","0","'KEGG Pathway','Enzyme '");
       
@@ -103,20 +103,21 @@ public class DrawHeatMap {
         preparedStatement.setLong(4, id);   
         preparedStatement.setDouble(5, Double.parseDouble(id2));
         preparedStatement.setDouble(6, Double.parseDouble(odds));
-        ResultSet results = preparedStatement.executeQuery();       
+        ResultSet results = preparedStatement.executeQuery(); 
+       
         StringBuilder sb = new StringBuilder();
-      
+     // System.out.println(preparedStatement);
         if (results != null)
         {
             while (results.next())
             {
-                //System.out.println("patient_num = " + results.getString("id"));
+               // System.out.println("patient_num = " + results.getString("name"));
                 sb.append(results.getString("id")+",");
                 concepts.add(new Concepts(results.getString("name"),results.getInt("id")));
                
                 count++;
             }
-            System.out.println("Size of Enriched Concepts: "+ count);
+           // System.out.println("Size of Enriched Concepts: "+ count);
        
         }
         Integer[] allConcepts = getConceptId(concepts);
@@ -130,6 +131,7 @@ public class DrawHeatMap {
         PreparedStatement preparedStatement2 = (PreparedStatement) c.prepareStatement(sql2);
         setValues(preparedStatement2, allConcepts);
         ResultSet rs = preparedStatement2.executeQuery();
+       // System.out.println(preparedStatement2);
         if (rs != null)
         {
             while (rs.next())
@@ -147,7 +149,7 @@ public class DrawHeatMap {
 //**********************Get the compounds of concept of interest.**************************************************************************************************************
         
        String compOfInt = "SELECT compounds_in_concepts.compound_id,compounds.internal_id, compounds.name FROM compounds_in_concepts JOIN compounds ON compounds_in_concepts.compound_id = compounds.internal_id WHERE compounds_in_concepts.concept_id ="+id;
-       System.out.println("Compounds of interest SQl" +compOfInt);
+      // System.out.println("Compounds of interest SQl" +compOfInt);
         s = c.createStatement();
         ResultSet resultOfInt = s.executeQuery(compOfInt);
         if (resultOfInt != null)
@@ -172,7 +174,7 @@ public class DrawHeatMap {
         String textfile = "/tmp/"+uuid+".txt";
         String filename = ""+uuid+"";
         writeArrayToFileRowise(mtr,textfile);
-        createBufferredImage(mtr,imageename);
+        //createBufferredImage(mtr,imageename);
         resultOfInt.close();
         s.close();
         rs.close();
@@ -213,8 +215,9 @@ public void writeArrayToFileRowise(Object[][] array, String filename){
 	ps = new PrintStream(new FileOutputStream(filename));
 	
 	    	for(int row=0;row < array.length;row++){
-	    		//System.out.println("column is" + col + "length"+array[row].length+  "value "+ array[row][col]);	    		
+	    			
 	    		for(int col=0; col < array[1].length;col++ ){
+	    			//System.out.println("column is" + row + "length"+array[row].length+  "value "+ array[row][col]);	    	
 	    			
 		    		if(col == (array[1].length-1))
 		    		{
@@ -234,7 +237,7 @@ public void writeArrayToFileRowise(Object[][] array, String filename){
     
     
    
-   
+//one internal id can have different name so 
 private ArrayList<Compounds> createExactComInt(ArrayList<Compounds> com_int) {
 	
 		ArrayList<Compounds> exactComInt = new ArrayList<Compounds>();
@@ -252,7 +255,7 @@ private ArrayList<Compounds> createExactComInt(ArrayList<Compounds> com_int) {
 			String mname = (String) entry.getValue();
 			exactComInt.add(new Compounds(mname, mid));
 		}
-		System.out.println("compound original was"+ com_int.size() + "  modified size id  " + exactComInt.size());
+		
 		return exactComInt;
 		}
 
@@ -287,7 +290,7 @@ public Object[][] createImage(ArrayList<Compounds> compList,HashMap<String, Arra
                      ArrayList<Long> no = entry.getValue();
                                  if(i==0)
                                  {
-                                     board[j][i]=key.replace(",", "s");
+                                     board[j][i]=key.replace(",", "");
                                  }
                                  else
                                  { 
@@ -306,14 +309,13 @@ public Object[][] createImage(ArrayList<Compounds> compList,HashMap<String, Arra
            }//For loop
 	       board[j][i]=count;                    
            if( !(count == 0)){
-        	   System.out.println("i is"+ i);
-        	   
+        	     	   
         	   track.add(i);
            }
     }
-    System.out.println("Board row no is" + board.length  + "column no is " + board[1].length);
+    System.out.println("Board row no is : " + board.length  + " Column no is " + board[1].length);
     board =deleteColumn (board,track);
-    System.out.println("After effect: Board row no is" + board.length  + "column no is " + board[1].length  + " track size is :" + track.size());
+    System.out.println("After effect: Board row no is : " + board.length  + ".Column no is :" + board[1].length  + "  & track size is :" + track.size());
     return board;
     }
 
@@ -329,7 +331,7 @@ public static Object[][] deleteColumn(Object[][] board,ArrayList track)
 			{
 				if (i == 0)
 				{
-					System.out.println(board[row][0]);
+					//System.out.println(board[row][0]);
 					nargs[row][0] = board[row][i];
 					check++;
 				}				
@@ -473,58 +475,55 @@ public BufferedImage createBufferredImage(Object[][] board, String filename )
 
 public int getColor(double per){
     int g =0;
-    if(per < 10)
+    if(per <= 10)
     {
         g = 255;
     }
-    else if (per<20)
+    else if (per<=20)
     {
         g= 225;
        
     }
-    else if (per<30)
-    {
-        g= 220;
-       
-    }
-    else if (per<40)
+    else if (per<=30)
     {
         g= 200;
        
     }
-    else if (per<50)
+    else if (per<=40)
     {
         g= 175;
        
     }
-    else if (per<60)
+    else if (per<=50)
     {
         g= 150;
        
     }
-    else if (per<70)
+    else if (per<=60)
     {
         g= 125;
        
     }
-    else if (per<80)
+    else if (per<=70)
     {
         g= 100;
        
     }
-    else if (per<90)
+    else if (per<=80)
     {
         g= 75;
        
-    }else if (per<100)
+    }
+    else if (per<=90)
     {
         g= 50;
        
-    }
-    else
+    }else if (per<=100)
     {
-        g =0;
+        g= 0;
+       
     }
+    
 return g;
 }
 
@@ -639,12 +638,6 @@ public Integer[] getConceptId (ArrayList<Concepts> concepts) throws ClassNotFoun
        
     //    System.out.println("Sixe of cmp"+frequencies.get(1293).size());
            
-             for (Entry<String, ArrayList<Long>> entry : frequencies.entrySet())
-             {
-                System.out.println("Concepts is --->" +  entry.getKey());
-                System.out.println("Compounds is -->" +  entry.getValue().get(1));
-                 
-             }
            
        
         return frequencies;

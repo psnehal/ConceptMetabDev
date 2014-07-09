@@ -13,70 +13,93 @@ class ConceptsController {
 		  //render Entry.search(params.q, params)
 		// render Concepts.search(params.q, params)
 			 println(params)
+			 Integer offset = params.int("offset")?:0
+			 Integer max2 = Math.min(params.int("max") ?: 50, 1000)
 			// def searchResults = Concepts.search(params.q, params)
 			 def filter = params.fil
 			 def searchResults
+			 def resultCount
+			 def b = Concepts.createCriteria()
+			 def b2 = Concepts.createCriteria()
+			 def c = Compounds.createCriteria()
+			 def c2 = Compounds.createCriteria()
 			 if(filter.equals("concept")){
-						 searchResults=  Concepts.withCriteria {
+						 searchResults=  b.list (max: max2, offset: offset) {
+				             ilike 'name', params.q + '%'
+							 order("name", "asc")
+						 	}
+						 
+						 def forcount =  b2 {
 				             ilike 'name', params.q + '%'
 						 	}
+						 resultCount= forcount.size()
 			 }
 			 
 			 else
 			 {
-				 searchResults=  Compounds.withCriteria {
+				 searchResults=  c.list (max: max2, offset: offset) {
+					 ilike 'name', params.q + '%'
+					 order("name", "asc")
+					 }
+				 
+				  def forcount=  c2 {
 					 ilike 'name', params.q + '%'
 					 }
+				 
+				 resultCount= forcount.size()
 			 }
-	         flash.message = "${searchResults.size()} results found for search: ${params.q}"
+	         flash.message = "${resultCount} results found for search: ${params.q}"
 	         flash.q = params.q
-	         println(searchResults.size())
-	         return [searchResults:searchResults, resultCount:searchResults.size(), filter:filter]
+	         println("resultCount"+resultCount)
+	         return [searchResults:searchResults, resultCount:resultCount, filter:filter]
 	}
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 	
 	def dbspecific (Integer max) {
 		
-		println(params);
-		params.max = Math.min(max ?: 1000, 100)
-		List<Concepts> c = new ArrayList<Concepts>()
-		List<Concepts> b = new ArrayList<Concepts>()
-		
-		if (params.containsKey("sort"))
-		{
-			println("Sortablekey");
-			b = Concepts.withCriteria
-			{
-			and{	
+
+		 Integer offset = params.int("offset")?:0
+		 Integer max2 = Math.min(params.int("max") ?: 500, 1000)
+		 
+		 println(params);
+		 println("offset" + offset)
+		//List<Concepts> c = new ArrayList<Concepts>()
+		//List<Concepts> b = new ArrayList<Concepts>()	
+	
+		def b = Concepts.createCriteria()
+		def result
+				 
+			println("Else lopop");
+			result = b.list (max: max2, offset: offset)
+			{ 
 				concept_types
 			   {
 				   eq('fullname' , params.name)
-				   
 			   }
-			   order(params.sort, params.order)
-			}
-		   }
-			println(b.size())
-		}
-		else
-		{
-		 
-			println("Else lopop");
-			b = Concepts.withCriteria
-			{ concept_types
-			   {
-				   eq('fullname' , params.name)
-			   }
+			  
 		   }
 		   
-		}
-		//println("cid is "+ c.id.getAt(0).toLong())
+			
+			def c = Concepts.createCriteria()
+			
+	   println("Else lopop");
+	   def result2 = c
+	   {
+		   concept_types
+		  {
+			  eq('fullname' , params.name)
+		  }
+		 
+	  }
+			
+		
+		println("result is "+ result2.size())
 		
 	
 		
 		
-	[b:b, resultcount :  b.size()]
+	[result:result, resultcount :  result2.size()]
 	}
 	
 	def main2 = {
@@ -235,10 +258,20 @@ class ConceptsController {
 		}
 		if(conceptsInstance.concept_types.fullname.contains('MeSH'))
 		{
-			def meshlink = conceptsInstance.name			
-			url = "http://www.ncbi.nlm.nih.gov/mesh/?term="+meshlink
+			
+			def meshid2treenumInstance = Meshid2treenum.findAllWhere(mesh_id : conceptsInstance?.original_id )
+			
+			
+			
+			def urlp = "http://www.ncbi.nlm.nih.gov/mesh/?term="+meshid2treenumInstance.get(0).tree_id
 			println ("found mesh term")
 			 width = "500px"
+			 
+			 
+			 println("meshid2treenumInstance tree id is" + meshid2treenumInstance.get(0).tree_id)
+			 
+			 url = '<a href="'+urlp+'" target="_blank">'+'<span class="property-value" aria-labelledby="original_id-label">'+meshid2treenumInstance.tree_id.toString().replace("[", "") .replace("]", "")+'</span></a>'
+			 
 		}
 		else if(conceptsInstance.concept_types.fullname.contains('GO'))
 		{

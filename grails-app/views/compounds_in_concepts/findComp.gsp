@@ -31,8 +31,8 @@
 					<tr>
 					<th>Index</th>
 					<th width ='50%'>Compound Name</th>
-					<th width ='20%'>Pubchem id</th>
-					<th width ='20%'>Kegg id</th>		
+					<th width ='20%'>Pubchem ID</th>
+					<th width ='20%'>Kegg ID</th>		
 							
 					</thead>
 					<tbody>
@@ -42,9 +42,10 @@
                          <td>${i+1 }</td>       
                          <td width ='50%'>${var.value.names }</td>
                          <g:if test="${var.value.pubid == null ||  var.value.pubid.equals('NULL')  }"> <td>--</td></g:if>                         
-                        	<g:else><td width ='20%'> ${var.value.pubid }</td></g:else>
-                       	<g:if test="${var.value.keid == null ||  var.value.keid.equals('NULL')  }"> <td>--</td></g:if>                         
-                        	<g:else><td width ='20%'> ${var.value.keid }</td></g:else>
+                        	<g:else><td width ='20%'><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=${var.value.pubid }"  target="_blank">  ${var.value.pubid }</a></td></g:else>
+                       	<g:if test="${var.value.keid == null ||  var.value.keid.equals('NULL')  }"> <td>--</td></g:if>     
+                                      
+                        	<g:else><td width ='20%'> <a href=" http://www.kegg.jp/dbget-bin/www_bget?cpd:${var.value.keid }" target="_blank"> ${var.value.keid }</a></td></g:else>
                     <tr>
                     </g:each>
                    </tbody> 

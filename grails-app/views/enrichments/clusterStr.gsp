@@ -3,8 +3,7 @@
 <html>
 
 <head>
-<title>Heat Map </title>
-  
+<title>Heat Map </title>  
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />    
   <link rel="stylesheet" href="${resource(dir: 'css/clusterStr', file: 'myTheme.css')}" type="text/css" media="screen">
   <link rel="stylesheet" href="${resource(dir: 'css/clusterStr', file: '960.css')}" type="text/css" media="screen">
@@ -80,17 +79,60 @@ console.log(w + " and h is "+ h);
 								
 					 <h1>Concept  Information</h1>
 					 <hr/>
-					 <br/>
+					 
+				
+					<center>
+					 <table width = "90%" id="result" >
+					 <tr>
+					 <td><span id="original_id-label" class="property-label"><b>Concept name: </b>${con.name} </span></td>
+					 <td><span id="original_id-label" class="property-label"><b>Concept Id: </b>${con.original_id}</span></td>
+					 </tr>
+					  <tr>
+					 <td><span id="original_id-label" class="property-label"><b>Concept Type: </b>${con.concept_types.getFullname()}</span></td>
+					 <td><span id="original_id-label" class="property-label"><b>Number of Compounds: </b>${con.num_compounds}</span></td>
+					 </tr>
+					 </table>
+					 
+					 
+					 </center>
+					 
 					
-					<ul class="list">			
-					<li>1. Concept name: ${con.name} </li>
-					<li>2. Concept Id:${con.original_id}</li>
-					<li>3. Concept Type: ${con.concept_types.getFullname()}</li>
-					<li>4. Number of Compounds:${con.num_compounds}</li>
-					</ul>
-						
 				</div>
+				
+				 <div style="width:300px">
+				  <h1>Legend</h1>
+						
+				<table width = "90%" id="result">
+				<tr>
+					<td bgcolor="white"></td> <!--0-->
+					 <td bgcolor="#FFFF00"></td> <!--0-10-->
+					 <td bgcolor="#FFE100"></td><!--10-20-->
+					 <td bgcolor="#FFC800"></td><!--20-30-->
+					 <td bgcolor="#FFAF00"></td><!--30-40-->
+					 <td bgcolor="#FF9600"></td><!--40-50-->
+					 <td bgcolor="#FF7D00"></td><!--50-60-->
+					 <td bgcolor="#FF6400"></td><!--60-70-->
+					 <td bgcolor="#FF4B00"></td><!--70-80-->
+					 <td bgcolor="#FF3200"></td><!--80-90-->
+					  <td bgcolor="#FF0000"></td><!--90-100-->
+					</tr>
+					<tr>
+					 <td><span class="property-label">0</span></td>
+					 <td>10</td>
+					 <td>20</td>
+					 <td>30</td>
+					 <td>40</td>
+					 <td>50</td>
+					 <td>60</td>
+					 <td>70</td>
+					 <td>80</td>
+					 <td>90</td>
+					 <td>100</td>
+					</tr>
+			</table>
+			</div>
 
+			
 </tr>
 <tr>		
 		<td>

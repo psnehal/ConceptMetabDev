@@ -71,7 +71,7 @@
 		
 		<div class ="searchm" align="center">
 		<g:form action="search" method="get">                  
-                  <span class="formText">Search By :<g:radioGroup name="fil" id="radio" values="['concept','compound']" value="concept" labels = "['Concepts','Compounds']" onClick="doExport()">
+                  <span class="formText">Search By :<g:radioGroup name="fil" id="radio" values="['concept','compound']" value="concept" labels = "['Concept','Compound']" onClick="doExport()">
                         ${it.radio} <g:message code="${it.label}" />
                         </g:radioGroup></span>
                         <g:textField name="q" id="city" value="${params.q}"/>
@@ -102,10 +102,11 @@
                     <tr>
                     	<td>
 						 	<g:set var="cnm" value="${it.ctypes}"/>
-						 	<g:link controller="Concepts" action="dbspecific" params="[name:cnm]">${cnm}</g:link>
+						 	<g:link controller="Concepts" action="dbspecific" params="[name:cnm, offset:'0']">${cnm}</g:link>
                         </td>
 					<td>${it.count}</td>
-					<td> <a href="#"><img src="${createLinkTo(dir: 'images/skin', file: 'information.png')}"  alt="Grails"/></a></td>
+					<g:set var="link" value="${createLink(action:'intro')}#${cnm}"/>
+					<td><a href="${link }"><img src="${createLinkTo(dir: 'images/skin', file: 'information.png')}"  alt="Grails"/></a></td>
                        
                         <tr>
                     </g:each>

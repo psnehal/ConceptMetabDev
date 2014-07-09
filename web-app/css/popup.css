@@ -1,0 +1,69 @@
+@CHARSET "UTF-8";
+
+h1 {
+	color: #0F226E;
+	font-weight: normal;
+	font-size: 1.00em;
+	margin: 0.1em 0 0.4em 0;
+	font-weight:bold;
+}
+
+ #title{
+	background:#F7F8E0;
+    
+
+}
+
+table#result {
+	
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #444444;
+	background-color: #efefef;
+	border-width: 1px;
+	border: thin;
+	border-style: solid;
+	border-collapse: collapse;
+	border-color: #dddddd;
+	clear: both;
+}
+
+table#result td {
+	padding: 5px;
+	clear: both;
+}
+
+table#chart {
+	border-collapse: collapse;
+	width: 100%;
+	overflow-y: scroll;
+	
+}
+
+table#chart tr {
+	border: 1;
+}
+
+table#chart tr>td:first-child, tr>th:first-child {
+	padding-left: 1.00em;
+}
+
+table#chart tr>td:last-child, tr>th:last-child {
+	padding-right: 1.15em;
+	
+}
+
+table#chart td  {
+	text-align: left;
+	vertical-align: center;
+	font-family: sans-serif;
+	font-size: 12px;
+	color: black;
+	padding:2px; margin:0;
+	background-color:white;
+	
+}
+
+table#chart th:hover, tr:hover, td:hover , tr.alt:hover, td.alt:hover{
+	background: white;
+}

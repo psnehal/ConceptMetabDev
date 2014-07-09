@@ -5,7 +5,22 @@
 		<head>
 		<title>heat map test</title>
 		<g:javascript src="heatmap_viewer.js" />
+		<g:javascript src="elevatezoom/query.elevatezoom.js" />
+		<g:javascript src="elevatezoom/jquery.elevateZoom-3.0.8.min.js" />
+		<g:javascript library="jquery" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<script>
+		$("#xaxis").elevateZoom({constrainType:"height", constrainSize:274, zoomType: "lens", containLensZoom: true, gallery:'gallery_01', cursor: 'pointer', galleryActiveClass: "active"});
+		 //pass the images to Fancybox 
+		 $("#xaxis").bind("click", function(e) { var ez = $('#xaxis').data('elevateZoom');	
+		  $.fancybox(ez.getGalleryList()); 
+		  return false;
+		});
+		
+
+
+
+		</script>
 		</head>
 		<body bgcolor="#ffffff" onload="start(${height}, ${width})">
 		<table border="1" cellpadding="0" cellspacing="0" width="100%" style="border-left-width: 10px; border-top-width: 10px;"> 
