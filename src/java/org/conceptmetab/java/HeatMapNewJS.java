@@ -576,6 +576,8 @@ public Map<String, String> createBufferredImageMod(Object[][] board, int id )
     BufferedImage bImage = new BufferedImage(BI_WIDTH, BI_HEIGHT,BufferedImage.TYPE_INT_RGB);   
     BufferedImage bXaxis = new BufferedImage(wXaxis, hXaxis,BufferedImage.TYPE_INT_RGB);   
     BufferedImage bYaxis = new BufferedImage(wYaxis, hYaxix,BufferedImage.TYPE_INT_RGB);   
+    
+  
     Graphics2D g2d = bImage.createGraphics();
     Graphics2D gXaxis = bXaxis.createGraphics();
     Graphics2D gYaxis = bYaxis.createGraphics();

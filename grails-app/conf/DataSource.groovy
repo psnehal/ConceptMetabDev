@@ -24,8 +24,8 @@ environments {
 			//logSql    = true
 			//formatSql = true
 			 properties {
-				maxActive   = 10
-				maxIdle     = 5
+				maxActive   = 50
+				maxIdle     = 25
 				minIdle     = 2
 				initialSize = 2
 		    }
@@ -39,7 +39,7 @@ environments {
     }
     production {
         dataSource {
-			url = "jdbc:mysql://sartor-webdev.bicc.med.umich.edu:3306/conceptmetab?useUnicode=yes&characterEncoding=UTF-8"
+			url = "jdbc:mysql://sartor-webdev.bicc.med.umich.edu:3306/conceptmetab?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
 			//url = "jdbc:mysql://127.0.0.1:33066/conceptmetab?useUnicode=yes&characterEncoding=UTF-8"
 			username = "snehal"
 			password = "snehal"
@@ -50,6 +50,18 @@ environments {
 				maxIdle     = 25
 				minIdle     = 5
 				initialSize = 5
+				numTestsPerEvictionRun = 3
+				maxWait = 10000
+		   
+				testOnBorrow = true
+				testWhileIdle = true
+				testOnReturn = true
+		   
+				validationQuery = "select now()"
+		   
+				minEvictableIdleTimeMillis = 1800000
+				timeBetweenEvictionRunsMillis = 1800000
+				
 			}
         }
     }

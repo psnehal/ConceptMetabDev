@@ -1,10 +1,15 @@
 package conceptmetab
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.Image
 import java.awt.event.ItemEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 
 import org.rosuda.REngine.*;
 import org.apache.commons.io.output.WriterOutputStream
@@ -15,6 +20,7 @@ import org.conceptmetab.java.DrawHeatMap
 import org.conceptmetab.java.HeatMapNewJS
 import org.conceptmetab.java.JDBCConnectionTest;
 import org.conceptmetab.java.MockupHeatMap
+import org.conceptmetab.java.DrawHeatMapInR
 import javax.imageio.*;
 
 
@@ -887,6 +893,13 @@ def columns = []
 		 forward(action: "table", params:params)
 		 
 	 }
+	 if(params.containsKey("testHeatMapInR"))
+	 {
+		 
+		 forward(action: "drawHeatmapInR", params:params)
+		 
+	 }
+	 
 	else {
 				 if(params.containsKey("slider"))
 					{
@@ -1231,6 +1244,190 @@ def columns = []
 	 }
 	 println(html2)
 	 [html:html,html2:html2,con:con]
+	 
+ }
+ 
+ def drawHeatmapInR(){
+	 
+	 println "detalied heatmap"+ params;
+	 
+	 def fil = params.fil
+	 def id2 = params.id2
+	 def odds= params.odds
+	 def db =[]
+	  if(params.statement instanceof java.lang.String)
+	  {
+		 println("Statement is only one string")
+		 db.add(params.statement);
+	  }
+	  else
+	  {
+		  db = params.statement.toList()
+	  }
+	 def q = params.q.toInteger()
+	  String dbname = "";
+	 db.each{ dbname = dbname+"'"+it+"'"+"," }
+	 dbname =dbname.substring(0,dbname.lastIndexOf(","))
+	 DrawHeatMapInR dh = new DrawHeatMapInR();
+	 Object[][] mtr  = dh.getConcept(q, fil, id2,odds,dbname);
+	 println("Got the matrix")
+	 
+	 UUID uuid = UUID.randomUUID();
+	 String imageename = ""+uuid+".png";
+	 String textfile = "/tmp/"+uuid+".txt";
+	 String filename = ""+uuid+".txt";
+	 dh.writeArrayToFileRowise(mtr,textfile);	 
+	println("got the file")
+	 
+	 def colM = mtr[1].length;
+	 def rowM = mtr.length
+	 def con = Concepts.get(q)
+	 
+	 Object[][] test = mtr
+	 List<String[]> l = new ArrayList<String[]>(Arrays.asList(test));
+	 def no = l.size()-1
+	 println("removed this line")
+	 l.remove(no)
+	 Object [][] forCluster = l.toArray()	 
+	 println("removed last row and back to object")
+	
+	 //def te = new JsonBuilder( forCluster ).toString()
+	 int compoundsize = mtr[1].length;
+	 int BI_WIDTH =  colM*20 ;
+	 int BI_HEIGHT =rowM *20;
+	
+	 int wXaxis = BI_WIDTH ;
+	 int hXaxis = 150;
+	
+	int wYaxis = 250;
+	int hYaxix = BI_HEIGHT
+	
+	 def clusterMat = connectRService.clusterAnalysisForR(filename,BI_HEIGHT,BI_WIDTH)
+	
+	 int[] coll = clusterMat.colOrd
+
+	 
+	 String html =""
+	 String html2 =""
+	// println("col is " + clusterMat.colOrd)
+	// println("row is " + clusterMat.rowOrd)
+	 println("Row is " +  forCluster.size()  + " Col is   :=" + forCluster[1].length + "   col order is :=" + coll.size() +  "row order is := " + coll.size())
+	 def rowl = clusterMat.rowOrd.toList()
+	 rowl = rowl.reverse()	 
+	 println("row is reversed " + rowl) 
+	 
+	 int rc_width = 20;
+	 int rc_height = 20;
+	 
+	
+	
+	println("create image" + "with mtr cols "+ colM + " width " + BI_WIDTH )
+	println("create image" + "with mtr rows "+ rowM + " width " + BI_HEIGHT )
+	
+	
+	println("height"+ BI_HEIGHT)
+	println("width"+ BI_HEIGHT)
+	BufferedImage bImage = new BufferedImage(BI_WIDTH, BI_HEIGHT,BufferedImage.TYPE_INT_RGB);
+	 BufferedImage bXaxis = new BufferedImage(wXaxis, hXaxis,BufferedImage.TYPE_INT_RGB);
+	 BufferedImage bYaxis = new BufferedImage(wYaxis, hYaxix,BufferedImage.TYPE_INT_RGB);
+	 def x_cor = 0
+	 def y_fcor=0
+	 Graphics2D g2d = bImage.createGraphics();
+	 Graphics2D gXaxis = bXaxis.createGraphics();
+	 Graphics2D gYaxis = bYaxis.createGraphics();
+	
+	 gXaxis.setBackground(Color.WHITE);
+	 gYaxis.setBackground(Color.WHITE);	 
+	 gXaxis.fillRect(0, 0, wXaxis, hXaxis);
+	 gYaxis.fillRect(0, 0, wYaxis, hYaxix);
+	 
+	 
+	
+	 for (int row = 0 ; row< forCluster.size(); row++)
+	 
+		 {
+			 
+				 int conInt = rowl[row-1]//R
+				 for (int col = 0 ; col <  forCluster[1].length;col++)
+					 {
+					
+						 
+						  if(row==0 && col != 0){
+							
+							 int comInt = coll[col-1]
+							 //println("its in compound name loop"+  comInt)
+							 println()
+							 
+								 int ch = x_cor+160;
+								 final AffineTransform saved = gXaxis.getTransform();
+								 final AffineTransform rotate = AffineTransform.getRotateInstance(-Math.PI /2, ch, 140);
+								 gXaxis.transform(rotate);
+								
+								
+									  String colname = mtr [0][comInt].toString();
+									// System.out.println("Entering column  " + col + "with colname"+ colname + "with x_cor" + ch);
+									  if(colname.length() > 30)
+										 {
+										  colname = colname.substring(0, 30);
+										 }
+									  gXaxis.setColor(Color.black);
+									  if (compoundsize < 50 )
+									  {
+										 // System.out.println("compound size is less than 50 loop");
+									  gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 15 ));
+									  }
+									  else
+									  {
+										  gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 25 ));
+									  }
+										
+										
+								   //   System.out.println("Colname is " +  colname + "added to "  + "[" + 0 +"," +col +"]" + "with x  and y cor" + ch + "and 0"  );
+									  gXaxis.drawString(colname, ch, 0);										
+									  gXaxis.setTransform(saved);
+									  x_cor = x_cor+rc_height;
+									  
+						 }
+						  
+						  else if(col == 0)
+						  {
+							  
+							  String rowname = mtr[conInt][0].toString();
+							  gYaxis.setColor(Color.black);
+							  gYaxis.setFont(new Font( "Sansserif", Font.BOLD, 20 ));
+							  int ch2 = compoundsize*20 +10;
+							 // System.out.println("Entering row  " + row + "with Rowname  "+ rowname + "  with y_cor  " + y_fcor);
+							  gYaxis.drawString(rowname, 10, y_fcor);
+							  //System.out.println("Rowname is " +  rowname + "added to "  + "[" + row +"," +col +"]" + "with x "+x_cor+" and y cor" + y_fcor  );
+							  y_fcor = y_fcor+ rc_height;
+							  
+						  }
+						 //Column order
+						 
+						
+						
+						
+							 
+					}//for inside 
+			
+		 }//Foroops
+				 
+		 String fileXaxis ="/tmp/"+ uuid+"_"+ "_Xaxis"+".png";
+		 ImageIO.write(bXaxis, "png", new File(fileXaxis))
+		 String fileYaxis ="/tmp/"+ uuid+"_"+ "_Yaxis"+".png";
+		 ImageIO.write(bYaxis, "png", new File(fileYaxis))
+		 
+		 
+		 System.out.println("-- saved" +  bXaxis.getWidth());
+	 
+		 def height= bYaxis.getHeight();
+		 def width = bXaxis.getWidth();
+		 
+		 println("Width from java is"+width +"  from R is "  + " height from java is " + height + "  height from R is " ) 
+	 
+		 [ximage:fileXaxis.replace("/tmp/", ""),bimage:imageename,yimage:fileYaxis.replace("/tmp/", ""),height:height,width:width,con:con]
+	 
+	 
 	 
  }
  

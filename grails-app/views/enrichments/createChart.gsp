@@ -387,6 +387,7 @@
 	   <g:submitButton name="table" value="Table" class="submit" onclick="validation(this);"/>
 	   <g:submitButton name="heatmap" value="Heatmap" class="submit"/>
 	   <g:submitButton name="CompleteNetwork" value="Complete Network" class="submit"/>
+	   <g:submitButton name="testHeatMapInR" value="testHeatMapInR" class="submit"/>
 	      </div>  
   </center>   
 	   </g:form> 

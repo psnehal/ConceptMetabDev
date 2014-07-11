@@ -47,10 +47,16 @@ RConnection c = new RConnection();
 			connection.voidEval('par(bg="#F7F8E0")')
 			connection.voidEval('myCol <- c("white","#ffffcc","#ffff99","#ffff66","#ffff33","#FFFF00","#FFCC00","#ff9900","#ff6600","#FF3300","red" )')
 			connection.voidEval(' myBreaks <- c(0,1, 10, 20,30,40,50,60,70,80,90,100)')
+			println("its in png block")
+			connection.voidEval('width<-length(colnames(data))*20')
+			connection.voidEval('height<-length(rownames(data))*20')
+			
+			
+				
 			
 			try{
-				println("its in png block")
-			    connection.voidEval("png(filename ='/tmp/test2.png',bg = '#F7F8E0') ")
+				
+			    connection.voidEval("png(filename ='/tmp/test2.png',bg = '#F7F8E0',width = width, height = height) ")
 			}
 			catch(e) {		
 				println("its in pdf block")
@@ -67,6 +73,70 @@ RConnection c = new RConnection();
 			return mapOrd
 			
 			}
+			
+			def clusterAnalysisForR(def te,def height ,def width)
+			{
+				println("inside Service")
+			RConnection connection;
+			connection = new RConnection("localhost", 6311);
+			println("Connected to R")
+			def json_file ="/tmp/"+te
+			   println("te is" +json_file)
+			connection.assign("json_file", json_file);
+			connection.voidEval("library('rjson')");
+			connection.voidEval("library('gplots')");
+			//connection.voidEval("test <- fromJSON (mat)");
+			//connection.voidEval("m = do.call(rbind, test)");
+			//connection.voidEval("data = data.frame(m[2:nrow(m), 2:ncol(m)], row.names=m[2:nrow(m),1],stringsAsFactors=F)");
+			connection.voidEval("m=read.csv(json_file, header=T)");
+			connection.voidEval("data=data.frame(m[1:nrow(m)-1, 2:ncol(m)], row.names=m[1:nrow(m)-1,1],stringsAsFactors=F)");
+			//connection.voidEval("colnames(data) = m[1,2:ncol(m)]");
+			//		/pdf("heatmap.pdf", height=10, width=10)mat =te
+			
+			/*
+			connection.voidEval('hmcols<-colorRampPalette(c("white","yellow","red"))(256)')
+			//connection.voidEval('test2 =heatmap(data.matrix(data),col=hmcols)')
+			connection.voidEval("png('/tmp/images/test.png')")
+			connection.voidEval("test2 =heatmap(data.matrix(data),col=hmcols))");
+			connection.voidEval("dev.off()")
+			*/
+			
+			connection.voidEval('hclust.ave <- function(x) hclust(x, method="average")')
+			connection.voidEval('par(bg="#F7F8E0")')
+			connection.voidEval('myCol <- c("white","#ffffcc","#ffff99","#ffff66","#ffff33","#FFFF00","#FFCC00","#ff9900","#ff6600","#FF3300","red" )')
+			connection.voidEval(' myBreaks <- c(0,1, 10, 20,30,40,50,60,70,80,90,100)')
+			println("its in png block")
+			connection.voidEval('width<-length(colnames(data))*20')
+			connection.voidEval('height<-length(rownames(data))*20')
+			
+			
+				
+			
+			try{
+				def imagename = "/tmp/"+ te.replace("txt","png")
+				println("its in png block with image name"+ imagename+ "with height" +  height + "width " + width)
+				connection.assign("height", height);
+				connection.assign("width", width);				
+				connection.assign("imagename", imagename);			
+				connection.voidEval("png(filename =imagename,bg = '#F7F8E0',width = width, height = height) ")
+			}
+			catch(e) {
+				println("its in pdf block")
+				connection.voidEval("pdf('/tmp/test3.pdf',width = width, height = height)")
+			}
+			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="",dendrogram="none")')
+			connection.voidEval("dev.off()")
+			int[] rowOrd = connection.eval('test2$rowInd').asIntegers();
+			int[] colOrd = connection.eval('test2$colInd').asIntegers();;
+			println("Got results")
+			
+			
+			def mapOrd = ["rowOrd": rowOrd, "colOrd": colOrd]
+			return mapOrd
+			
+			}
+			
+			
 			
 			
 			def ComHeatmap(def filename)
@@ -136,14 +206,17 @@ RConnection c = new RConnection();
 			connection.voidEval(' myBreaks <- c(0,1, 10, 20,30,40,50,60,70,80,90,100)')
 			
 			try{
-				println("its in png block")
-				connection.voidEval("png(filename ='/tmp/test2.png'),bg = '#F7F8E0' ")
+				
+				def imagename = "/tmp/"+ te.replace("txt","png")
+				println("its in png block with image name"+ imagename)
+				connection.assign("imagename", imagename);
+				connection.voidEval("png(filename =imagename),bg = '#F7F8E0' ")
 			}
 			catch(e) {
 				println("its in pdf block")
 				connection.voidEval("pdf('/tmp/test3.pdf')")
 			}
-			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="")')
+			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="",dendrogram="none")')
 			connection.voidEval("dev.off()")
 			int[] rowOrd = connection.eval('test2$rowInd').asIntegers();
 			int[] colOrd = connection.eval('test2$colInd').asIntegers();;
