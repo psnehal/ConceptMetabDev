@@ -62,9 +62,9 @@
 	<g:set var="odds" value="${params.odds}"/>
 				<g:set var="fil" value="${params.fil}"/>
 				<g:link controller="concepts" action="show" id="${params.q}" params="[id2: id2, odds: odds,fil:fil]">Go Back to Filter Page</g:link></td>
-				
+	<% List statements = params.list('statement') %>			
 	 <export:formats formats="['csv', 'excel']" action="table" params="[q:"${params.q}", odds:"${params.odds }", id1:"1.45e-323",id2:"${params.id2 }",fil:"${params.fil }", statement:"${params.statement}", table:"table"]" />
-	 
+	 <p>${statements}</p>
    <div id="show-concepts" class="content scaffold-show" role="main"> 						
     <div id ="title" style="width: 676px;float:left;">
 	             <h1>Concept Information</h1>

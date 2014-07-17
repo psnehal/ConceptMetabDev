@@ -36,7 +36,7 @@ class CreateEnrichedConceptService {
 			 order(filter)
 		 }
 		
-		 println("list of interactions = "+result.size() +"   id1 = "+ id1_inter+"  id2 = "+ id2_inter+"  id  = "+ con +"  filter  = "+ filter)
+		 println("list of interactions = "+result.size() +"   id1 = "+ id1_inter+"  id2 = "+ id2_inter+"  id  = "+ con +"  filter  = "+ filter+ "   db is " + db)
 		DecimalFormat format = new DecimalFormat("0.###E0");
 		DecimalFormat format2 = new DecimalFormat("0.###");
 		def map = result.collect {en ->
@@ -60,8 +60,8 @@ class CreateEnrichedConceptService {
 		}
 		
 		
-		//println("map from service"+map)
-		//println("Size is"+ map.size() +"   map: === " + map )
+		println("map from service"+map)
+		println("db Size is"+ db.size() +"   map: === " + map )
 		int c = 1
 		
 		List re = new ArrayList()
@@ -73,9 +73,11 @@ class CreateEnrichedConceptService {
 			
 			for (int i = 0; i<db.size(); i++)
 			{
+					
 					map.each{
-						if (it.ctfull.equals(db.get(i))) {
-							//println("ct full is"+ it.ctfull + "db is "+ db.get(i))
+						println("ct full is  '"+ it.ctfull + "'  db is '"+ db.get(i)+"'")
+						if (it.ctfull.trim().equals(db.get(i).trim())) {
+							println("inside loop ct full is"+ it.ctfull + "db is "+ db.get(i))
 							re.add(it)
 						}
 					}

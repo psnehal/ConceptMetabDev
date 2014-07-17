@@ -105,26 +105,25 @@ RConnection c = new RConnection();
 			connection.voidEval('par(bg="#F7F8E0")')
 			connection.voidEval('myCol <- c("white","#ffffcc","#ffff99","#ffff66","#ffff33","#FFFF00","#FFCC00","#ff9900","#ff6600","#FF3300","red" )')
 			connection.voidEval(' myBreaks <- c(0,1, 10, 20,30,40,50,60,70,80,90,100)')
-			println("its in png block")
-			connection.voidEval('width<-length(colnames(data))*20')
-			connection.voidEval('height<-length(rownames(data))*20')
-			
-			
-				
+			def heighInch = (height * 0.01387978)
+			def widthInch = (width * 0.01387978)
+			connection.assign("height", heighInch);
+			connection.assign("width", widthInch);
 			
 			try{
 				def imagename = "/tmp/"+ te.replace("txt","png")
-				println("its in png block with image name"+ imagename+ "with height" +  height + "width " + width)
-				connection.assign("height", height);
-				connection.assign("width", width);				
+				println("its in png block with image name"+ imagename+ "with height" +  height + "width " + width)							
 				connection.assign("imagename", imagename);			
-				connection.voidEval("png(filename =imagename,bg = '#F7F8E0',width = width, height = height) ")
+				connection.voidEval("png(filename =imagename,bg = '#F7F8E0',height=height, width= width, units='in', res=75) ")
 			}
 			catch(e) {
 				println("its in pdf block")
 				connection.voidEval("pdf('/tmp/test3.pdf',width = width, height = height)")
 			}
-			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="",dendrogram="none")')
+			
+			
+		
+			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="",dendrogram="none",margins=c(0,0),lwid=c(0.000001,width),lhei=c(0.000001,height))')
 			connection.voidEval("dev.off()")
 			int[] rowOrd = connection.eval('test2$rowInd').asIntegers();
 			int[] colOrd = connection.eval('test2$colInd').asIntegers();;

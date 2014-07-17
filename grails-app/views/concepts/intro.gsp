@@ -52,7 +52,10 @@
 		<div id="paraPanel">
 		<h3>Enzymes</h3>
 		We used the org.Hs.eg.db R package (2) to map enzymes to genes. We then reused the gene to reaction to compound mapping from KEGG. There are 176 compound sets relating enzymes to compounds.
-		Medical Subject Headings
+		</div>
+		
+		<div id="paraPanel">
+		<h3>Medical Subject Headings</h3>
 		We leveraged the database developed for Metab2MeSH (4), which uses Fisher's Exact Test to annotate PubChem compounds to concepts defined in MeSH, the National Library of Medicine's controlled vocabulary for biology and medicine used to manually index articles for MEDLINE/PubMed. We elected to consider the top-level MeSH categories for Anatomy, Chemicals and Drugs, Diseases, Organisms, Phenomena and Processes, Psychiatry and Psychology, and Agriculture and Technology. MeSH has a tree structure, and a MeSH term may appear in different branches of the tree. To remove the ambiguity of which top-level category a term should be considered a part of, we prioritized membership thus: Diseases, Phenomena and Process, Psychiatry and Psychology, Chemicals and Drugs, Anatomy, Organisms, Technology and Agriculture. See the table below for the number of concepts in each top-level MeSH category.
 		</div>
 		

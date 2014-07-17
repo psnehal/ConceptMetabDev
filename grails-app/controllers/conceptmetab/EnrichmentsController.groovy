@@ -965,7 +965,7 @@ def columns = []
 				 }
 				 
 				 
-				 else if(params.containsKey("table"))
+				 else if(params.containsKey("tableOld"))
 				 {
 					 println("inside enrichment ttable"+params)
 					 println(map.getClass())
@@ -977,7 +977,7 @@ def columns = []
 						println(map2)
 						
 					 
-					 redirect(action: "tableold",params:[map:map2])					
+					 redirect(action: "tableOld",params:[map:map2])					
 					 
 				 }
 				 else{
@@ -1017,32 +1017,55 @@ def columns = []
  def table()
  {
 	 println("inside ttable"+params)
-	 def filter = params.fil;
-	 def con = params.q.toString();
-	 def id1 = params.id1.toString();
-	 def id2 = params.id2.toString();
+	 println("statement are" + params.statement + "class " + params.statement.getClass())
 	 def db = []
-	 def conceptInstance = Concepts.get(con)
-	 HashMap jsonMapN = new HashMap()
-	 String odds = params.odds.toString()
-	 def map
-	 if(params.statement instanceof java.lang.String)
+	 
+	 if(params.containsKey("extension"))
 	 {
-		println("Statement is only one string")
-		db.add(params.statement);
+		println("insde extension loop")
+		def dbe = params.statement.replace("[", "").replaceAll("^\\s+", "");
+		def databaseNames = dbe.replace("]", "").tokenize(",")
+		println(databaseNames.getClass())
+		println( databaseNames)
+		db = databaseNames.collect()
+		 
+		 
 	 }
 	 else
 	 {
-		 db = params.statement.toList()
+		 
+		 if(params.statement instanceof java.lang.String)
+		 {
+			println("Statement is only one string")
+			db.add(params.statement);
+		 }
+		 else
+		 {
+			 db = params.statement.toList()
+		 }
+				 
+		 
 	 }
+	 
+	 println("at the end" + db.size())
+	 def filter = params.fil;
+	 def con = params.q.toString();
+	 println("inside ttable con is"+con)
+	 def id1 = params.id1.toString();
+	 def id2 = params.id2.toString();
 	
+	 def conceptInstance = Concepts.get(con.toBigDecimal())
+	 HashMap jsonMapN = new HashMap()
+	 String odds = params.odds.toString()
+	 def map
+	 
 	 //**************************************************************For Sorting *****************************************
 	 String fil =params.sort
 	 String order =params.order
 	 
 	 map = createEnrichedConceptService.showEnrichedConcepts(filter, con,  id1, id2,odds, db)
 	 //[enid:3138797, id:2722, name:ketone body biosynthetic process, comNo:13, eid:GO:0046951, ctypes:GOBP, ctfull:GO Biological Process, pval:5.533E-9, qval:7.682E-8, ins:5, odds:999999999],
-	 println(map.getClass())
+	 println("After the call"+map)
 	 def html
 	def allR =map.collect {
 			ids -> 
@@ -1065,7 +1088,7 @@ def columns = []
 	      }
 	 }
 	 println(allR.getClass() )
-	 println( "Map class is " + map.getClass())
+	 println( "Map class is " + allR)
 	 
 	 
 	 
@@ -1293,8 +1316,8 @@ def columns = []
 	
 	 //def te = new JsonBuilder( forCluster ).toString()
 	 int compoundsize = mtr[1].length;
-	 int BI_WIDTH =  colM*20 ;
-	 int BI_HEIGHT =rowM *20;
+	 int BI_WIDTH =  (colM-1)*20 ;
+	 int BI_HEIGHT =(rowM -1)*20;
 	
 	 int wXaxis = BI_WIDTH ;
 	 int hXaxis = 150;
@@ -1326,11 +1349,13 @@ def columns = []
 	
 	
 	println("height"+ BI_HEIGHT)
-	println("width"+ BI_HEIGHT)
+	println("width"+ BI_WIDTH)
 	BufferedImage bImage = new BufferedImage(BI_WIDTH, BI_HEIGHT,BufferedImage.TYPE_INT_RGB);
 	 BufferedImage bXaxis = new BufferedImage(wXaxis, hXaxis,BufferedImage.TYPE_INT_RGB);
 	 BufferedImage bYaxis = new BufferedImage(wYaxis, hYaxix,BufferedImage.TYPE_INT_RGB);
 	 def x_cor = 0
+	 def   x_fcor = 0
+	 def y_cor =0
 	 def y_fcor=0
 	 Graphics2D g2d = bImage.createGraphics();
 	 Graphics2D gXaxis = bXaxis.createGraphics();
@@ -1346,15 +1371,17 @@ def columns = []
 	 for (int row = 0 ; row< forCluster.size(); row++)
 	 
 		 {
+			 x_fcor = 0
 			 
 				 int conInt = rowl[row-1]//R
+				
 				 for (int col = 0 ; col <  forCluster[1].length;col++)
 					 {
-					
+						 int comInt = coll[col-1]
 						 
 						  if(row==0 && col != 0){
 							
-							 int comInt = coll[col-1]
+							
 							 //println("its in compound name loop"+  comInt)
 							 println()
 							 
@@ -1389,7 +1416,7 @@ def columns = []
 									  
 						 }
 						  
-						  else if(col == 0)
+						  else if(col == 0 )
 						  {
 							  
 							  String rowname = mtr[conInt][0].toString();
@@ -1402,23 +1429,50 @@ def columns = []
 							  y_fcor = y_fcor+ rc_height;
 							  
 						  }
+						  
+						  else
+						  {
+							  int check = (Integer) mtr[conInt][comInt];
+							  
+							  if(check == 0)
+								  {									
+									   g2d.setPaint ( new Color ( 255, 255, 255 ) );
+									   //System.out.println("Its for no with check  " +check +"  and cord   x ="+x_fcor+"  y=" + y_cor+  "for [ " +row +"," +col+"]" );
+									   g2d.fillRect(x_fcor,y_cor,rc_width,rc_height);
+									   x_fcor = x_fcor+ rc_height;
+								  }
+								  else
+								  {
+									  int g = dh.getColor(check);										
+									  g2d.setPaint ( new Color ( 255,g,0 ) );
+									 // System.out.println("Its for yes with check " +check +"and cord x = "+x_fcor+" y= " + y_cor+ "for [ " +row +"," +col+"]");
+									   g2d.fillRect(x_fcor,y_cor,rc_width,rc_height);
+									   x_fcor = x_fcor+ rc_height;
+							   }
+						  
+						  }
+						  
 						 //Column order
-						 
-						
-						
-						
+						  
 							 
 					}//for inside 
+					 
+					 if(row != 0)
+					 {
+					 y_cor = y_cor+rc_height;
+					 }
+					// println("ycor" + y_cor + "["+ row+"]")
 			
 		 }//Foroops
 				 
 		 String fileXaxis ="/tmp/"+ uuid+"_"+ "_Xaxis"+".png";
 		 ImageIO.write(bXaxis, "png", new File(fileXaxis))
-		 String fileYaxis ="/tmp/"+ uuid+"_"+ "_Yaxis"+".png";
+		 String fileYaxis ="/tmp/"+ uuid+"_"+ "_Yaxis"+".png";		
 		 ImageIO.write(bYaxis, "png", new File(fileYaxis))
+		 String main ="/tmp/"+ uuid+"main"+".png";
+		 ImageIO.write(bImage, "png", new File(main))
 		 
-		 
-		 System.out.println("-- saved" +  bXaxis.getWidth());
+		 System.out.println("-- saved" +  main);
 	 
 		 def height= bYaxis.getHeight();
 		 def width = bXaxis.getWidth();
