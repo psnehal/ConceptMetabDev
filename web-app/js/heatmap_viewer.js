@@ -7,13 +7,13 @@
 
 /* base global values */
 var imageWidth = 4099;
-var imageHeight = 600;
-var maxWidth = Math.round(imageWidth * 4.2);
-var maxHeight = Math.round(imageHeight * 4.2);
-var mainWidth = '1000px';
-var mainHeight = '600px';
-var xAxisHeight = '149px';
-var yAxisWidth = '200px';
+var imageHeight = 231;
+var maxWidth = Math.round(imageWidth * 1.2);
+var maxHeight = Math.round(imageHeight * 1.2);
+var mainWidth = '720px';
+var mainHeight = '431px';
+var xAxisHeight = '200px';
+var yAxisWidth = '250px';
 var mainViewer = null;
 var xAxisViewer = null;
 var yAxisViewer = null;
@@ -207,13 +207,12 @@ var debug=new debug_msgs();
 // Initialize
 function start(width,height){
 	debug.println('Setup...');
-	debug.println("width" + width + "height" + height);
 	var body_img=document.getElementById("main");
 	var main = new viewer({ 
 			name: 'main', 
 			image: body_img, 
 			frame: [mainWidth,mainHeight],
-			maxZoom: [width,height]
+			maxZoom: [width+"px",height+"px"]
 		});
 	var xaxis_img=document.getElementById("xaxis");
 	var xaxis=new viewer({ 
@@ -256,10 +255,10 @@ function viewer(arguments) //argument array
 	var name='name';
 	var image=null,imageSource=null,parent=null,replace=null,preLoader=null;
 	var track=null; // null, 'height', or 'width'
-	var frame=['1400px','1400px',true]; //Format: ['width in px or % (number)','height in px or % (number)', auto adjust frameElement to image (boolean)]
+	var frame=['400px','400px',true]; //Format: ['width in px or % (number)','height in px or % (number)', auto adjust frameElement to image (boolean)]
 	var borderClass=null;
-	var zoomFactor='20%'; //10% increase per zoom in			
-	var maxZoom=['5024px','5024px']; //Either ['max width in pixel', 'max height in pixel']
+	var zoomFactor='10%'; //10% increase per zoom in			
+	var maxZoom=['15024px','15024px']; //Either ['max width in pixel', 'max height in pixel']
 
 	/*Set user defined properties and configurations*/
 	/*

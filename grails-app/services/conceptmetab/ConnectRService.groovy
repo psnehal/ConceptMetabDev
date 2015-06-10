@@ -16,16 +16,17 @@ RConnection c = new RConnection();
 
 
 
-			def clusterAnalysis(def te)
+def clusterAnalysis(def te)
 			{
-				println("inside Service")
+				println("Inside R")
 			RConnection connection;
 			connection = new RConnection("localhost", 6311);		   
 			println("Connected to R")
 			def json_file ="/tmp/"+te
 			   println("te is" +json_file)
-			connection.assign("json_file", json_file);
-			connection.voidEval("library('rjson')");
+			   println( "jpeg file name is " + te.toString().replaceAll("txt", "png"))
+			   def imageFileName = te.toString().replaceAll(".txt", "_table.png")
+			connection.assign("json_file", json_file);			
 			connection.voidEval("library('gplots')");
 			//connection.voidEval("test <- fromJSON (mat)");
 			//connection.voidEval("m = do.call(rbind, test)");
@@ -45,21 +46,25 @@ RConnection c = new RConnection();
 			
 			connection.voidEval('hclust.ave <- function(x) hclust(x, method="average")')
 			connection.voidEval('par(bg="#F7F8E0")')
-			connection.voidEval('myCol <- c("white","#ffffcc","#ffff99","#ffff66","#ffff33","#FFFF00","#FFCC00","#ff9900","#ff6600","#FF3300","red" )')
+			connection.voidEval('myCol <- c("white","#FFFF00","#FFE100","#FFC800","#FFAF00","#FF9600","#FF7D00","#FF6400","#FF4B00","#FF3200","#FF0000" )')
 			connection.voidEval(' myBreaks <- c(0,1, 10, 20,30,40,50,60,70,80,90,100)')
 			println("its in png block")
-			connection.voidEval('width<-length(colnames(data))*20')
-			connection.voidEval('height<-length(rownames(data))*20')
+			
 			
 			
 				
 			
 			try{
+				def imagename = "/tmp/"+ imageFileName
+				println("its in png block with image name"+ imageFileName)
+				connection.assign("imagename", imagename);
+				//connection.voidEval("png(filename =imagename,bg = '#F7F8E0',height=height, width= width, units='in', res=75) ")
 				
-			    connection.voidEval("png(filename ='/tmp/test2.png',bg = '#F7F8E0',width = width, height = height) ")
+			    connection.voidEval("png(filename =imagename,bg = '#F7F8E0') ")
 			}
 			catch(e) {		
 				println("its in pdf block")
+				def pdfname = "/tmp/"+ te.toString().replaceAll(".txt", "_pdf.pdf")
 				connection.voidEval("pdf('/tmp/test3.pdf')")				
 			}
 			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="" )')
@@ -74,42 +79,28 @@ RConnection c = new RConnection();
 			
 			}
 			
-			def clusterAnalysisForR(def te,def height ,def width)
+def clusterAnalysisForR(def te,def height ,def width)
 			{
 				println("inside Service")
 			RConnection connection;
 			connection = new RConnection("localhost", 6311);
 			println("Connected to R")
 			def json_file ="/tmp/"+te
-			   println("te is" +json_file)
+			println("te is" +json_file)
 			connection.assign("json_file", json_file);
-			connection.voidEval("library('rjson')");
 			connection.voidEval("library('gplots')");
-			//connection.voidEval("test <- fromJSON (mat)");
-			//connection.voidEval("m = do.call(rbind, test)");
-			//connection.voidEval("data = data.frame(m[2:nrow(m), 2:ncol(m)], row.names=m[2:nrow(m),1],stringsAsFactors=F)");
 			connection.voidEval("m=read.csv(json_file, header=T)");
-			connection.voidEval("data=data.frame(m[1:nrow(m)-1, 2:ncol(m)], row.names=m[1:nrow(m)-1,1],stringsAsFactors=F)");
-			//connection.voidEval("colnames(data) = m[1,2:ncol(m)]");
-			//		/pdf("heatmap.pdf", height=10, width=10)mat =te
-			
-			/*
-			connection.voidEval('hmcols<-colorRampPalette(c("white","yellow","red"))(256)')
-			//connection.voidEval('test2 =heatmap(data.matrix(data),col=hmcols)')
-			connection.voidEval("png('/tmp/images/test.png')")
-			connection.voidEval("test2 =heatmap(data.matrix(data),col=hmcols))");
-			connection.voidEval("dev.off()")
-			*/
-			
+			connection.voidEval("data=data.frame(m[1:nrow(m)-1, 2:ncol(m)], row.names=m[1:nrow(m)-1,1],stringsAsFactors=F)");			
 			connection.voidEval('hclust.ave <- function(x) hclust(x, method="average")')
 			connection.voidEval('par(bg="#F7F8E0")')
-			connection.voidEval('myCol <- c("white","#ffffcc","#ffff99","#ffff66","#ffff33","#FFFF00","#FFCC00","#ff9900","#ff6600","#FF3300","red" )')
+			connection.voidEval('myCol <- c("white","#FFFF00","#FFE100","#FFC800","#FFAF00","#FF9600","#FF7D00","#FF6400","#FF4B00","#FF3200","#FF0000" )')
 			connection.voidEval(' myBreaks <- c(0,1, 10, 20,30,40,50,60,70,80,90,100)')
+			//1 inch [in] = 96.0000000000011 pixel (Y)
 			def heighInch = (height * 0.01387978)
 			def widthInch = (width * 0.01387978)
 			connection.assign("height", heighInch);
 			connection.assign("width", widthInch);
-			
+			/*
 			try{
 				def imagename = "/tmp/"+ te.replace("txt","png")
 				println("its in png block with image name"+ imagename+ "with height" +  height + "width " + width)							
@@ -122,8 +113,11 @@ RConnection c = new RConnection();
 			}
 			
 			
-		
-			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="",dendrogram="none",margins=c(0,0),lwid=c(0.000001,width),lhei=c(0.000001,height))')
+	
+			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="",dendrogram="none",margins=c(0,0),lwid=c(0.000001,width),lhei=c(0.000001,height),sepwidth=c(0.000001,0.0000001),sepcolor="#C0C0C0",colsep=1:ncol(data),rowsep=1:nrow(data))')
+			*/
+			connection.voidEval("pdf('/tmp/test3.pdf',width = width, height = height)")
+			connection.voidEval('test2 =heatmap.2((data.matrix(data)),hclustfun=hclust.ave,col = myCol , breaks = myBreaks,trace="none",key = FALSE, labCol="",labRow="" )')
 			connection.voidEval("dev.off()")
 			int[] rowOrd = connection.eval('test2$rowInd').asIntegers();
 			int[] colOrd = connection.eval('test2$colInd').asIntegers();;
@@ -138,7 +132,7 @@ RConnection c = new RConnection();
 			
 			
 			
-			def ComHeatmap(def filename)
+def ComHeatmap(def filename)
 			{
 				println("inside Service")
 				

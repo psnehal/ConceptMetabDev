@@ -67,8 +67,8 @@ console.log('w is' + w + 'h is '+ h);
 					
 					<tr> <h1>Concept  Information</h1></tr>
 					
-					<tr><td>Concept name: </td><td> ${con.name} </td><tr>
-					<tr><td>Concept Id:</td><td> ${con.original_id}</td></tr>
+					<tr><td>Concept Name: </td><td> ${con.name} </td><tr>
+					<tr><td>Concept ID:</td><td> ${con.original_id}</td></tr>
 					<tr><td>Concept Type:</td><td> ${con.concept_types.getFullname()}</td><tr>
 					<tr><td>Number of Compounds:</td><td> ${con.num_compounds}</td><tr>
 					</table>

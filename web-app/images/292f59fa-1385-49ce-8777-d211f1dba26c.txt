@@ -1,0 +1,39 @@
+0,L-Histidine,beta-Alanyl-N(pi)-methyl-L-histidine,beta-Alanyl-L-arginine,beta-Alanyl-L-lysine,N(pi)-Methyl-L-histidine,Homocarnosine,Carnosine,beta-Alanine,4-Aminobutanoate
+purine nucleoside catabolic process,100,100,94,94,97,97,100,100,97
+purine nucleotide catabolic process,100,100,94,94,97,97,100,100,97
+ATP catabolic process,100,100,94,94,97,97,100,100,97
+peptide metabolic process,100,100,94,94,97,97,100,100,97
+nucleoside triphosphate metabolic process,100,100,94,94,97,97,100,100,97
+nucleoside triphosphate catabolic process,100,100,94,94,97,97,100,100,97
+purine nucleoside triphosphate metabolic process,100,100,94,94,97,97,100,100,97
+purine nucleoside triphosphate catabolic process,100,100,94,94,97,97,100,100,97
+purine ribonucleotide catabolic process,100,100,94,94,97,97,100,100,97
+nucleoside catabolic process,100,100,94,94,97,97,100,100,97
+nucleotide catabolic process,100,100,94,94,97,97,100,100,97
+ribonucleoside triphosphate metabolic process,100,100,94,94,97,97,100,100,97
+ribonucleoside triphosphate catabolic process,100,100,94,94,97,97,100,100,97
+purine ribonucleoside triphosphate metabolic process,100,100,94,94,97,97,100,100,97
+purine ribonucleoside triphosphate catabolic process,100,100,94,94,97,97,100,100,97
+ribonucleotide catabolic process,100,100,94,94,97,97,100,100,97
+carnosine metabolic process,100,100,94,94,97,97,100,100,97
+carnosine biosynthetic process,100,100,94,94,97,97,100,100,97
+ribonucleoside catabolic process,100,100,94,94,97,97,100,100,97
+peptide biosynthetic process,100,100,94,94,97,97,100,100,97
+amide biosynthetic process,100,100,94,94,97,97,100,100,97
+ATP metabolic process,100,100,94,94,97,97,100,100,97
+purine ribonucleoside catabolic process,100,100,94,94,97,97,100,100,97
+purine-containing compound catabolic process,100,100,94,94,97,97,100,100,97
+nucleoside phosphate catabolic process,100,100,94,94,97,97,100,100,97
+glycosyl compound catabolic process,100,100,94,94,97,97,100,100,97
+pyrophosphatase activity,100,100,94,94,97,97,100,100,97
+hydrolase activity acting on acid anhydrides,100,100,94,94,97,97,100,100,97
+hydrolase activity acting on acid anhydrides in phosphorus-containing anhydrides,100,100,94,94,97,97,100,100,97
+ligase activity,100,100,94,94,97,97,100,100,97
+ligase activity forming carbon-nitrogen bonds,100,100,94,94,97,97,100,100,97
+acid-amino acid ligase activity,100,100,94,94,97,97,100,100,97
+nucleoside-triphosphatase activity,100,100,94,94,97,97,100,100,97
+carnosine synthase activity,100,100,94,94,97,97,100,100,97
+beta-Alanine metabolism,100,100,94,94,0,0,100,100,97
+Carnosine,100,100,0,0,97,97,100,100,97
+Anserine,100,100,0,0,97,97,100,100,0
+0,37,37,35,35,36,36,37,37,36

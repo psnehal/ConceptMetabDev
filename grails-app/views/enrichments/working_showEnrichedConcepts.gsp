@@ -40,7 +40,7 @@ $(document).ready(function()
 					<th>External Id </th>	
 					<th>Concept type</th>	
 					<th>P-Value</th>
-					<th>Q-value</th>
+					<th>q-value</th>
 					<th>Intersection</th>				
 					<th>odds</th>							
 					</thead>

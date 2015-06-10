@@ -138,12 +138,12 @@ import com.mysql.jdbc.PreparedStatement;
 	                cmp.add(new Compounds_in_Concepts(rs.getString("conname"),rs.getLong("compound_id")));
 	                count++;
 	            }
-	            System.out.println("Size of compounds obejct "+ cmp.size());
+	           // System.out.println("Size of compounds obejct "+ cmp.size());
 	        }
 	//**********************Got the hashmap of all the concepts and there compounds ***********************************************************************************************
 	        
 	        HashMap<String, ArrayList<Long>> frequencies = createHashmap(cmp);
-	        System.out.println("Size of Hashmap = "+ frequencies.size());       
+	       // System.out.println("Size of Hashmap = "+ frequencies.size());       
 	        
 	//**********************Get the compounds of concept of interest.**************************************************************************************************************
 	        
@@ -200,12 +200,13 @@ import com.mysql.jdbc.PreparedStatement;
 
 	public void writeArrayToFileRowise(Object[][] array, String filename){
 		PrintStream ps;
+		int actLen = array[1].length;
 		try {
 		ps = new PrintStream(new FileOutputStream(filename));
 		
 		    	for(int row=0;row < array.length;row++){
 		    			
-		    		for(int col=0; col < array[1].length;col++ ){
+		    		for(int col=0; col < actLen;col++ ){
 		    			//System.out.println("column is" + row + "length"+array[row].length+  "value "+ array[row][col]);	    	
 		    			
 			    		if(col == (array[1].length-1))
@@ -363,8 +364,8 @@ import com.mysql.jdbc.PreparedStatement;
 	    int BI_WIDTH = board.length*20+200;
 	    int rc_height = 20;
 	    int BI_HEIGHT =  compoundsize*20 + 250;
-	    System.out.println("Concepts length :"+  board.length +"Compounds no :"+ compoundsize);  
-	    System.out.println("Width of image : " + BI_WIDTH + "  Height is " + BI_HEIGHT );
+	    //System.out.println("Concepts length :"+  board.length +"Compounds no :"+ compoundsize);  
+	    //System.out.println("Width of image : " + BI_WIDTH + "  Height is " + BI_HEIGHT );
 	    
 	    if (BI_WIDTH > 10000 || BI_HEIGHT > 10000 ){    	
 	    	rc_width = 10;
@@ -458,7 +459,7 @@ import com.mysql.jdbc.PreparedStatement;
 	                   e.printStackTrace();
 	           }
 	           
-			System.out.println("-- saved" );      
+			   
 			return bImage;
 	}
 

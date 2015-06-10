@@ -7,7 +7,7 @@ class ConceptsController {
 	
 	
 	def beforeInterceptor =
-	[action:this.&auth, except:["main2","index", "list", "show", "create","atom","getName", "search","opt","ajaxFindCity","checkQ","main","intro","dbspecific"]]
+	[action:this.&auth, except:["main2","index", "list", "show", "create","atom","getName", "search","opt","ajaxFindCity","checkQ","main","intro","dbspecific","demo"]]
 
 	 def search = {
 		  //render Entry.search(params.q, params)
@@ -23,55 +23,83 @@ class ConceptsController {
 			 def b2 = Concepts.createCriteria()
 			 def c = Compounds.createCriteria()
 			 def c2 = Compounds.createCriteria()
-			 if(filter.equals("concept")){
+			 
+			 if (params.containsKey("true"))
+			 {		
+					 if(filter.equals("concept")){
 						 searchResults=  b.list (max: max2, offset: offset) {
-				             ilike 'name', params.q + '%'
+							 ilike 'name',  params.q 
 							 order("name", "asc")
-						 	}
+							 }
 						 
 						 def forcount =  b2 {
-				             ilike 'name', params.q + '%'
-						 	}
+							 ilike 'name',  params.q 
+							 }
 						 resultCount= forcount.size()
+					 }
+					 
+					 else
+					 {
+						 searchResults=  c.list (max: max2, offset: offset) {
+							 ilike 'name', params.q 
+							 order("name", "asc")
+							 }
+						 
+						  def forcount=  c2 {
+							 ilike 'name', params.q 
+							 }
+						 
+						 resultCount= forcount.size()
+					 }
+				 
+				 println("Exam match loop")
+				 
 			 }
-			 
 			 else
 			 {
-				 searchResults=  c.list (max: max2, offset: offset) {
-					 ilike 'name', params.q + '%'
-					 order("name", "asc")
+					 if(filter.equals("concept")){
+								 searchResults=  b.list (max: max2, offset: offset) {
+						             ilike 'name',  '%'+ params.q + '%'
+									 order("name", "asc")
+								 	}
+								 
+								 def forcount =  b2 {
+						             ilike 'name',  '%' +params.q + '%'
+								 	}
+								 resultCount= forcount.size()
 					 }
-				 
-				  def forcount=  c2 {
-					 ilike 'name', params.q + '%'
+					 
+					 else
+					 {
+						 searchResults=  c.list (max: max2, offset: offset) {
+							 ilike 'name', '%'+ params.q + '%'
+							 order("name", "asc")
+							 }
+						 
+						  def forcount=  c2 {
+							 ilike 'name',  '%'+params.q + '%'
+							 }
+						 
+						 resultCount= forcount.size()
 					 }
-				 
-				 resultCount= forcount.size()
 			 }
 	         flash.message = "${resultCount} results found for search: ${params.q}"
 	         flash.q = params.q
-	         println("resultCount"+resultCount)
+	       //  println("resultCount"+resultCount)
 	         return [searchResults:searchResults, resultCount:resultCount, filter:filter]
 	}
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 	
 	def dbspecific (Integer max) {
-		
-
 		 Integer offset = params.int("offset")?:0
-		 Integer max2 = Math.min(params.int("max") ?: 500, 1000)
-		 
-		 println(params);
-		 println("offset" + offset)
+		 Integer max2 = Math.min(params.int("max") ?: 500, 1000)		
+		 def name = params.name
 		//List<Concepts> c = new ArrayList<Concepts>()
 		//List<Concepts> b = new ArrayList<Concepts>()	
-	
 		def b = Concepts.createCriteria()
 		def result
-				 
-			println("Else lopop");
-			result = b.list (max: max2, offset: offset)
+		  result = b.list (max: max2, offset: offset,sort: "name")
 			{ 
 				concept_types
 			   {
@@ -83,7 +111,7 @@ class ConceptsController {
 			
 			def c = Concepts.createCriteria()
 			
-	   println("Else lopop");
+	 
 	   def result2 = c
 	   {
 		   concept_types
@@ -92,14 +120,8 @@ class ConceptsController {
 		  }
 		 
 	  }
-			
 		
-		println("result is "+ result2.size())
-		
-	
-		
-		
-	[result:result, resultcount :  result2.size()]
+	[result:result, resultcount :  result2.size(), name:name]
 	}
 	
 	def main2 = {
@@ -135,6 +157,10 @@ class ConceptsController {
 	
 	
 }
+	def demo = {
+	
+	
+}
 	
 	def main ={
 		
@@ -150,6 +176,7 @@ class ConceptsController {
 		
 		println(result.get(0) )
 		def id1= result.collect{ ids -> return [count:ids.getAt(0),ctypes:ids.getAt(1)]}
+
 		
 		 [ id1:id1]
 		
@@ -198,6 +225,7 @@ class ConceptsController {
 			def conFound = Concepts.withCriteria {
 				  ilike 'con', params.term + '%'
 				 }.sort()
+				 println("From ajax con city and params are"+params)
 		  render (conFound as JSON)
 		 }
 		
@@ -214,8 +242,10 @@ class ConceptsController {
 						  def foundCities = Concepts.withCriteria {
 							  ilike 'name', params.term + '%'
 							  order("name", "asc")	 }
-
-						  render (foundCities?.'name' as JSON)
+						 
+						  def ans = foundCities?.name+"(" + foundCities?.num_compounds + ")"
+						  println("FfoundCities"+ ans)
+						  render (foundCities?.name as JSON)
 					  }
 					  else
 					  {
@@ -250,6 +280,7 @@ class ConceptsController {
 		def conceptsInstance = Concepts.get(id)
 		String url
 		def width = "676px"
+		def height="200px"
 		println ("Concept type is " + conceptsInstance.concept_types.fullname )
 		if (!conceptsInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'concepts.label', default: 'Concepts'), id])
@@ -260,17 +291,38 @@ class ConceptsController {
 		{
 			
 			def meshid2treenumInstance = Meshid2treenum.findAllWhere(mesh_id : conceptsInstance?.original_id )
+			def urlp
 			
+			if(meshid2treenumInstance.size() != 0)
+			{
 			
-			
-			def urlp = "http://www.ncbi.nlm.nih.gov/mesh/?term="+meshid2treenumInstance.get(0).tree_id
-			println ("found mesh term")
-			 width = "500px"
-			 
-			 
-			 println("meshid2treenumInstance tree id is" + meshid2treenumInstance.get(0).tree_id)
-			 
+			 urlp = "http://www.ncbi.nlm.nih.gov/mesh/?term="+meshid2treenumInstance.get(0).tree_id
 			 url = '<a href="'+urlp+'" target="_blank">'+'<span class="property-value" aria-labelledby="original_id-label">'+meshid2treenumInstance.tree_id.toString().replace("[", "") .replace("]", "")+'</span></a>'
+			}
+			else
+			{
+				urlp = "http://www.ncbi.nlm.nih.gov/mesh/?term="+conceptsInstance?.original_id
+				url = '<a href="'+urlp+'" target="_blank">'+'<span class="property-value" aria-labelledby="original_id-label">'+conceptsInstance?.original_id+'</span></a>'
+			}
+			def testR = meshid2treenumInstance.tree_id
+			println ("found mesh term" + testR.size() )
+			
+			if(testR.size() > 2)
+			{
+				height="250px"
+				
+			}
+			else
+			{
+				height="200px"
+			}
+			 width = "500px"
+			
+			 
+			 
+			// println("meshid2treenumInstance tree id is" + meshid2treenumInstance.get(0).tree_id)
+			 
+			 
 			 
 		}
 		else if(conceptsInstance.concept_types.fullname.contains('GO'))
@@ -286,7 +338,7 @@ class ConceptsController {
 			url = "http://www.genome.jp/dbget-bin/www_bget?"+conceptsInstance?.original_id
 		}
 		println("url is "+ url)
-		[conceptsInstance: conceptsInstance, url:url,width:width]
+		[conceptsInstance: conceptsInstance, url:url,width:width,height:height]
         
     }
 

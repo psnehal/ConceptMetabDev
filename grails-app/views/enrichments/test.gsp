@@ -31,6 +31,7 @@
 		<td><ii:imageTag indirect-imagename="${yimage}" id="yaxis" width="100%" height="600px" border="0" alt="" /></td></tr>
 		</tbody></table>
 		<div>
+		changing test page		
 		Zoom with mouse wheel; pan with mouse drag. <br />
 		You can pan (but not zoom) the x and y axis. <br />
 		You can both pan and zoom the heatmap image. <br />

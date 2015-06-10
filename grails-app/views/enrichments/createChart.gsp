@@ -97,13 +97,12 @@
      
         
         var options = {
-        	
-         	   title: 'Concept Distribution by Type',
-         	   'width': 500,
-         	   'height': 300,
+        		
+         	   'width': 425,
+         	   'height': 325,
                 //legend:{position: 'right', textStyle: {color: 'blue', fontSize: 10, maxLines:2}},
                  legend:{position: 'none'},         
-                 chartArea:{'left':20,'top':40,width:"100%",'height':'80%'},
+                 chartArea:{'left':5,'top':10,width:"100%",'height':'100%'},
                  fontSize:'12',
                  colors:${clst},
                  is3D:false,
@@ -162,7 +161,8 @@
      	    			for (var i =0, n=unwanted.length;i<n;i++)
  	    	  			{
  	    				 if (data.getValue(y, 0) == unwanted[i]) {
- 	    					options.slices[y] = { color: 'grey' } ;
+ 	    					options.slices[y] = { color: 'grey',pieSliceText:'none'} ;
+ 	    					
  	    					console.log("slices");   
  	    					console.log("data value " + data.getValue(y, 0) + " wanted " + unwanted[i] + "with y" + y);
  	    					console.log(options.slices[y])	  
@@ -171,10 +171,16 @@
      	    	  		
      	    		}  
 
-     	    		console.log("3");   
-
-     	    		options.is3D = true;
      	    		options.pieSliceText = 'percentage';
+     	        	options.width = '480';
+     	        	options.height= '350';
+     	        	options.chartArea['width']='70%';
+     	        	options.chartArea['height']='70%';
+     	        	options.chartArea['left']='25';
+     	        	options.chartArea['top']='25'; 	
+     	        
+     	        	options.is3D = true;
+     	    		options.pieSliceText = 'none';
      				 chart.draw(data, options);
 
 		
@@ -190,6 +196,13 @@
         	}
 
         	options.pieSliceText = 'percentage';
+        	options.width = '480';
+        	options.height= '350';
+        	options.chartArea['width']='70%';
+        	options.chartArea['height']='70%';
+        	options.chartArea['left']='25';
+        	options.chartArea['top']='25'; 	
+        
         	options.is3D = true;
         	 checkAllChart(0);
         	 chart.draw(data, options);
@@ -206,6 +219,7 @@
 
         	}
         	options.is3D = false;
+        	options.pieSliceText = 'percentage';
         	 checkAllChart(1);
         	 chart.draw(data, options);
 
@@ -282,12 +296,12 @@
 
     	  var options = {
     	        	
-            	   title: 'Concept Distribution by Type',
-            	   'width': 500,
+            	   title: 'Concept Distribution by Type from explosion',
+            	   'width': 400,
             	   'height': 300,
                    //legend:{position: 'right', textStyle: {color: 'blue', fontSize: 10, maxLines:2}},
                     legend:{position: 'none'},         
-                    chartArea:{'left':20,'top':40,width:"120%",height:"120%"},
+                    chartArea:{'left':5,'top':10,width:"70%",height:"70%"},
                     fontSize:'12',
                     colors:${clst},
                     slices:{},
@@ -345,19 +359,22 @@
    
   
    <g:form action="redirectView" method="get" id="myform">   
-   <div  style="height:100%;">
-	<div style=" width: 500px ;float:left;border:1; ">
+   <div  style="height:100%;border:1px;">  
+ 
+	<div style=" width: 450px ;float:left;border:1px; ">
+	  <center><span class="formText">Concept Distribution by Annotation Database</span></center>
 	 <div id="chart_div" ></div>
 	 <br/>
 	 </div>
 	 
-	 <div style="width: 375px;float:right ;border:1; ">  	          
-			 <table id = "chart">
+	 <div style="width: 420px;float:right ;border:1px; margin-right:45px;">  	 
+	 
+			 <table id = "chart" style="margin-right:100px;" >
 			      <tr>
-			      <td colspan="2"><span class="formText">Select one or more database to see results</span></td>
+			      <td colspan="2"><span class="formText">Select one or more Annotation Database</span><br/></td>
 			     			      <g:each in="${map}" status="i" var="test">
 				  <tr>
-					 	<td><g:checkBox name="statement" value="${test.getKey()}" checked="false" />${ test.getKey()}  </td>
+					 	<td nowrap><g:checkBox name="statement" value="${test.getKey()}" checked="false" />${ test.getKey()}  </td>
 					 	<td> <div class="foo" style="background-color:${emptyList.getAt(i)}"></div></td>
 						<td>${test.getValue() }</td> 
 						</tr> 
@@ -365,9 +382,12 @@
 				   <tr>
 				   		 <td><g:checkBox name="checkAllAuto" value="all" id="checkAllAuto" onclick="checkAll(this);" checked="false" />All</td><td>${rsize }</td>
 				   </tr>
-				   <tr> <td><input type="button" name="update" id="update" value="Update Chart"  class="submitsmall" onclick="javascript: onclick();" />
-				   <input type="button" name="selectall" id="selectall" value="Select all" class="submitsmall" /></td>
-				   <td><input type="button" name="update" id="selectnone" value="Select none" class="submitsmall"/></td>
+				   <tr> 
+					   <td colspan = 3>
+						   <input type="button" name="update" id="update" value="Update Chart"  class="submitsmall" onclick="javascript: onclick();" />
+						   <input type="button" name="selectall" id="selectall" value="Select All" class="submitsmall" />
+						   <input type="button" name="update" id="selectnone" value="Select None" class="submitsmall"/>
+					   </td>
 				   </tr>
 				    
 				</table>
@@ -377,17 +397,18 @@
    <center>
    
    <div style="width: 800px; clear: both;">
-   <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Visualize / Check Results </h1>
+   <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;View Enrichment Results </h1>
     <g:hiddenField name="id2"  value="${params.id2 }"/>
 	   <g:hiddenField name="id1"  value="1.45e-323"/>
 	   <g:hiddenField name="q" value="${params.q}" />
 	   <g:hiddenField name="odds" value="${params.odds}" />
 	   <g:hiddenField name="fil" value="${params.fil}" />
-	   <g:submitButton name="network" value="Network" class="submit"/>	
+	   <g:submitButton name="network" value="Star Network" class="submit"/>	
+	   <g:submitButton name="CompleteNetwork" value="Complete Network" class="submit"/>
 	   <g:submitButton name="table" value="Table" class="submit" onclick="validation(this);"/>
 	   <g:submitButton name="heatmap" value="Heatmap" class="submit"/>
-	   <g:submitButton name="CompleteNetwork" value="Complete Network" class="submit"/>
-	   <g:submitButton name="testHeatMapInR" value="testHeatMapInR" class="submit"/>
+	  
+	  <!-- --  <g:submitButton name="testHeatMapInR" value="testHeatMapInR" class="submit"/>-->
 	      </div>  
   </center>   
 	   </g:form> 

@@ -1,3 +1,4 @@
+<%@ page import="conceptmetab.Meshid2treenum" %>
 <%@ page contentType="text/html;charset=ISO-8859-1" %>
 <html lang="en">
 <head>
@@ -6,7 +7,7 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <link rel="stylesheet" href="${resource(dir: 'css', file: 'createChart.css')}" type="text/css">
-<title>Enrichments</title>
+<title>Star Network for ${ con.name }</title>
 <script>
 $(function() {
 			$( "#tabsF" ).tabs();		
@@ -140,7 +141,7 @@ function favBrowser()
 									{ attrValue: "MeSH Diseases", value: "#F47D00" },
 									{ attrValue: "MeSH Chem and Drug", value: "#FFB86D" },
 									{ attrValue: "MeSH Organisms", value: "#FCDC3B" },
-									{ attrValue: "MeSH Phen and Proc", value: "#F7EA2B" },
+									{ attrValue: "MeSH Phen and Proc", value: "#0000FF" },
 									{ attrValue: "MeSH Psy and Psy", value: "#00F5FF" },
 									{ attrValue: "MeSH Tech", value: "#00C5CD" }
 	                        ]
@@ -161,7 +162,7 @@ function favBrowser()
 									{ attrValue: "MeSH Diseases", value: "#F47D00" },
 									{ attrValue: "MeSH Chem and Drug", value: "#FFB86D" },
 									{ attrValue: "MeSH Organisms", value: "#FCDC3B" },
-									{ attrValue: "MeSH Phen and Proc", value: "#F7EA2B" },
+									{ attrValue: "MeSH Phen and Proc", value: "#0000FF" },
 									{ attrValue: "MeSH Psy and Psy", value: "#00F5FF" },
 									{ attrValue: "MeSH Tech", value: "#00C5CD" }
 	                        ]
@@ -233,9 +234,9 @@ function favBrowser()
     // initialization options
     var options = {
             // where you have the Cytoscape Web SWF
-            swfPath: "/conceptmetab/swf/CytoscapeWeb",
+            swfPath: "/swf/CytoscapeWeb",
             // where you have the Flash installer SWF
-            flashInstallerPath: "/conceptmetab/swf/playerProductInstall",
+            flashInstallerPath: "/swf/playerProductInstall",
           	
 
             
@@ -332,7 +333,7 @@ function favBrowser()
             console.log("test"+test)
             var testlink = 'displayEdge?q='+id
             var con = getUrlVars()["q"];
-            var ed =window.open('${createLink(action:'displayEdge')}?q='+ id+'&con='+con,"_blank",'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no, width=620,height=500,left=430,top=23');
+            var ed =window.open('${createLink(action:'displayEdge')}?q='+ id+'&con='+con,"_blank",'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no, width=620,height=500,top=23');
             ed.onload = function() { this.document.title = "Edge Information"; } 
             
        }
@@ -389,34 +390,45 @@ function showDiv() {
 </head>
 <body>
  
-
-	<div id =header> 			 
+<div style="background-color:#eee;">
+	<div id =header  > 			 
 				<a href="${createLink(uri: '/')}"><img src="${resource(dir: 'images', file: 'logoconceptmetab.gif')}" alt="Grails"  style="max-height: 300px; max-width:300px;"/></a>
 				<br/><span class="header-sub" style="font-size: .70em;">Compound Set Network Tool</span>
 				
 	</div>
 	<div id="lefttop"> 
-			<ul>
-			<li>
-				 <g:form controller="concepts" action="show" method="get">
+	<br/>
+			<table id ='chart2'>
+			<tr>
+			<td>
+			<g:form controller="concepts" action="show" method="get">
 				  <g:hiddenField name="id2"  value="${params.id2}"/>                            
 				  <g:hiddenField name="odds"  value="${params.odds}"/>
 				  <g:hiddenField name="fil" value="${params.fil}" />
 				  <g:hiddenField name="id" value="${con.id}" />
-				  <g:submitButton name="Submit" value="Select Database" class="submit"/>
+				  <g:submitButton name="Submit" value="Go Back" class="submit"/>
 				 </g:form>
-			</li>
-			<li> 
-			  <g:form action="redirectView" method="get">
+				 
+			</td>
+			
+			<td>
+			 <g:form action="redirectView" method="get">
 			  	<g:submitButton class="submit" value="Complete Network" name="CompleteNetwork"/>
-			</li>
-			<li>
-			<input type="button" name="Legend" value="Legend" class="submit" onclick="showDiv()" />
-			</li>
-			</ul>	   
+			</td>
+			
+			<td>
+			<g:submitButton class="submit" value="Heatmap" name="heatmap"/>
+			</td>
+			<td>
+				<g:submitButton class="submit" value="Table" name="table"/>
+			</td>
+			</tr>
+				 
+			</table>
+			
 	 </div>
 
-
+</div>
 
 <div id="navigation">
 	<div id="welcomeDiv"  style="display:block;" class="answer_list" >
@@ -427,33 +439,48 @@ function showDiv() {
         <g:hiddenField name="q" value="${params.q}" />
         <br/> 
 		<div id ="fieldpanel">
+		
+			<span class="formTextHeader">Concept Information</span>		
 			<table id ='result'>
-			<tr><td>Concept name:</td><td> ${con.name}</td><tr>
-			<tr><td>Concept Id:</td><td> ${con.original_id}</td></tr>
+			<tr><td>Concept Name:</td><td> ${con.name}</td><tr>
+			<tr>
+			 <g:if test="${con.concept_types.getFullname().contains("MeSH")}">		
+				<%def meshid2treenumInstance =Meshid2treenum.findAllWhere(mesh_id : con.original_id ) %>						  		  
+			    <g:if test="${meshid2treenumInstance.size() != 0}">		  
+			    			<td>Concept ID:</td><td> ${meshid2treenumInstance.tree_id.toString().replace("[", "") .replace("]", "") }</td>
+				</g:if>
+				<g:else>
+					  		<td>Concept ID: </td><td>${con.original_id}</span></td>
+				</g:else>
+			</g:if>
+		  	<g:else>
+			 	<td>Concept ID: </td><td>${con.original_id}</td>
+			</g:else>
+			</tr>	
 			<tr><td>Concept Type:</td><td> ${con.concept_types.getFullname()}</td><tr>
 			<tr><td>Number of Compounds:</td><td> ${con.num_compounds}</td><tr>
 			</table>
 		</div>
-		<div id ="fieldpanel"> 
-		<span class="formTextHeader">Filter Options:</span>
-			<table id ='chart'>				
-						   <g:each in="${list}" status="i" var="test">	
-						   		<input type="hidden" name="statement" value="${test}">	
-							</g:each>  
-			</table>
-			<table id ='chart'>
-				<tr><td><div> P-value: <input type="radio" name="fil" value="pval"/> Q-value <input type="radio" name="fil" value="${params.fil}" checked="checked"  /><g:textField name="id2" id="id2" size="10" value="${params.id2 }"/></div>  </td></tr>
-	            <tr><td><span class="filter-label">Odds Ratio</span><span class="filter-label"> <g:textField name="odds" id="odds" value="${params.odds}"/></span> 
-	            </td></tr>
-			   <tr><td> <center> <g:submitButton name="Submit" class ="submit"/> </center></td></tr>
-			    </table>   
-			    <g:hiddenField name="id" value="${params.id}" />
-			    </g:form>        
-	           
-	    </div>
-	        <div id ="fieldpanel">
-				
-			</div>
+		<br/>
+		<div id ="fieldpanel" style="height:100%;"> 
+		<span class="formTextHeader">Filter Options:</span>					
+	            
+				<table id ='result' style='background:white'>
+					<tr><td><div>P-value<input type="radio" name="fil" value="pval"/> q-value <input type="radio" name="fil" value="${params.fil}" checked="checked"  /> < <g:textField name="id2" id="id2" size="8" value="${params.id2 }"/></div>  </td></tr>
+		            <tr><td>
+		            <span class="filter-label">Odds Ratio ></span>
+		              <span class="filter-label"> <g:textField name="odds" id="odds" value="${params.odds}"/></span> 
+		            </td></tr> 
+		            <tr><td><center> <g:submitButton name="network" value="Submit" class ="submit"/></center></td></tr>
+	             </table> 
+	             <table id ='chart'>				
+					   <g:each in="${list}" status="i" var="test">	
+					   		<input type="hidden" name="statement" value="${test}">	
+						</g:each>		                         
+	              	</table>
+	              	<g:hiddenField name="id" value="${params.q}" />   
+			    </g:form> 
+ 		</div>
 	    <div id ="fieldpanel" >  
          <span class="formTextHeader">Legend</span> 
 	  		<table id="chart">
@@ -471,7 +498,7 @@ function showDiv() {
 					      <tr><td>MeSH Chemicals and Drugs </td><td> <div class="foo" style="background-color:#FFB86D"></div></td></tr>
 						  <tr><td>MeSH Diseases </td><td> <div class="foo" style="background-color:#F47D00"></div></td></tr>
 						  <tr><td>MeSH Organisms</td><td> <div class="foo" style="background-color:#FCDC3B"></div></td></tr>
-						  <tr><td>MeSH Phenomena and Processes  </td><td> <div class="foo" style="background-color:#F7EA2B"></div></td></tr> 
+						  <tr><td>MeSH Phenomena and Processes  </td><td> <div class="foo" style="background-color:#0000FF"></div></td></tr> 
 						  <tr><td>MeSH Psychology and Psychiatry  </td><td> <div class="foo" style="background-color:#00F5FF"></div></td></tr> 
 						  <tr><td>MeSH Technology, Industry, and Agriculture </td><td> <div class="foo" style="background-color:#00C5CD"></div></td></tr>
 						

@@ -36,7 +36,7 @@ class CreateEnrichedConceptService {
 			 order(filter)
 		 }
 		
-		 println("list of interactions = "+result.size() +"   id1 = "+ id1_inter+"  id2 = "+ id2_inter+"  id  = "+ con +"  filter  = "+ filter+ "   db is " + db)
+		 //println("list of interactions = "+result.size() +"   id1 = "+ id1_inter+"  id2 = "+ id2_inter+"  id  = "+ con +"  filter  = "+ filter+ "   db is " + db)
 		DecimalFormat format = new DecimalFormat("0.###E0");
 		DecimalFormat format2 = new DecimalFormat("0.###");
 		def map = result.collect {en ->
@@ -60,8 +60,8 @@ class CreateEnrichedConceptService {
 		}
 		
 		
-		println("map from service"+map)
-		println("db Size is"+ db.size() +"   map: === " + map )
+		//println("map from service"+map)
+		//println("db Size is"+ db.size() +"   map: === " + map )
 		int c = 1
 		
 		List re = new ArrayList()
@@ -75,9 +75,9 @@ class CreateEnrichedConceptService {
 			{
 					
 					map.each{
-						println("ct full is  '"+ it.ctfull + "'  db is '"+ db.get(i)+"'")
+						//println("ct full is  '"+ it.ctfull + "'  db is '"+ db.get(i)+"'")
 						if (it.ctfull.trim().equals(db.get(i).trim())) {
-							println("inside loop ct full is"+ it.ctfull + "db is "+ db.get(i))
+							//println("inside loop ct full is"+ it.ctfull + "db is "+ db.get(i))
 							re.add(it)
 						}
 					}
@@ -103,11 +103,7 @@ class CreateEnrichedConceptService {
 		BigDecimal id2_inter = id2I.toBigDecimal();
 		def result
 		HashMap jsonMap = new HashMap()
-		
-	
-		
-		//This one gets list of concepts enriched with concept of interest
-		
+		//This one gets list of concepts enriched with concept of interest		
 	   def enrichL =Enrichments.createCriteria()
 	   result= enrichL.list {
 			 or {
@@ -119,11 +115,7 @@ class CreateEnrichedConceptService {
 			 ge('odds',odds.toBigDecimal())
 			 order(filter)
 		 }
-		
-	   
-	   
-		 println("list of interactions = "+result.size() +"   id1 = "+ id1_inter+"  id2 = "+ id2_inter+"  id  = "+ con +"  filter  = "+ filter)
-		 
+		 //println("list of interactions = "+result.size() +"   id1 = "+ id1_inter+"  id2 = "+ id2_inter+"  id  = "+ con +"  filter  = "+ filter)		 
 		 //Map is collection of concept ids 
 			 def map = result.collect {en ->
 							 //println(en.id1.id  + "and con is " + con )
@@ -154,13 +146,13 @@ class CreateEnrichedConceptService {
 						 def stdb = Concepts.get(it).concept_types.getFullname()
 						// println("ct full is =  "+ stdb  + "  db is = "+ db.get(i))
 						 if (stdb.equals(db.get(i))) {
-							 println("ct full is =  "+ stdb  + "  db is = "+ db.get(i))
+							// println("ct full is =  "+ stdb  + "  db is = "+ db.get(i))
 							 re.add(it)
 						 }
 					 }
 			 }
 			 re.add(con)
-			 println("re.size" + re.size() + "re is    "+re + "re.class " + re.class  +"map.class is " + map.class)
+			// println("re.size" + re.size() + "re is    "+re + "re.class " + re.class  +"map.class is " + map.class)
 				
 			
 			 def conId = [id: query.id.toString(),label:query.name.capitalize(), comNo:query.num_compounds,conTypes:query.concept_types.getName() ]
@@ -203,11 +195,11 @@ class CreateEnrichedConceptService {
 			 
 			 
 			
-			 println("f2 is "+f2)
+			// println("f2 is "+f2)
 			 jsonMap.edges = f2
 			 def check = jsonMap as JSON
 			 
-		 println("check is " +check)
+		// println("check is " +check)
 			return check
 		 
 		

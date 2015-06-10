@@ -134,7 +134,7 @@ img {
 border-radius: 10px; /* future proofing */
 -khtml-border-radius: 10px;
 margin-bottom: 20px;
-margin-top: 20px; 
+margin-top: 1px; 
 
 
 }
@@ -272,10 +272,11 @@ fieldset,
     list-style: none;
     overflow: hidden;
     zoom: 1;
+    
 }
 
 .fieldcontain {
-    margin-top: 1em;
+    margin-top: 0.8em;
 }
 
 
@@ -285,8 +286,8 @@ fieldset,
     text-align: left;
     font-family: Arial, Helvetica, sans-serif;
     font-size:90%;
-    width: 20%;
-     word-wrap: break-word ;
+    width: 25%;
+    word-wrap: break-word ;
 }
 
 .fieldcontain .com-label {
@@ -304,6 +305,16 @@ fieldset,
     font-family: Arial, Helvetica, sans-serif;
     font-size:80%;
     width: 100%;
+}
+
+.fieldcontain .filter-label-mod {
+    color: #666666;
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:80%;
+    width: 100%;
+     margin: 10px;
+     display: inline-block;
 }
 
 .fieldcontain .property-label {
@@ -380,11 +391,9 @@ input[type=checkbox]{
  }
  
  
- .foo {   
-    
+ .foo {       
     width: 10px;
-    height: 10px;
-    margin: 5px 5px 5px 5px;
+    height: 10px;   
     border-width: 1px;
     border-style: solid;
     border-color: rgba(0,0,0,.2);
@@ -515,6 +524,24 @@ input:invalid:focus, select:invalid:focus, textarea:invalid:focus {
 }
 
 /* TABLES */
+.datagrid table { border-collapse: collapse; text-align: left; width: 100%; }
+.datagrid {font: normal 12px/150% Arial, Helvetica, sans-serif; background: #fff; overflow: hidden; border: 1px solid #8C8C8C; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
+.datagrid table td, .datagrid table th { padding: 7px 8px; }
+.datagrid table thead th {
+	/*background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dedede ), color-stop(1,#dedede) );
+	background:-moz-linear-gradient( center top, #999999 5%, #999999 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF5FC', endColorstr='#C9C1C3');*/
+	background-color:#dedede; 
+	color:#080808; 
+	font-size: 13px; 
+	font-weight: bold; 
+	text-align:left; 
+	}
+.datagrid table thead th:first-child { border: none; }
+.datagrid table tbody td { color: #140E0E; font-size: 12px;font-weight: normal; }
+.datagrid table tbody td:first-child { border-left: none; }
+.datagrid table tbody tr:last-child td { border-bottom: none; }
+
 
 table#advanced {
 	width: 700px;
@@ -542,6 +569,33 @@ table#result td {
 	clear: both;
 }
 
+
+table#result2 {
+	border-top: 1px solid #FFFAF0;	
+	font-family:sans-serif;
+	font-size: 20px;
+	border-collapse: collapse;
+	border :1;
+	margin-bottom: 1em;
+	margin-left:1em; 
+	width:99%;
+}
+
+table#result2 td {
+	padding: 5px;
+	clear: both;
+	vertical-align: center;
+	font-family: sans-serif;
+	font-size: 12px;
+	color: black;
+	
+}
+ table#result2 th:hover, tr:hover, td.alt:hover, td:hover {
+	background: red;
+}
+
+
+
 table#legend {
 	border-top: 1px solid #FFFAF0;	
 	font-family:sans-serif;
@@ -562,10 +616,9 @@ table#legend td {
 
 table#chart {
 	border-top: 1px solid white;
-	border-collapse: collapse;
-	width: 100%;
-	margin-bottom: 1em;
+	border-collapse: collapse;	
 	overflow-y: scroll;
+	cellspacing=0;
 	
 }
 
@@ -575,10 +628,11 @@ table#chart tr {
 
 table#chart tr>td:first-child, tr>th:first-child {
 	padding-left: 1.00em;
+	padding-right: .05em;
 }
 
 table#chart tr>td:last-child, tr>th:last-child {
-	padding-right: 1.15em;
+	padding-right: .15em;
 	
 }
 
@@ -589,6 +643,7 @@ table#chart td  {
 	font-family: sans-serif;
 	font-size: 12px;
 	color: black;
+	padding:0; margin:0;
 	
 	
 }
@@ -857,12 +912,16 @@ a.header-main:link, a.header-main:visited {
 
 .formText {
 	font-family: sans-serif;
-	font-size: 14px;
-	color: #0F226E;
-	padding: 1.1em 1em 0.1em 0.5em;
+	font-size: 15px;
+	color: black;	
+	padding: 0.1em 0.1em 2.1em 0.2em;
 }
-
-
+.formTextSmall {
+	font-family: sans-serif;
+	font-size: 12px;
+	color: black;	
+	padding: 0.1em 0.1em 2.1em 0.2em;
+}
   .formTextExp {
 	font-family: sans-serif;
 	font-size: 14px;
@@ -879,7 +938,7 @@ a.header-main:link, a.header-main:visited {
 	font-size: 1.25em;
 	font-size: 18px;
 	
-	padding: 0.1em 1em 0.1em 0.5em;
+	padding: 0.0em 1em 0.0em 0.5em;
 }
 
 #fieldpanel{
@@ -1061,4 +1120,10 @@ a.header-main:link, a.header-main:visited {
 	font-style: italic;
 	color: #777777;
 }
+
+tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
 

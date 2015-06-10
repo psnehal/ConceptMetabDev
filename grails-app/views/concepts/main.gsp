@@ -63,58 +63,90 @@
 	<body>
 		<br /> <br /> 
 		<a href="#list-concepts" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
-			<ul>
-					<li><a class="intro"  href="${createLink(uri:'/concepts/intro')}">About</a></li>
-			</ul>
-		</div>
 		
+			<g:form action="search" method="get">        
 		<div class ="searchm" align="center">
-		<g:form action="search" method="get">                  
-                  <span class="formText">Search By :<g:radioGroup name="fil" id="radio" values="['concept','compound']" value="concept" labels = "['Concept','Compound']" onClick="doExport()">
+	          
+                  <span class="formText">
+                  Search By :<g:radioGroup name="fil" id="radio" values="['concept','compound']" value="concept" labels = "['Concept','Compound']" onClick="doExport()">
                         ${it.radio} <g:message code="${it.label}" />
                         </g:radioGroup></span>
+                         <span class="formText"><g:checkBox name="true" value="Exact Match" checked="false" />Exact Match </span>
+                         <br/>
                         <g:textField name="q" id="city" value="${params.q}"/>
-                        <g:submitButton name="Show" class="submit"/>
-                     
-         </g:form> 
+                        <g:submitButton name="Search" class="submit"/>
+                        <br/>
+         </div>  
+         <div class ="searchm" align="center">             
+                       
+          </div>           
+        
 		
-		</div>
+		
+		 </g:form> 
 		
 		
 		
 		<div id="list-concept_types" class="content scaffold-list" role="main">
 			<h1>Browse Concepts</h1>
-			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			
+		
+			<div class="datagrid">
 			<table id = "basic">
 				<thead>
 					<tr>
-					<th>Concept Type</th>					
-					<th>Number of Concepts</th>
-					<th>Information</th>				
+					<th rowspan="2">Concept Type</th>					
+					<th rowspan="2">Number of Concepts</th>
+					<th rowspan="2">Average Concept Size</th>		
+					<th colspan="2" >Range of Concept Size</th>							
 					</tr>
+					<tr><th>Min</th><th>Max</th></tr>
+					
 				</thead>
 				<tbody>
+				
+				 
                     <g:each in="${ id1}" >
-                    <tr>
+   
+                <tr>
                     	<td>
 						 	<g:set var="cnm" value="${it.ctypes}"/>
 						 	<g:link controller="Concepts" action="dbspecific" params="[name:cnm, offset:'0']">${cnm}</g:link>
                         </td>
 					<td>${it.count}</td>
 					<g:set var="link" value="${createLink(action:'intro')}#${cnm}"/>
-					<td><a href="${link }"><img src="${createLinkTo(dir: 'images/skin', file: 'information.png')}"  alt="Grails"/></a></td>
+					<td>${it.ctypes.mean}</td>
+					<td>${it.ctypes.min}</td>
+					<td>${it.ctypes.max}</td>
                        
                         <tr>
                     </g:each>
                    </tbody> 
                    
 	 </table>
-			
+		</div>	
 		
 		</div>
+		<div class="nav" role="navigation">
+			<ul>
+					<li><a class="intro"  href="${createLink(uri:'/concepts/intro')}">About</a></li>
+			 <li><a class="intro"  href="${createLink(uri:'/concepts/demo')}">Reference</a></li>
+					<!--	<li><a class="intro"  href="${createLink(uri:'/concepts/intro')}">Contact Us</a></li>- -->		
+			</ul>
+		</div>
+		<br/><br/>
+		<center>	
+		<img src="${resource(dir: 'images', file: 'dcmb.jpg')}" alt="DCMB"/>	<br />	<br />
+					
+					<span class="text" STYLE="font-size: 10pt">
+						Copyright 2015 The University of Michigan 
+						<br />
+						Developed under the support of 
+						<br />
+						Grant #U24 DK097153 & #T32 HG00040
+						<br />
+						</a>
+					<a href="${resource(dir: 'pdf', file: 'TermsOFUse.pdf')}" ><span class="textSmallLink">Terms of Use</span></a>	
+					</span>
+					</center>
 	</body>
 </html>

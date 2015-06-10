@@ -1,3 +1,4 @@
+<%@ page import="conceptmetab.Meshid2treenum" %>
 <%@ page contentType="text/html;charset=ISO-8859-1" %>
 <html lang="en">
 <head>
@@ -6,18 +7,14 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <link rel="stylesheet" href="${resource(dir: 'css', file: 'createChart.css')}" type="text/css">
-<title>Enrichments</title>
+<title>Complete Network for ${ concept.name }</title>
 <script>
 $(function() {
-	
-		
-			$( "#tabsF" ).tabs();
-		
+			$( "#tabsF" ).tabs();		
 			var first = getUrlVars()["id1"];
 		    var second = getUrlVars()["id2"];
 		    var q = getUrlVars()["q"];
-		   console.log("q ="+ q);
-		
+		   console.log("q ="+ q);		
 		   $("#slider-verticalbackwards").slider({
 			   
 			    range: "min",
@@ -26,17 +23,11 @@ $(function() {
 			    value: 200.009,
 			    
 			    slide: function(event, ui) {
-		
 			    	var id2_int = 400.01- ui.value.toFixed(3) ;
 			    	var id2 = Math.pow(10, -id2_int);
 			    	console.log("id2_int"+ id2_int + "  id2 = " + id2)
 			        $("#amount-backwards").val(id2);
-			        
-			        
-			        
 			    },
-		
-		
 				change:function(event, ui)
 				{
 					var id2_int = 400.01- ui.value.toFixed(3) ;
@@ -54,135 +45,8 @@ $(function() {
 			$("#amount-backwards").val(idc);
 			//$("#amount-backwards").val(100 - $("#slider-verticalbackwards").slider("value"));
 		//****************************************************************qval Slider*****************************************************************
-		  $("#slider-qval-back").slider({
-			   
-			    range: "min",
-			    min: 0,
-			    max: 500,
-			    value: 100,
-			    slide: function(event, ui) {
-		
-			    	var id2_int = 500- ui.value;
-			    	var id2 = Math.pow(10, -id2_int);
-			    	console.log("id2_int"+ id2_int + "  id2 = " + id2)
-			    	
-			        $("#amount-slider-qval-back").val(id2);
-			        
-			        
-			        
-			    },
-		
-		
-				change:function(event, ui)
-				{
-					var id2_int = 500- ui.value;
-			    	var id2 = Math.pow(10, -id2_int);
-			    	var id = getUrlVars()["q"];
-			        var id1 = 1.45e-323;
-		
-					console.log("changed id1 = "+ id1 +"  id2  = " + id2 );
-					window.location.href ='http://localhost:8080/conceptmetab/enrichments/createJson?id1='+id1+'&id2='+id2+'&q='+id+'&fil=qval';
-					
-				}
-			});
-		   var idq = Math.pow(10, -$("#slider-verticalbackwards").slider("value"));
-		   console.log("idc is "+ idq);
-			$("#amount-slider-qval-back").val(idq);
-			//$("#amount-backwards").val(100 - $("#slider-verticalbackwards").slider("value"));
-			//***************************************************************************************************************************************
-			
-			
 			//itializes slider
-					$( "#slider-range" ).slider({
-						
-							range: true,
-							min:  0,
-							max: 400,
-							values: [ 0, 373 ],
-							
 				
-							
-							slide: function( event, ui ) {
-										console.log("inside slide");
-									//getter	
-									$( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-									//window.alert(ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
-									console.log("value 1 ==  "+ ui.values[ 0 ]+ "   value 2 == " + ui.values[ 1 ]);
-									//var id2 = Math.pow(10, -ui.values[ 0 ]);
-									//var id1 = Math.pow(10, -ui.values[ 1 ]);
-									console.log("3");
-									var id2 = ui.values[ 1 ];
-									var id1 = ui.values[ 0 ];
-									console.log("id1 == "+ ui.values[ 0 ]);
-									console.log("id2 == "+ ui.values[ 1 ]);
-									var uiv =  Math.pow(10, - ui.values[ 1 ]);
-									$("#para").text(uiv);
-									//var url = window.location.href;
-								//window.open(link ,'Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no, width=420,height=400,left=430,top=23');
-							},
-							change:function(event, ui)
-							{
-								console.log("inside change");
-								var id1_int = ui.values[ 1 ];
-								var id2_int = ui.values[ 0 ];
-								
-								//$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +" - $" + $( "#slider-range" ).slider( "values", 1 ))
-								var id = getUrlVars()["q"];
-								console.log("id is "+ id);
-								console.log("id is before id1 =  "+ id1 + " id2 = "+ id2);
-								
-								var id1 = Math.pow(10, -id1_int)
-								var id2 = Math.pow(10, -id2_int);
-								console.log("changed id1 = "+ id1 +"  id2  = " + id2 );
-								window.location.href ='http://localhost:8080/conceptmetab/enrichments/filterSlider?id1='+id1+'&id2='+id2+'&q='+id+'&fil=pval';  
-							}
-						
-					}); //Slider
-		
-					$( "#qval-range" ).slider({
-						
-						range: true,
-						min:  0,
-						max: 400,
-						values: [ 0, 373 ],
-			
-						
-						slide: function( event, ui ) {
-									console.log("inside slide");
-								//getter	
-								$( "#qval" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-								//window.alert(ui.values[ 0 ] + " - $" + ui.values[ 1 ]);
-								console.log("value 1 ==  "+ ui.values[ 0 ]+ "   value 2 == " + ui.values[ 1 ]);
-								//var id2 = Math.pow(10, -ui.values[ 0 ]);
-								//var id1 = Math.pow(10, -ui.values[ 1 ]);
-								console.log("3");
-								var id2 = ui.values[ 1 ];
-								var id1 = ui.values[ 0 ];
-								console.log("id1 == "+ ui.values[ 0 ]);
-								console.log("id2 == "+ ui.values[ 1 ]);
-								var uiv =  Math.pow(10, - ui.values[ 1 ]);
-								$("#qval").text(uiv);
-								//var url = window.location.href;
-							//window.open(link ,'Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no, width=420,height=400,left=430,top=23');
-						},
-						change:function(event, ui)
-						{
-							console.log("inside change");
-							var id1_int = ui.values[ 1 ];
-							var id2_int = ui.values[ 0 ];
-							
-							//$( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +" - $" + $( "#slider-range" ).slider( "values", 1 ))
-							var id = getUrlVars()["q"];
-							console.log("id is "+ id);
-							console.log("id is before id1 =  "+ id1 + " id2 = "+ id2);
-							
-							var id1 = Math.pow(10, -id1_int)
-							var id2 = Math.pow(10, -id2_int);
-							console.log("changed id1 = "+ id1 +"  id2  = " + id2 );
-							window.location.href ='http://localhost:8080/conceptmetab/enrichments/filterSlider?id1='+id1+'&id2='+id2+'&q='+id+'&fil=qval';  
-						}
-					
-				}); //Slider
 				}); //Function
 
 
@@ -280,7 +144,7 @@ window.onload=function() {
 								{ attrValue: "MeSH Diseases", value: "#F47D00" },
 								{ attrValue: "MeSH Chem and Drug", value: "#FFB86D" },
 								{ attrValue: "MeSH Organisms", value: "#FCDC3B" },
-								{ attrValue: "MeSH Phen and Proc", value: "#F7EA2B" },
+								{ attrValue: "MeSH Phen and Proc", value: "#0000FF" },
 								{ attrValue: "MeSH Psy and Psy", value: "#00F5FF" },
 								{ attrValue: "MeSH Tech", value: "#00C5CD" }
                      ]
@@ -301,7 +165,7 @@ window.onload=function() {
 								{ attrValue: "MeSH Diseases", value: "#F47D00" },
 								{ attrValue: "MeSH Chem and Drug", value: "#FFB86D" },
 								{ attrValue: "MeSH Organisms", value: "#FCDC3B" },
-								{ attrValue: "MeSH Phen and Proc", value: "#F7EA2B" },
+								{ attrValue: "MeSH Phen and Proc", value: "#0000FF" },
 								{ attrValue: "MeSH Psy and Psy", value: "#00F5FF" },
 								{ attrValue: "MeSH Tech", value: "#00C5CD" }
                      ]
@@ -372,9 +236,9 @@ window.onload=function() {
 // initialization options
 var options = {
         // where you have the Cytoscape Web SWF
-        swfPath: "/conceptmetab/swf/CytoscapeWeb",
+        swfPath: "/swf/CytoscapeWeb",
         // where you have the Flash installer SWF
-        flashInstallerPath: "/conceptmetab/swf/playerProductInstall",
+        flashInstallerPath: "/swf/playerProductInstall",
       	
 
         
@@ -415,62 +279,66 @@ vis.ready(function() {
     	handle_edge_click(event);
     });
     
-    function handle_click(event) {
-         var target = event.target;
-         
-         clear();
-         
-         var test = "event.group = " + event.group ;
-        
-             var test2 = "0"+ test;
-         for (var i in target.data) {
-            var variable_name = i;
-            var variable_value = target.data[i];
-            //print( "    " + variable_name + " = " + variable_value );
-            var variable_info = "    " + variable_name + " = " + variable_value + "\n";
-            test =test+variable_info;
-            console.log("i = "+ i + " value = "+ target.data[i]);
-            if(i == "id")
-                   {
-                   console.log("found pval"+ target.data[i]);
-                   var id = target.data[i];
-                   }
-          
-             }
-        
-         window.open('displayMsg?q='+id,'Popup','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=620,height=200');
-        // window.open("","huh","width=320,height=210,scrollbars=no,toolbar=no,screenx=0,screeny=0,location=no,titlebar=no,directories=no,status=no,menubar=no,fullscreen=yes"); 
-         
-    }
-
-    function handle_edge_click(event) {
-        var target = event.target;
-        
-        clear();
-        
-        var test = "event.group = " + event.group ;
-        var test2 = "0"+ test;
-        var map = new Object();
-		console.log("target data"+target.id)
-        
-        for (var i in target.data) {
-           var variable_name = i;
-           var variable_value = target.data[i];
-           //print( "    " + variable_name + " = " + variable_value );
-          console.log("i = "+ i + " value = "+ target.data[i]);
-          var variable_info = "    " + variable_name + " = " + variable_value + ";";
-            test =test+variable_info;
-               if(i == "db_id")
+     function handle_click(event) {
+             var target = event.target;
+             
+             clear();
+             
+             var test = "event.group = " + event.group ;
+            
+                 var test2 = "0"+ test;
+             for (var i in target.data) {
+                var variable_name = i;
+                var variable_value = target.data[i];
+                //print( "    " + variable_name + " = " + variable_value );
+                var variable_info = "    " + variable_name + " = " + variable_value + "\n";
+                test =test+variable_info;
+                console.log("i = "+ i + " value = "+ target.data[i]);
+                if(i == "id")
                        {
-                       console.log("found db_id == "+ target.data[i]);
+                       console.log("found pval"+ target.data[i]);
                        var id = target.data[i];
                        }
+              
+                 }
+             var w =window.open('${createLink(action:'displayMsg')}?q='+ id,"_blank",'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no, width=400,height=150');
+             w.onload = function() { this.document.title = "Concept Information"; }
+            // window.open('displayMsg?q='+id,'Popup','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=200');
+            // window.open("","huh","width=320,height=210,scrollbars=no,toolbar=no,screenx=0,screeny=0,location=no,titlebar=no,directories=no,status=no,menubar=no,fullscreen=yes"); 
              
-            }
-        console.log("test"+test)
-        window.open('displayEdge?q='+id,'Popup','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no, width=620,height=500,left=430,top=23'); 
-        
-   }
+        }
+
+	 function handle_edge_click(event) {
+	            var target = event.target;
+	            
+	            clear();
+	            
+	            var test = "event.group = " + event.group ;
+	            var test2 = "0"+ test;
+	            var map = new Object();
+				console.log("target data"+target.id)
+	            
+	            for (var i in target.data) {
+	               var variable_name = i;
+	               var variable_value = target.data[i];
+	               //print( "    " + variable_name + " = " + variable_value );
+	              console.log("i = "+ i + " value = "+ target.data[i]);
+	              var variable_info = "    " + variable_name + " = " + variable_value + ";";
+	                test =test+variable_info;
+	                   if(i == "db_id")
+	                           {
+	                           console.log("found db_id == "+ target.data[i]);
+	                           var id = target.data[i];
+	                           }
+	                 
+	                }
+	            console.log("test"+test)
+	            var testlink = 'displayEdge?q='+id
+	            var con = getUrlVars()["q"];
+	            var ed =window.open('${createLink(action:'displayEdge')}?q='+ id+'&con='+con,"_blank",'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no, width=620,height=500,left=430,top=23');
+	            ed.onload = function() { this.document.title = "Edge Information"; } 
+	            
+	       }
     
     function clear() {
         document.getElementById("note").innerHTML = "";
@@ -534,25 +402,34 @@ vis.draw(draw_options);
 				
 	</div>
 	<div id="lefttop"> 
-			<ul>
-			<li>
-				 <g:form controller="concepts" action="show" method="get">
+	<br/>
+			<table id ='chart'>
+			<tr><td>
+			<g:form controller="concepts" action="show" method="get">
 				  <g:hiddenField name="id2"  value="${params.id2}"/>                            
 				  <g:hiddenField name="odds"  value="${params.odds}"/>
 				  <g:hiddenField name="fil" value="${params.fil}" />
 				  <g:hiddenField name="id" value="${concept.id}" />
-				  <g:submitButton name="Submit" value="Select Database" class="submit"/>
+				  <g:submitButton name="Submit" value="Go Back" class="submit"/>
 				 </g:form>
-			</li>
-			<li> 
-			  <g:form action="redirectView" method="get">
-			  
-			  	<g:submitButton class="submit" value="Simple Network" name="network"/> 
-			</li>
-			<li>
-			<input type="button" name="Legend" value="Legend" class="submit" onclick="showDiv()" />
-			</li>
-			</ul>	   
+				 
+			</td>
+			
+			<td>
+			 <g:form action="redirectView" method="get">
+			  	<g:submitButton class="submit" value="Star Network" name="network"/>
+			</td>
+			
+			<td>
+			<g:submitButton class="submit" value="Heatmap" name="heatmap"/>
+			</td>
+			<td>
+				<g:submitButton class="submit" value="Table" name="table"/>
+			</td>
+			</tr>
+				 
+			</table>
+			
 	 </div>
 <div id="navigation">
 	<div id="welcomeDiv"  style="display:block;" class="answer_list" >
@@ -562,42 +439,55 @@ vis.draw(draw_options);
         <g:hiddenField name="q" value="${params.q}" />
         <br/> 
 		  		<div id ="fieldpanel">
-					<table id ='result'>
-					<tr> <span class="formTextHeader">Concept Information</span></tr>
-					<tr><td>Concept name:</td><td> ${concept.name}</td><tr>
-					<tr><td>Concept Id:</td><td> ${concept.original_id}</td></tr>
+		  		<span class="formTextHeader">Concept Information</span>			
+					<table id ='result'>				
+					<tr><td>Concept Name:</td><td> ${concept.name}</td><tr>
+					<tr>
+					 <g:if test="${concept.concept_types.getFullname().contains("MeSH")}">		
+						<%def meshid2treenumInstance =Meshid2treenum.findAllWhere(mesh_id : concept.original_id ) %>						  		  
+					    <g:if test="${meshid2treenumInstance.size() != 0}">		  
+					    			<td>Concept ID:</td><td> ${meshid2treenumInstance.tree_id.toString().replace("[", "") .replace("]", "") }</td>
+						</g:if>
+						<g:else>
+							  		<td><span id="original_id-label" class="property-label">Concept ID: </td><td>${concept.original_id}</span></td>
+						</g:else>
+					 </g:if>
+				  	 <g:else>
+					 	<td><span id="original_id-label" class="property-label">Concept ID:</td><td> ${concept.original_id}</span></td>
+					 </g:else>
+					</tr>	
 					<tr><td>Concept Type:</td><td> ${concept.concept_types.getFullname()}</td><tr>
 					<tr><td>Number of Compounds:</td><td> ${concept.num_compounds}</td><tr>
 					</table>
 				</div>
-				
+				<br/>
 				<div id ="fieldpanel"> 
-					<span class="formTextHeader">Filter Options:</span>
-					<g:hiddenField name="id" value="${params.q}" />
-			            <table id ='chart'>				
+					<span class="formTextHeader">Filter Options:</span>					
+			            
+						<table id ='result'>
+							<tr><td><div> P-value: <input type="radio" name="fil" value="pval"/> q-value <input type="radio" name="fil" value="${params.fil}" checked="checked"  /> < <g:textField name="id2" id="id2" size="8" value="${params.id2 }"/></div>  </td></tr>
+				            <tr><td>
+				            <span class="filter-label">Odds Ratio > </span>
+				              <span class="filter-label"> <g:textField name="odds" size="8" id="odds" value="${params.odds}"/></span> 
+				            </td></tr> 
+				            <tr><td><center> <g:submitButton name="CompleteNetwork" value="Submit" class ="submit"/></center></td></tr>
+			             </table> 
+			             <table id ='chart'>				
 							   <g:each in="${list}" status="i" var="test">	
 							   		<input type="hidden" name="statement" value="${test}">	
 								</g:each>		                         
 		               	</table>
-						<table id ='chart'>
-							<tr><td><div> P-value: <input type="radio" name="fil" value="pval"/> Q-value <input type="radio" name="fil" value="${params.fil}" checked="checked"  /><g:textField name="id2" id="id2" size="10" value="${params.id2 }"/></div>  </td></tr>
-				            <tr><td>
-				            <span class="filter-label">Odds Ratio</span>
-				              <span class="filter-label"> <g:textField name="odds" id="odds" value="${params.odds}"/></span> 
-				            </td></tr> 
-				            <tr><td><center> <g:submitButton name="CompleteNetwork" value="Submit" class ="submit"/></center></td></tr>
-			             </table>    
-					    </g:form>     
-				          
+		               	<g:hiddenField name="id" value="${params.q}" />   
+					    </g:form> 
 	   			</div>
-			   		<div id ="fieldpanel" >  
+			   	<div id ="fieldpanel" >  
 		         	<span class="formTextHeader">Legend</span> 
-			  		<table id="chart">
+			  		<table id="result">
 							<tr><td>Enriched Concept</td> <td> <img src="${resource(dir: 'images', file: 'norel.png')}" alt="Grails"  style="max-height: 50px; max-width:50px;"/></td></tr>
 							<tr><td>Subset -superset</td> <td> <img src="${resource(dir: 'images', file: 'rel1.png')}" alt="Grails"  style="max-height: 50px; max-width:50px;"/></td></tr>
 							<tr><td>Identical sets</td> <td> <img src="${resource(dir: 'images', file: 'rel3.png')}" alt="Grails"  style="max-height: 50px; max-width:50px;"/></td></tr>
 					</table>		
-					<table id = "chart">
+					<table id = "result">
 					      <tr><td>Enzyme  </td><td> <div class="foo" style="background-color:#BE3A40"></div></td></tr>
  						  <tr><td>GO Biological Process  </td><td> <div class="foo" style="background-color:#227207"></div></td></tr>
 						  <tr><td>GO Cellular Component</td><td> <div class="foo" style="background-color:#98E6CA"></div></td></tr>
@@ -607,12 +497,11 @@ vis.draw(draw_options);
 					      <tr><td>MeSH Chemicals and Drugs </td><td> <div class="foo" style="background-color:#FFB86D"></div></td></tr>
 						  <tr><td>MeSH Diseases </td><td> <div class="foo" style="background-color:#F47D00"></div></td></tr>
 						  <tr><td>MeSH Organisms</td><td> <div class="foo" style="background-color:#FCDC3B"></div></td></tr>
-						  <tr><td>MeSH Phenomena and Processes  </td><td> <div class="foo" style="background-color:#F7EA2B"></div></td></tr> 
+						  <tr><td>MeSH Phenomena and Processes  </td><td> <div class="foo" style="background-color:#0000FF"></div></td></tr> 
 						  <tr><td>MeSH Psychology and Psychiatry  </td><td> <div class="foo" style="background-color:#00F5FF"></div></td></tr> 
 						  <tr><td>MeSH Technology, Industry, and Agriculture </td><td> <div class="foo" style="background-color:#00C5CD"></div></td></tr>
-						
 					</table> 	
-         	</div>
+         		</div>
 	
 </div>
 </div>	

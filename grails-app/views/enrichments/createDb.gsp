@@ -79,7 +79,7 @@
 													{ attrValue: "MeSH Diseases", value: "#F47D00" },
 													{ attrValue: "MeSH Chem and Drug", value: "#FFB86D" },
 													{ attrValue: "MeSH Organisms", value: "#FCDC3B" },
-													{ attrValue: "MeSH Phen and Proc", value: "#F7EA2B" },
+													{ attrValue: "MeSH Phen and Proc", value: "#0000FF" },
 													{ attrValue: "MeSH Psy and Psy", value: "#00F5FF" },
 													{ attrValue: "MeSH Tech", value: "#00C5CD" }
 				                        ]

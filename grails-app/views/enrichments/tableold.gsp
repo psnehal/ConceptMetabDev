@@ -41,11 +41,11 @@
 	        <g:if test="${conceptInstance.concept_types.getFullname().contains("MeSH")}">
 	          <%def meshid2treenumInstance =Meshid2treenum.findAllWhere(mesh_id : conceptInstance.original_id ).tree_id %>
 	          <li class= "fieldcontain">
-	          	 <span class="property-label">Concept Id:</span>
+	          	 <span class="property-label">Concept ID:</span>
 	          	 <span class="property-value">${meshid2treenumInstance.toString().replace("[", "") .replace("]", "") } </span></li>	           
 	        </g:if>
 	        <g:else>
-	          <li class= "fieldcontain"><span class="property-label">Concept Id:</span>
+	          <li class= "fieldcontain"><span class="property-label">Concept ID:</span>
 	          <span class="property-value">${conceptInstance.original_id} </span></li>
 	        </g:else>  
 	        <li class= "fieldcontain"><span class="property-label">Concept Type:</span> 
@@ -74,7 +74,7 @@
 						 <th class="ay-sort">><g:message code="overlap" default="Concept ID" /></th>
 						 <th class="ay-sort">><g:message code="overlap" default="Concept Type" /></th>
 						 <th class="ay-sort"><g:message code="overlap" default="P-value" /></th>
-						 <th class="ay-sort"><g:message code="overlap" default="Q-Value" /></th>
+						 <th class="ay-sort"><g:message code="overlap" default="q-Value" /></th>
 						 <th class="ay-sort"><g:message code="overlap" default="Overlap" /></th>
 						 
 						 <g:sortableColumn property="odds" defaultOrder="desc"

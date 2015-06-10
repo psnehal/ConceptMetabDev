@@ -1,9 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="conceptmetab.Enrichments" %>
+<%@ page import="conceptmetab.Meshid2treenum" %>
 
 <html>
 
 <head>
-<title>Heat Map </title>  
+<title>Heatmap for ${con.name } </title>  
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />    
   <link rel="stylesheet" href="${resource(dir: 'css/clusterStr', file: 'myTheme.css')}" type="text/css" media="screen">
   <link rel="stylesheet" href="${resource(dir: 'css/clusterStr', file: '960.css')}" type="text/css" media="screen">
@@ -75,32 +77,72 @@ console.log(w + " and h is "+ h);
 <table>
 <tr>
 	<td colspan="2">
-				<div id ="title">
-								
-					 <h1>Concept  Information</h1>
-					 <hr/>
-					 
+			 <div id ="title">
+			 <h1>Concept  Information</h1>
+			 <hr/>
+				 <table width = "90%" id="result" >
+				 <tr>
+				  <td><span id="original_id-label" class="property-label"><b>Concept Name: </b>${con.name} </span></td>
+					<g:if test="${con.concept_types.getFullname().contains("MeSH")}">		
+					  <%def meshid2treenumInstance =Meshid2treenum.findAllWhere(mesh_id : con.original_id ) %>						  		  
+				  		<g:if test="${meshid2treenumInstance.size() != 0}">		  
+				   		<td><span id="original_id-label" class="property-label"><b>Concept ID: </b>${meshid2treenumInstance.tree_id.toString().replace("[", "") .replace("]", "") }</span></td>			          	 
+				  		</g:if>
+				  		<g:else>
+				  		<td><span id="original_id-label" class="property-label"><b>Concept ID: </b>${con.original_id}</span></td>
+				  		</g:else>
+				  	</g:if>
+				  	<g:else>
+				 	<td><span id="original_id-label" class="property-label"><b>Concept ID: </b>${con.original_id}</span></td>
+				 	</g:else>
+				 </tr>
+				  <tr>
+				 <td><span id="original_id-label" class="property-label"><b>Concept Type: </b>${con.concept_types.getFullname()}</span></td>
+				 <td><span id="original_id-label" class="property-label"><b>Number of Compounds: </b>${con.num_compounds}</span></td>
+				 </tr>
+				 </table>
+				 </center>
+				 <h1>Input Parameters</h1>
+					<% def dbs =""
+							  def db =[]
+						  if(params.statement instanceof java.lang.String)
+						  {
+							
+							 db.add(params.statement);
+						  }
+						  else
+						  {
+							  db = params.statement.toList()
+						  }
+					%>
+					<g:each in="${db}" status="i" var="test">	
+					   	<% dbs = test+ ", "+ dbs %>	
+					</g:each>
+					<hr/>
 				
-					<center>
 					 <table width = "90%" id="result" >
 					 <tr>
-					 <td><span id="original_id-label" class="property-label"><b>Concept name: </b>${con.name} </span></td>
-					 <td><span id="original_id-label" class="property-label"><b>Concept Id: </b>${con.original_id}</span></td>
+					 <g:if test="${params.fil == 'qval'}">
+					 <td><span id="original_id-label" class="property-label"><b> q-Value </b> ${params.id2} </span></td>
+					 </g:if>
+					 <g:else>
+					  <td><span id="original_id-label" class="property-label"><b>P-Value  </b>${params.id2} </span></td>
+					 </g:else>
+					 <td><span id="original_id-label" class="property-label"><b>Odds Ratio:  </b>${params.odds}</span></td>
 					 </tr>
 					  <tr>
-					 <td><span id="original_id-label" class="property-label"><b>Concept Type: </b>${con.concept_types.getFullname()}</span></td>
-					 <td><span id="original_id-label" class="property-label"><b>Number of Compounds: </b>${con.num_compounds}</span></td>
+					 <td colspan =2 ><span id="original_id-label" class="property-label"><b>Selected Annotation Database: </b>${dbs}</span></td>
+					
 					 </tr>
 					 </table>
-					 
-					 
-					 </center>
+					
 					 
 					
 				</div>
 				
 				 <div style="width:300px">
 				  <h1>Legend</h1>
+				  <span class="footnote">(Numbers indicate % of enriched concepts containing the compound)</span>
 						
 				<table width = "90%" id="result">
 				<tr>
@@ -136,15 +178,13 @@ console.log(w + " and h is "+ h);
 </tr>
 <tr>		
 		<td>
-		<div class="title" id ="title"> 
-		<ii:imageTag indirect-imagename="test2.png"  /> 
-		</div>
+		<ii:imageTag indirect-imagename="${imageFileName}"  /> 
 		</td>
 
 <td ><div id ="title"> <table class="fancyTable" id="myTable05" cellpadding="0" cellspacing="0">
 		<thead>
 		    <tr class="colhead">
-		 	<td class='row-header'><img src="${resource(dir: 'images', file: 'tableImage.png')}" alt="Grails"  style="max-height: 300px; max-width: 200px"/></td>
+		 	<td class='row-header'><img src="${resource(dir: 'images', file: 'ImageForTable.png')}" alt="Grails"  style="max-height: 200px; max-width: 200px"/></td>
 			${html }
 			<td class="row-header">--</td>
 			</tr>
@@ -171,9 +211,36 @@ console.log(w + " and h is "+ h);
 </tr>
 
 </table>
+  <br/>
+<div>
+		 <g:form action="redirectView" method="get" id="myform">   
+ 		<g:hiddenField name="id2"  value="${params.id2 }"/>
+	   <g:hiddenField name="id1"  value="1.45e-323"/>
+	   <g:hiddenField name="q" value="${params.q}" />
+	   <g:hiddenField name="odds" value="${params.odds}" />
+	   <g:hiddenField name="fil" value="${params.fil}" />
+	    <g:each in="${db}" status="i" var="test">	
+			<input type="hidden" name="statement" value="${test}">	
+		</g:each>
+	   <g:submitButton name="network" value="Star Network" class="submit"/>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	   <g:submitButton name="CompleteNetwork" value="Complete Network" class="submit"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	   <g:submitButton name="table" value="Table" class="submit" />	 
+	
+	   </g:form> 
+</div>	 
+<br/>
 </div>
-</center>
+
+<br/>
+<br/>
+
+	  <!-- --  <g:submitButton name="testHeatMapInR" value="testHeatMapInR" class="submit"/>-->
+	      </div>  
+ 
+	   
+	   
 </div>
+
 
 </body>
 </html>

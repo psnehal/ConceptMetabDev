@@ -68,7 +68,7 @@ public class DrawHeatMap {
         //jbc.getConceptId(3);       
     }
    
-    public String getConcept(int id,String fil, String id2, String odds, String dbL) throws ClassNotFoundException, SQLException
+    public Map<String, String> getConcept(int id,String fil, String id2, String odds, String dbL) throws ClassNotFoundException, SQLException
     {
        
         Connection c;
@@ -173,8 +173,16 @@ public class DrawHeatMap {
         String imageename = "/tmp/"+uuid+".png";
         String textfile = "/tmp/"+uuid+".txt";
         String filename = ""+uuid+"";
+        String conlen = ""+ mtr.length+"";
+        String comlen = ""+mtr[1].length+"";
         writeArrayToFileRowise(mtr,textfile);
         //createBufferredImage(mtr,imageename);
+        Map<String,String > mapData = new HashMap<String, String>();
+        mapData.put("filename",filename );
+        mapData.put("concepts",conlen );
+        mapData.put("compounds", comlen);
+        
+        
         resultOfInt.close();
         s.close();
         rs.close();
@@ -182,7 +190,7 @@ public class DrawHeatMap {
         results.close();
         preparedStatement.close();
         c.close();
-        return filename;
+        return mapData;
     }
     
 public void writeArrayToFile(Object[][] array, String filename){

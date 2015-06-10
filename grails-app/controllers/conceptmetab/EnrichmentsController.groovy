@@ -1,8 +1,10 @@
 package conceptmetab
+import java.awt.BasicStroke
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image
+import java.awt.Stroke
 import java.awt.event.ItemEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -22,6 +24,7 @@ import org.conceptmetab.java.JDBCConnectionTest;
 import org.conceptmetab.java.MockupHeatMap
 import org.conceptmetab.java.DrawHeatMapInR
 import javax.imageio.*;
+import javax.swing.border.Border
 
 
 import grails.converters.JSON
@@ -126,20 +129,7 @@ class EnrichmentsController {
 		def enrichP =Enrichments.createCriteria()
 		
 		
-	 println("list of interactions = "+result.size() +" id1 = "+ id1_inter+"  id2 = "+ id2_inter+"  id  = "+ con +"  filter  = "+ filter)
-		
-	 
-		if (params.containsKey("db"))
-		{
-			println("its going for database filter")
-			
-		}
-		else
-		{
-			println("p and q")
-			
-			
-		}
+	// println("list of interactions = "+result.size() +" id1 = "+ id1_inter+"  id2 = "+ id2_inter+"  id  = "+ con +"  filter  = "+ filter)
 		
 	
 		
@@ -149,8 +139,8 @@ class EnrichmentsController {
 			def allids = allid.unique()
 		
 			
-			println(allids.sort())
-			println("Size of all concepts"+ allids.size())
+			//println(allids.sort())
+		//	println("Size of all concepts"+ allids.size())
 		def allR =allids.collect {ids -> return [id:ids.id,label:(Concepts.get(ids.id).getName().capitalize()),comNo:(Concepts.get(ids.id).getNum_compounds()),conTypes:(Concepts.get(ids.id).concept_types.getName())]}
 	
 		//allids.add(con)
@@ -161,7 +151,7 @@ class EnrichmentsController {
 			//	println(Concepts.get(en.id1.id).getOriginal_id())
 				}
 	   
-	println(jsonMap)
+		//println(jsonMap)
 	   
 		def check = jsonMap as JSON
 	 //  [check:check, resultcount : result.size()]
@@ -191,7 +181,7 @@ class EnrichmentsController {
 	///*****************************************************************CreateJson**************************************************************************
 	def createJson(){
 		
-		println("from createJson"+params)
+		println("From createJson "+params)
 		def filter = params.fil;
 		def con = params.q.toString();
 		def id1 = params.id1.toString();
@@ -209,7 +199,7 @@ class EnrichmentsController {
 		 }
 	   
 		HashMap jsonMapN = new HashMap()
-		println("db  is"+ db.class)
+		//println("db  is"+ db.class)
 		String odds = params.odds.toString()
 		def check
 		
@@ -221,12 +211,11 @@ class EnrichmentsController {
 		}	
 		
 	   check = createEnrichedConceptService.createNetwork(filter, con,  id1, id2,odds, db)
-	   println("From redirect view action" +check);
+	  println("From redirect createJson action");
  
 				//println(dbname.class)
 		   
-		   def concept = Concepts.get(con.toInteger())
-		  
+		   def concept = Concepts.get(con.toInteger())		  
 		  
 		 [ check:check,concept:concept,db:db,resultcount:check.toString().length() ]
 	}
@@ -246,12 +235,12 @@ class EnrichmentsController {
 				
 				def meshid2treenumInstance = Meshid2treenum.findAllWhere(mesh_id : conceptsInstance?.original_id )		
 				//println("meshid2treenumInstance" + meshid2treenumInstance)		
-				conceptsInstance.original_id = meshid2treenumInstance.tree_id
+				//conceptsInstance.original_id = meshid2treenumInstance.tree_id
 				 
 			}
 			
 		
-			println("got the instance")
+			println("got the instance" +  conceptsInstance.original_id)
 		[conceptsInstance: conceptsInstance]
 		
 	}
@@ -265,13 +254,13 @@ class EnrichmentsController {
 		
 		def enrichInstance = Enrichments.get(msg.toLong())
 		
-		println(enrichInstance.id1.compounds_in_concepts.compound.id)
+		//println(enrichInstance.id1.compounds_in_concepts.compound.id)
 		List id1_com=enrichInstance.id1.compounds_in_concepts.compound.id
 		List id2_com=enrichInstance.id2.compounds_in_concepts.compound.id
 		
 		
 		List inter = id1_com.intersect(id2_com)
-		println("intesection"+inter)
+		//println("intesection"+inter)
 		
 		def comp = Compounds.createCriteria()
 		
@@ -280,7 +269,7 @@ class EnrichmentsController {
 			'in'("internal_id",inter)
 		}
 	
-		println(res)
+		//println(res)
 		
 		def comIns = res.collect { ids ->						
 								return [pubid:ids.pubchem_id,name:ids.name, keid : ids.kegg_id, id : ids.internal_id]
@@ -289,32 +278,33 @@ class EnrichmentsController {
 		def map = [:]
 		String names
 		comIns.each {
-			
-			if(map.containsKey(it.id))
+			def urlKegg =""
+			def urlPubchem =""
+			names = it.name
+			def keggid = it.keid.split(";")
+			for(int i=0; i < keggid.size(); i++)
 			{
-				 names= map.get(it.id).names
-				names = names+"; "+ it.name
-				
+				urlKegg= urlKegg+'<a href= "http://www.kegg.jp/dbget-bin/www_bget?cpd:'+keggid.getAt(i)+'" target="_blank">'+keggid.getAt(i)+'</a>; '
 			}
-			else
-			{
-				names = it.name
-			}
-			
-			
-				def value = [:]
-				println("names" + names)
-				value.put('names', names)		
-				value.put('pubid', it.pubid)
-				value.put('keid', it.keid)			
-				map.put(it.id, value)
-				
-		}		
+			def pubchemid = it.pubid.split(";")
+		   for(int i=0; i < pubchemid.size(); i++)
+		   {
+			   urlPubchem= urlPubchem+'<a href= "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid='+pubchemid.getAt(i)+'" target="_blank">'+pubchemid.getAt(i)+'</a>; '
+		   }
+		   def value = [:]
+		   value.put('names', names)
+		   value.put('pubid', it.pubid)
+		   value.put('keid', it.keid)
+		   value.put('keidurl', urlKegg)
+		   value.put('pubidurl', urlPubchem)
+			   
+			   map.put(it.id, value)
+	   }
 		
 		//BigDecimal pval = intersection.pval
 		
 		
-		println ("comins"+comIns)
+		//println ("comins"+comIns)
 		[enrichInstance:enrichInstance,map:map]
 		
 	}
@@ -463,10 +453,8 @@ def createDb(){
 		 def id2_inter
 		 def odds
 		 
-		 println("From filter slider parameters a")
+		
 		 HashMap jsonMap = new HashMap()
-		 
-		 println("its going for p and q filter")
 		 filter = params.fil;
 		 con = params.q.toLong();
 		 id1_inter = params.id1.toBigDecimal();
@@ -496,7 +484,7 @@ def createDb(){
 			 order(filter)
 		 }
 		 
-		  println("From Create Chart Size :== " + result.size())
+		//  println("From Create Chart Size :== " + result.size())
 		 /* println("list of interactions == "+result.size()+ "for id is = " + con)
 		  def id1= result.collect{ ids -> return(Concepts.get(ids.id1.id).concept_types.getName())}
 		  def id2= result.collect{ ids -> return(Concepts.get(ids.id2.id).concept_types.getName())}
@@ -523,101 +511,29 @@ def createDb(){
 			  else map[it] = 1;
 		  }
 		  
-		  println("Map is" +map.size())
+		 
+		  
+		  def mapMod = map.sort()
 		  
 		  def emptyList = []
-		  map.each{
-			 //println("this is start of loop"+it.getKey())
-			  if(it.getKey().equals("GO Biological Process"))
-			  {
-				 
-				  def index =map.findIndexOf {it.key =='GO Biological Process'}
-				  emptyList.addAll(index, "#227207")
-			  }
-			  if(it.getKey().equals("GO Cellular Component"))
-			  {
-			 
-				  def index =map.findIndexOf {it.key=='GO Cellular Component'}
-				  emptyList.addAll(index, "#98E6CA")
-			  }
-			  if(it.getKey().equals("GO Molecular Function"))
-			  {
-				  
-				  def index =map.findIndexOf {it.key=='GO Molecular Function'}
-				  emptyList.addAll(index, "#49FFB9")
-			  }
-			  if(it.getKey().equals("Enzyme"))
-			  {
-				 
-				  def index =map.findIndexOf {it.key=='Enzyme'}
-				  emptyList.addAll(index, "#BE3A40")
-			  }
-			  if(it.getKey().equals("KEGG Pathway"))
-			  {
-				  
-				  def index =map.findIndexOf {it.key=='KEGG Pathway'}
-				  emptyList.addAll(index, "#CC2EFA")
-			  }
-			 if(it.getKey().equals("Chemical Clusters"))
-			  {
-				 
-				  def index =map.findIndexOf {it.key=='Chemical Clusters'}
-				 //println("index of cluster is)" + index)
-				  emptyList.addAll(index, "#ffab9b")
-			  }
-			  if(it.getKey().equals("MeSH Anatomy"))
-			  {
-				 
-				  def index =map.findIndexOf {it.key=='MeSH Anatomy'}
-				  emptyList.addAll(index, "#7B3F00")
-			  }
-			  if(it.getKey().equals("MeSH Diseases"))
-			  {
-				 
-				  def index =map.findIndexOf {it.key=='MeSH Diseases'}
-				  emptyList.addAll(index, "#F47D00")
-			  }
-			  if(it.getKey().equals("MeSH Chemicals and Drugs"))
-			  {
-				 
-				  def index =map.findIndexOf {it.key=='MeSH Chemicals and Drugs'}
-				  emptyList.addAll(index, "#FFB86D")
-			  }
-			  if(it.getKey().equals("MeSH Organisms"))
-			  {
-				 
-				  def index =map.findIndexOf {it.key=='MeSH Organisms'}
-				  emptyList.addAll(index, "#FCDC3B")
-			  }
-			  if(it.getKey().equals("MeSH Phenomena and Processes"))
-			  {
-				 
-				  def index =map.findIndexOf {it.key=='MeSH Phenomena and Processes'}
-				  emptyList.addAll(index, "#F7EA2B")
-			  }
-			  if(it.getKey().equals("MeSH Psychology and Psychiatry"))
-			  {
-				 
-				  def index =map.findIndexOf {it.key=='MeSH Psychology and Psychiatry'}
-				  emptyList.addAll(index, "#00F5FF")
-			  }
-			  if(it.getKey().equals("MeSH Technology, Industry, and Agriculture"))
-			  {
-				 
-				  def index =map.findIndexOf {it.key=='MeSH Technology, Industry, and Agriculture'}
-				  emptyList.addAll(index, "#00C5CD")
-			  }
-			 //println(em
-		  }
+		  def couCol = 0
+		  mapMod.each{
+			//println(it.key)
+			def conTypeIns = Concept_types.findAllWhere("fullname" : it.key)
+			emptyList.add(conTypeIns.color)			
+			emptyList.addAll(couCol, conTypeIns.color)
+			couCol++
+			
+					  }
 			
 	def columns = []
 		 columns << ["id": 'Col1',"label": 'database', "type": 'string']
 		 columns << ["id": 'Col2',"label": 'no', "type": 'number']
-		// println(columns)
+		 //println(emptyList)
 	   
 		 def rows = []
 		 def cells
-		 map.each {
+		 mapMod.each {
 		 cells = []
 		 cells << [v: it.getKey()] << [v: it.getValue()]
 		 rows << ['c': cells]
@@ -625,7 +541,7 @@ def createDb(){
 	   
 		 def tableold = [cols: columns, rows: rows]
 		 jsonMap.table = tableold
-		println map
+		//println map
 		 
 		// println("jsonMap is+" +  emptyList)
 		 //def allR =map.collect {ids -> return [ids.getKey().toString(),ids.getValue()]}	   
@@ -633,8 +549,8 @@ def createDb(){
 		
 		def dbc = tableold as JSON
 		def clst = emptyList as grails.converters.JSON
-		println ("dbc is" + dbc)
-			[dbc:dbc, map:map,clst:clst,rsize:result.size(),emptyList:emptyList]
+		//println ("dbc is" + dbc)
+			[dbc:dbc, map:mapMod,clst:clst,rsize:result.size(),emptyList:emptyList]
 	 
  }
  
@@ -771,7 +687,7 @@ def createDb(){
 		{
 		   
 			def index =map.findIndexOf {it.key=='MeSH Phenomena and Processes'}
-			emptyList.addAll(index, "#F7EA2B")
+			emptyList.addAll(index, "#0000FF")
 		}
 		if(it.getKey().equals("MeSH Psychology and Psychiatry"))
 		{
@@ -896,7 +812,7 @@ def columns = []
 	 if(params.containsKey("testHeatMapInR"))
 	 {
 		 
-		 forward(action: "drawHeatmapInR", params:params)
+		 forward(action: "drawHeatmapInRForOrder", params:params)
 		 
 	 }
 	 
@@ -929,20 +845,20 @@ def columns = []
 			  
 				 if(params.containsKey("network"))
 				 {
-					 println("map from network"  + map)
+					 //println("map from network"  + map)
 					 def allR =map.collect {
 						 ids ->  return [id:ids.id.toString(),label:ids.name.capitalize(),comNo:ids.comNo,conTypes:ids.ctypes]
 					 }
 					 def query = Concepts.get(con)
 					 def conId = [id: query.id.toString(),label:query.name.capitalize(), comNo:query.num_compounds,conTypes:query.concept_types.getName() ]
-					 println("ConId" + conId)
+					 //println("ConId" + conId)
 					//allids.add(con)+
 					 jsonMapN.nodes = allR+conId
 					 jsonMapN.edges = map.collect {en ->
-						 println(en.flag)
+						// println(en.flag)
 						 if(en.rel != 0 && en.flag.equals("id2") )
 						 {
-							 println("it in another loop")
+							// println("it in another loop")
 							 return [source: en.id.toString() , target: con.toString(),id: (en.pval),db_id: en.enid.toString(),thick: (en.ins),label: en.eid,rel:en.rel]
 						 }
 						 else
@@ -952,7 +868,7 @@ def columns = []
 						 }		  
 												  }
 						  def check = jsonMapN as JSON
-						  println(jsonMapN)
+						  //println(jsonMapN)
 						 [check:check, resultcount : map.size()]
 					 forward(action: "filterSlider", params:[check:check, ct:map.size(),q:con])
 				 }
@@ -1012,7 +928,80 @@ def columns = []
 	}
 	 
  }
+ def displayOverlap()
+ {
+	 
+	 println(params)
+	 def ConceptInstance1  = Concepts.get(params.id1)
+	 def ConceptInstance2  = Concepts.get(params.id2)
+	 
+	 List id1_com=ConceptInstance1.compounds_in_concepts.compound.id
+	 List id2_com=ConceptInstance2.compounds_in_concepts.compound.id
+	 
+	 
+	
+	 List inter = id1_com.intersect(id2_com)
+	 //println("intesection"+inter)
+	 
+	 def comp = Compounds.createCriteria()
+	 
+	 def res = comp.list {
+		 
+		 'in'("internal_id",inter)
+	 }
  
+	 //println(res)
+	 
+	 def comIns = res.collect { ids ->
+							 return [pubid:ids.pubchem_id,name:ids.name, keid : ids.kegg_id, id : ids.internal_id]
+			 }
+	 
+	 def map = [:]
+	 String names
+	 
+	 comIns.each {
+		 def urlKegg =""
+		 def urlPubchem =""
+		
+			 names = it.name
+			 def keggid = it.keid.split(";")
+			
+			 for(int i=0; i < keggid.size(); i++)
+			 {
+				 urlKegg= urlKegg+'<a href= "http://www.kegg.jp/dbget-bin/www_bget?cpd:'+keggid.getAt(i)+'" target="_blank">'+keggid.getAt(i)+'</a>; '
+			 }
+			 def pubchemid = it.pubid.split(";")				
+			
+				for(int i=0; i < pubchemid.size(); i++)
+				{
+					urlPubchem= urlPubchem+'<a href= "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid='+pubchemid.getAt(i)+'" target="_blank">'+pubchemid.getAt(i)+'</a>; '
+				}
+			 
+			 def value = [:]
+			
+			 value.put('names', names)
+			 value.put('pubid', it.pubid)
+			 value.put('keid', it.keid)
+			 value.put('keidurl', urlKegg)
+			 value.put('pubidurl', urlPubchem)
+			 map.put(it.id, value)
+			 
+	 }
+	// println("map is"+map)
+	 def fields = [ "name", "pubid","keid"]
+	 def labels = [ "name": "name","pubid": "Pubchem_id","keid" :"kegg_id"]
+	 String filename = "Overlapping_Compounds_for_"+ConceptInstance1.name+"_"+ConceptInstance2.name+"."+params.extension
+	 if(params?.format && params.format != "html")
+	 {
+		 response.contentType = grailsApplication.config.grails.mime.types[params.format]
+		 response.setHeader("Content-disposition", "attachment; filename=${filename}")
+		 ///separator=",";
+		 exportService.export(params.format, response.outputStream,comIns,fields,labels, [:], [:])
+	 }
+		 
+	 [map:map,ConceptInstance1:ConceptInstance1,ConceptInstance2:ConceptInstance2]
+	 
+ }
  
  def table()
  {
@@ -1088,7 +1077,7 @@ def columns = []
 	      }
 	 }
 	 println(allR.getClass() )
-	 println( "Map class is " + allR)
+	 println( "ALL R is  class is " + allR)
 	 
 	 
 	 
@@ -1102,11 +1091,13 @@ def columns = []
 		 exportService.export(params.format, response.outputStream,allR,fields,labels, [:], [:]) }
 	 
 	
-	
+	println("conceptInstance is "+ conceptInstance.original_id )
 	 	 
 	 [conceptInstance:conceptInstance,allR:allR]
 	 
  }
+ 
+ 
  def cluster(){
 	 
 	 def fil = params.fil
@@ -1270,6 +1261,264 @@ def columns = []
 	 
  }
  
+ def drawHeatmapInRForOrder(){
+	 
+	 println "detalied heatmap"+ params;
+	 
+	 def fil = params.fil
+	 def id2 = params.id2
+	 def odds= params.odds
+	 def db =[]
+	  if(params.statement instanceof java.lang.String)
+	  {
+		 println("Statement is only one string")
+		 db.add(params.statement);
+	  }
+	  else
+	  {
+		  db = params.statement.toList()
+	  }
+	 def q = params.q.toInteger()
+	  String dbname = "";
+	 db.each{ dbname = dbname+"'"+it+"'"+"," }
+	 dbname =dbname.substring(0,dbname.lastIndexOf(","))
+	 DrawHeatMapInR dh = new DrawHeatMapInR();
+	 Object[][] mtr  = dh.getConcept(q, fil, id2,odds,dbname);
+	 println("Got the matrix")
+	 
+	 UUID uuid = UUID.randomUUID();
+	 String imageename = ""+uuid+".png";
+	 String textfile = "/tmp/"+uuid+".txt";
+	 String filename = ""+uuid+".txt";
+	 dh.writeArrayToFileRowise(mtr,textfile);
+	println("got the file")
+	 
+	 def colM = mtr[1].length;
+	 def rowM = mtr.length
+	 def con = Concepts.get(q)
+	 
+	 Object[][] test = mtr
+	 List<String[]> l = new ArrayList<String[]>(Arrays.asList(test));
+	 def no = l.size()-1
+	 println("removed this line")
+	 l.remove(no)
+	 Object [][] forCluster = l.toArray()
+	 println("removed last row and back to object")
+	
+	 //def te = new JsonBuilder( forCluster ).toString()
+	 int compoundsize = mtr[1].length;
+	 int BI_WIDTH =  (colM-1)*20 ;
+	 int BI_HEIGHT =(rowM -1)*20;
+	 
+	
+	 int wXaxis = BI_WIDTH ;
+	 int hXaxis = 200;
+	
+	int wYaxis = 250;
+	int hYaxix = BI_HEIGHT;
+	
+	 def clusterMat = connectRService.clusterAnalysisForR(filename,BI_HEIGHT,BI_WIDTH)
+	
+	 int[] coll = clusterMat.colOrd
+
+	 
+	 String html =""
+	 String html2 =""
+	// println("col is " + clusterMat.colOrd)
+	// println("row is " + clusterMat.rowOrd)
+	 
+	 def rowl = clusterMat.rowOrd.toList()
+	 rowl = rowl.reverse()
+	 
+	 int rc_width = 20;
+	 int rc_height = 20;
+	 
+	
+	
+	println("create image" + "with mtr cols "+ colM + " width " + BI_WIDTH )
+	println("create image" + "with mtr rows "+ rowM + " width " + BI_HEIGHT )
+	
+	
+	println("height: "+ BI_HEIGHT)
+	println("width: "+ BI_WIDTH)
+	BufferedImage bImage = new BufferedImage(BI_WIDTH, BI_HEIGHT,BufferedImage.TYPE_INT_RGB);
+	 BufferedImage bXaxis = new BufferedImage(wXaxis, hXaxis,BufferedImage.TYPE_INT_RGB);
+	 BufferedImage bYaxis = new BufferedImage(wYaxis, hYaxix,BufferedImage.TYPE_INT_RGB);
+	 def x_cor = 0
+	 def x_fcor = 0
+	 def y_cor =0
+	 def y_fcor=15
+	 Graphics2D g2d = bImage.createGraphics();
+	 Graphics2D gXaxis = bXaxis.createGraphics();
+	 Graphics2D gYaxis = bYaxis.createGraphics();
+	
+	 gXaxis.setBackground(Color.WHITE);
+	 gYaxis.setBackground(Color.WHITE);
+	 g2d.setBackground(Color.GRAY)
+	 
+	 gXaxis.fillRect(0, 0, wXaxis, hXaxis);
+	 gYaxis.fillRect(0, 0, wYaxis, hYaxix);
+	 g2d.setColor(Color.GRAY)
+	 g2d.fillRect(0, 0, BI_WIDTH, BI_HEIGHT);
+	 
+	 println(rowl)
+	 
+	
+	 for (int row = 0 ; row< forCluster.size(); row++)
+	 
+		 {
+			 x_fcor = 0
+			
+				//R
+				
+				 for (int col = 0 ; col <  forCluster[1].length;col++)
+					 {
+						 int comInt = coll[col-1]
+						 int conInt = rowl[row-1]
+						 
+						  if(row==0 && col != 0){
+							
+							
+							 //println("its in compound name loop :  "+  comInt)
+						
+							 
+								 int ch = x_cor+205;
+								 final AffineTransform saved = gXaxis.getTransform();
+								 final AffineTransform rotate = AffineTransform.getRotateInstance(-Math.PI /2, ch, 190);
+								 gXaxis.transform(rotate);
+								
+								
+									  String colnm = mtr [0][comInt].toString()
+									  String colname = colnm.substring(0,1).toUpperCase() + colnm.substring(1);
+									// System.out.println("Entering column  " + col + "with colname"+ colname + "with x_cor" + ch);
+									  if(colname.length() > 30)
+										 {
+										  colname = colname.substring(0, 30);
+										 }
+									  gXaxis.setColor(Color.black);
+									  if (compoundsize < 50 )
+									  {
+										 // System.out.println("compound size is less than 50 loop");
+									  gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 15 ));
+									  }
+									  else
+									  {
+										  gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 15 ));
+									  }
+										
+										
+								   //   System.out.println("Colname is " +  colname + "added to "  + "[" + 0 +"," +col +"]" + "with x  and y cor" + ch + "and 0"  );
+									  gXaxis.drawString(colname, ch, 0);
+									  gXaxis.setTransform(saved);
+									  x_cor = x_cor+rc_height;
+									  
+						 }
+						  
+						  else if(col == 0 &&  row != 0)
+						  {
+							  						  
+							  String rownm = mtr[conInt][0].toString();
+							  String rowname = rownm.substring(0,1).toUpperCase() + rownm.substring(1);
+							  if(rowname.length() < 30 )
+							  {
+								  rowname = String.format("%-30s", rowname);
+								  
+							  }							  
+							 //System.out.println("Rowname is" +  rowname + "added to "  + "[" + row +"," +col +"]" + "with x "+20+" and y cor" + y_fcor + "with  conInt : " + conInt  );
+							  gYaxis.setColor(Color.black);
+							  gYaxis.setFont(new Font( "Sansserif", Font.BOLD, 15 ));
+							  int ch2 = compoundsize*20 +10;
+							 // System.out.println("Entering row  " + row + "with Rowname  "+ rowname + "  with y_cor  " + y_fcor);
+							  gYaxis.drawString(rowname, 4, y_fcor);
+							
+							  y_fcor = y_fcor+rc_height;
+						/* 
+							  gYaxis.setPaint ( new Color ( 255, 0, 0 ) );
+							  double thickness = 2;
+							  Stroke oldStroke = gYaxis.getStroke();
+							  
+							  gYaxis.setStroke(new BasicStroke(3));
+							  gYaxis.drawRect(0, y_cor, 20, 22)
+							  gYaxis.setStroke(oldStroke);
+							  gYaxis.setPaint ( new Color ( 255, 255, 255 ) );
+							  String testf = "" + row + "";
+							  gYaxis.setPaint ( Color.BLUE );
+							  gYaxis.drawString(testf, 0, y_fcor );
+							 
+							  y_fcor = y_fcor+rc_height;
+							  	  */
+							  
+						  }
+						  
+						else if(col != 0 || row != 0)
+						  {
+							  int check = (Integer) mtr[conInt][comInt];
+							  
+							  if(check == 0)
+								  {
+									   g2d.setPaint ( new Color ( 255, 255, 255 ) );
+									//  System.out.println("Its for no with check  " +check +"  and cord   x ="+x_fcor+"  y=" + y_cor+  "for [ " +row +"," +col+"]" );
+									  double thickness = 2;
+									  Stroke oldStroke = gYaxis.getStroke();									  
+									  gYaxis.setStroke(new BasicStroke(3));									  
+									   g2d.fillRect(x_fcor,y_cor,19,19);
+									   gYaxis.setStroke(oldStroke);
+									   x_fcor = x_fcor+ rc_height;
+								  }
+								  else
+								  {
+									  int g = dh.getColor(check);
+									  g2d.setPaint ( new Color ( 255,g,0 ) );
+									  double thickness = 2;
+									  Stroke oldStroke = gYaxis.getStroke();
+									  gYaxis.setStroke(new BasicStroke(3));
+									// System.out.println("Its for yes with check  " +check +"  and cord   x ="+x_fcor+"  y=" + y_cor+  "for [ " +row +"," +col+"]" );
+									   g2d.fillRect(x_fcor,y_cor,19,19);
+									   gYaxis.setStroke(oldStroke);
+									   x_fcor = x_fcor+ rc_height;
+							   }
+						  
+						  }
+						 
+						  
+						 //Column order
+						  
+						  
+							 
+					}//for inside
+					 
+					 if(row != 0)
+					 
+					 {
+					y_cor = y_cor+20;
+					 }
+					
+					// println("ycor" + y_cor + "["+ row+"]")
+			
+		 }//Foroops
+				 
+		 String fileXaxis ="/tmp/"+ uuid+"_"+ "_Xaxis"+".png";
+		 ImageIO.write(bXaxis, "png", new File(fileXaxis))
+		 String fileYaxis ="/tmp/"+ uuid+"_"+ "_Yaxis"+".png";
+		 ImageIO.write(bYaxis, "png", new File(fileYaxis))
+		 String main ="/tmp/"+ uuid+"main"+".png";
+		 ImageIO.write(bImage, "png", new File(main))
+		 
+		 System.out.println("-- saved" +  main);
+	 
+		 def height= bYaxis.getHeight();
+		 def width = bXaxis.getWidth();
+		 
+		 println("Width from java is"+width +"  from R is "  + " height from java is " + height + "  height from R is " )
+	 
+		 [ximage:fileXaxis.replace("/tmp/", ""),bimage:main.replace("/tmp/", ""),yimage:fileYaxis.replace("/tmp/", ""),height:height,width:width,con:con]
+	 
+	 
+	 
+ }
+ 
+ 
+ 
  def drawHeatmapInR(){
 	 
 	 println "detalied heatmap"+ params;
@@ -1318,12 +1567,13 @@ def columns = []
 	 int compoundsize = mtr[1].length;
 	 int BI_WIDTH =  (colM-1)*20 ;
 	 int BI_HEIGHT =(rowM -1)*20;
+	 int BI_HEIGHT2 =(rowM-1)*21;
 	
 	 int wXaxis = BI_WIDTH ;
 	 int hXaxis = 150;
 	
 	int wYaxis = 250;
-	int hYaxix = BI_HEIGHT
+	int hYaxix = BI_HEIGHT2;
 	
 	 def clusterMat = connectRService.clusterAnalysisForR(filename,BI_HEIGHT,BI_WIDTH)
 	
@@ -1334,10 +1584,9 @@ def columns = []
 	 String html2 =""
 	// println("col is " + clusterMat.colOrd)
 	// println("row is " + clusterMat.rowOrd)
-	 println("Row is " +  forCluster.size()  + " Col is   :=" + forCluster[1].length + "   col order is :=" + coll.size() +  "row order is := " + coll.size())
+	 
 	 def rowl = clusterMat.rowOrd.toList()
-	 rowl = rowl.reverse()	 
-	 println("row is reversed " + rowl) 
+	 rowl = rowl.reverse()	 	  
 	 
 	 int rc_width = 20;
 	 int rc_height = 20;
@@ -1354,10 +1603,10 @@ def columns = []
 	 BufferedImage bXaxis = new BufferedImage(wXaxis, hXaxis,BufferedImage.TYPE_INT_RGB);
 	 BufferedImage bYaxis = new BufferedImage(wYaxis, hYaxix,BufferedImage.TYPE_INT_RGB);
 	 def x_cor = 0
-	 def   x_fcor = 0
-	 def y_cor =0
-	 def y_fcor=0
-	 Graphics2D g2d = bImage.createGraphics();
+	 def x_fcor = 0
+	 def y_cor =20
+	 def y_fcor=30
+	 //Graphics2D g2d = bImage.createGraphics();
 	 Graphics2D gXaxis = bXaxis.createGraphics();
 	 Graphics2D gYaxis = bYaxis.createGraphics();
 	
@@ -1366,6 +1615,7 @@ def columns = []
 	 gXaxis.fillRect(0, 0, wXaxis, hXaxis);
 	 gYaxis.fillRect(0, 0, wYaxis, hYaxix);
 	 
+	 println(rowl)
 	 
 	
 	 for (int row = 0 ; row< forCluster.size(); row++)
@@ -1373,7 +1623,7 @@ def columns = []
 		 {
 			 x_fcor = 0
 			 
-				 int conInt = rowl[row-1]//R
+				//R
 				
 				 for (int col = 0 ; col <  forCluster[1].length;col++)
 					 {
@@ -1382,10 +1632,10 @@ def columns = []
 						  if(row==0 && col != 0){
 							
 							
-							 //println("its in compound name loop"+  comInt)
-							 println()
+							 //println("its in compound name loop :  "+  comInt)
+						
 							 
-								 int ch = x_cor+160;
+								 int ch = x_cor+155;
 								 final AffineTransform saved = gXaxis.getTransform();
 								 final AffineTransform rotate = AffineTransform.getRotateInstance(-Math.PI /2, ch, 140);
 								 gXaxis.transform(rotate);
@@ -1405,7 +1655,7 @@ def columns = []
 									  }
 									  else
 									  {
-										  gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 25 ));
+										  gXaxis.setFont(new Font( "SansSerif", Font.BOLD, 15 ));
 									  }
 										
 										
@@ -1416,21 +1666,44 @@ def columns = []
 									  
 						 }
 						  
-						  else if(col == 0 )
+						  else if(col == 0 &&  row != 0)
 						  {
+							  int conInt = rowl[row-1]
 							  
 							  String rowname = mtr[conInt][0].toString();
+							  if(rowname.length() < 30 )
+							  {
+								  rowname = String.format("%-30s", rowname);
+								  
+							  }
+							  
+							/*  System.out.println("Rowname is" +  rowname + "added to "  + "[" + row +"," +col +"]" + "with x "+20+" and y cor" + y_fcor + "with  conInt : " + conInt  );
 							  gYaxis.setColor(Color.black);
-							  gYaxis.setFont(new Font( "Sansserif", Font.BOLD, 20 ));
+							  gYaxis.setFont(new Font( "Sansserif", Font.BOLD, 15 ));
 							  int ch2 = compoundsize*20 +10;
 							 // System.out.println("Entering row  " + row + "with Rowname  "+ rowname + "  with y_cor  " + y_fcor);
-							  gYaxis.drawString(rowname, 10, y_fcor);
-							  //System.out.println("Rowname is " +  rowname + "added to "  + "[" + row +"," +col +"]" + "with x "+x_cor+" and y cor" + y_fcor  );
-							  y_fcor = y_fcor+ rc_height;
+							  gYaxis.drawString(rowname, 4, y_fcor);
+							
+							  y_fcor = y_fcor+19.5;
+							  */
+							  
+							  gYaxis.setPaint ( new Color ( 255, 0, 0 ) );	
+							  double thickness = 2;
+							  Stroke oldStroke = gYaxis.getStroke();
+							  
+							  gYaxis.setStroke(new BasicStroke(3));
+							  gYaxis.drawRect(0, y_cor, 20, 22)
+							  gYaxis.setStroke(oldStroke);
+							  gYaxis.setPaint ( new Color ( 255, 255, 255 ) );							
+							  String testf = "" + row + "";
+							  gYaxis.setPaint ( Color.BLUE );
+							  gYaxis.drawString(testf, 0, y_cor );							 
+							  y_cor = y_cor+22;
+							  
 							  
 						  }
 						  
-						  else
+						/*  else
 						  {
 							  int check = (Integer) mtr[conInt][comInt];
 							  
@@ -1451,16 +1724,14 @@ def columns = []
 							   }
 						  
 						  }
+						  */
 						  
 						 //Column order
 						  
 							 
 					}//for inside 
 					 
-					 if(row != 0)
-					 {
-					 y_cor = y_cor+rc_height;
-					 }
+					
 					// println("ycor" + y_cor + "["+ row+"]")
 			
 		 }//Foroops
@@ -1469,10 +1740,10 @@ def columns = []
 		 ImageIO.write(bXaxis, "png", new File(fileXaxis))
 		 String fileYaxis ="/tmp/"+ uuid+"_"+ "_Yaxis"+".png";		
 		 ImageIO.write(bYaxis, "png", new File(fileYaxis))
-		 String main ="/tmp/"+ uuid+"main"+".png";
-		 ImageIO.write(bImage, "png", new File(main))
+		// String main ="/tmp/"+ uuid+"main"+".png";
+		 //ImageIO.write(bImage, "png", new File(main))
 		 
-		 System.out.println("-- saved" +  main);
+		// System.out.println("-- saved" +  main);
 	 
 		 def height= bYaxis.getHeight();
 		 def width = bXaxis.getWidth();
@@ -1484,7 +1755,7 @@ def columns = []
 	 
 	 
  }
- 
+
  
  def drawHeatmap()
  {
@@ -1507,14 +1778,37 @@ def columns = []
 	 db.each{ dbname = dbname+"'"+it+"'"+"," }
 	 println("DBNAME is "+dbname)
 	 dbname =dbname.substring(0,dbname.lastIndexOf(","))
-	 def  filename = hm.getConcept(params.q.toInteger(), fil, id2,odds,dbname);
+	 def  filename,comlen,conlen
+	 Map<String,String> mapImages = hm.getConcept(params.q.toInteger(), fil, id2,odds,dbname);
+	
+	 for (Map.Entry<String, String> mapE : mapImages.entrySet())
+	 {
+		 System.out.println(mapE.getKey() + "/" + mapE.getValue());
+		 String data = mapE.getKey();
+		if(data.equals("filename"))
+		{
+			 filename=  mapE.getValue();
+			 
+		}
+		else if(data.equals("concepts"))
+		{
+			 conlen=  mapE.getValue();
+			 
+		}
+		else if(data.equals("compounds"))
+		{
+			 comlen=  mapE.getValue();
+			 
+		}
+		
+	 }
 	 
 	def bimage = filename+".png"
 	def textimage = filename+".txt"	
 	
 	def clusterMat = connectRService.ComHeatmap(filename)
 	def con = Concepts.get(params.q.toInteger())
-	[bimage:bimage,textimage:textimage,con:con]
+	[bimage:bimage,textimage:textimage,con:con,conlen:conlen,comlen:comlen]
 	 
  }
  
@@ -1675,19 +1969,15 @@ def columns = []
 		  db = params.statement.toList()
 	  }
 	 def q = params.q.toInteger()
-	  String dbname = "";
-	 db.each{ dbname = dbname+"'"+it+"'"+"," }
-	 dbname =dbname.substring(0,dbname.lastIndexOf(","))
-	 DetailedHeatmap dh = new DetailedHeatmap();
-	 Object[][] mtr  = dh.getConcept(q, fil, id2,odds,dbname);
-	 print("mtr is"+ mtr)
+	 def comlen = params.comlen.toInteger()
+	 def conlen = params.conlen.toInteger()
 	 
-	 def colM = mtr[1].length;
-	 def rowM = mtr.length
 	 
-	 if (colM > 200 || rowM > 300 )
+	
+	 
+	 if (comlen > 300 || conlen > 300 )
 	 {
-		 String bimage, ximage, yimage,height,width;
+		/* String bimage, ximage, yimage,height,width;
 		 HeatMapNewJS hm = new HeatMapNewJS();
 		 Map<String,String> mapImages =hm.createBufferredImageMod(mtr,q);
 		 println("from test"+mapImages)
@@ -1723,14 +2013,24 @@ def columns = []
 		 println("from test"+bimage + "x " + ximage + "y " + yimage)
 		 
 		 
-		 forward(action: "test", params: [ximage:ximage,bimage:bimage,yimage:yimage,height:height,width:width,q:q])
-		
 		 
+		
+		 */
+		 forward(action: "drawHeatmapInRForOrder", params:params)
 		
 		 
 	 }
 	 else
 	 {
+		 String dbname = "";
+		 db.each{ dbname = dbname+"'"+it+"'"+"," }
+		 dbname =dbname.substring(0,dbname.lastIndexOf(","))
+		 DetailedHeatmap dh = new DetailedHeatmap();
+		 Object[][] mtr  = dh.getConcept(q, fil, id2,odds,dbname);
+		 print("mtr is"+ mtr)
+		 
+		 def colM = mtr[1].length;
+		 def rowM = mtr.length
 		 def con = Concepts.get(q)
 		 
 		 Object[][] test = mtr		 
@@ -1744,128 +2044,130 @@ def columns = []
 		 //def te = new JsonBuilder( forCluster ).toString()				
 		 def clusterMat = connectRService.clusterAnalysis(filename)
 		 int[] coll = clusterMat.colOrd
-		 int[] rowl = clusterMat.rowOrd		
+		 def rowl = clusterMat.rowOrd.toList()
+		 rowl = rowl.reverse()
+		 
 		 String html =""
 		 String html2 =""
-		 println("col is " + clusterMat.colOrd)		 
-		 println("row is " + clusterMat.rowOrd)		
+		// println("col is " + clusterMat.colOrd)		 
+		// println("row is " + clusterMat.rowOrd)		
 		 println("Row is " +  forCluster.size()  + " Col is   :=" + forCluster[1].length + "   col order is :=" + coll.size() +  "row order is := " + rowl.size())
 		 
 		 
 		//render forCluster
-		 //CclusterMat has compounds in columns and concepts in rows ..For html we need to transpose matrix with compounds in cols
-		
-		 for (int col = 0 ; col <  forCluster[1].length;col++)
+		 //CclusterMat has compounds in columns and concepts in rows ..
+		 for (int row = 0 ; row< forCluster.size(); row++)
 		 {
-			 String rownames = "<tr>"
-				 for (int row = 0 ; row< forCluster.size(); row++)
+			 String rownames = ""
+			 for (int col = 0 ; col <  forCluster[1].length;col++)
+			 {
+				
+				 String colname ="<tr> ";
+				 String color;
+				 int comInt = coll[col-1]//Column order
+				 int conInt = rowl[row-1]//Row order
+				 if (row == 0 && col !=0)
 				 {
-					 String colname =" ";
-					 String color;					
-					 int comInt = coll[col-1]//Column order
-					 int conInt = rowl[row-1]//Row order
-					 //println( "ConInt" + [conInt] + "Comint" +[comInt])
-						 if (col == 0 && row != 0)
+					 def comName  =  test[0][comInt].toString()
+					 if(comName.length() > 31)
+					 {
+					  comName = comName.substring(0, 30);
+					 }
+					 
+					 if ( col == 0)
+					 {
+						  colname  = " <td><div style='position:relative' class='colhead_item' id='first_item'>" + comName +" </div></td>"
+					 }
+					 else
+					 {
+						  colname  = "  <td><div style='position:relative' class='colhead_item'>" + comName +"</div></th>"
+					 }
+					// colname  = "<th class='rotate'><div class='rotateD'><span class='intact'>"+conName+"</div></span></th>"
+					 html = html+colname;
+					 
+				 }
+				 else if ( row != 0 )
+				 { 
+					 if( col== 0)
+					 {
+					 def conName = test[conInt][0]
+					 rownames =rownames + '<tr><td class="row-header">' +conName+ '</td>'
+					 }
+					 else
+					 {
+						 def value = test[conInt][comInt];
+						 
+						 if(value > 90 && value <= 100)
 						 {
-							 
-							/* println("all conscepts are getting added to the column which were in rows")
-							 def conName = test[conInt][0]
-							 colname = "<th class='rotate-45'><div class='tableHeader'><span>" +conName +" </span></div></th>"
-							 println("colnames are "+ conName + "with row" + conInt )
-							  html = html+colname;
-							 */
-							 def conName = test[conInt][0]
-							
-							 if ( col == 0)
-							 {
-								  colname  = " <td><div style='position:relative' class='colhead_item' id='first_item'>" + conName +" </div></td>"
-							 }
-							 else
-							 {
-								  colname  = "  <td><div style='position:relative' class='colhead_item'>" + conName +"</div></th>"
-							 }
-							// colname  = "<th class='rotate'><div class='rotateD'><span class='intact'>"+conName+"</div></span></th>"
-							 html = html+colname;
+							 color = '#FF0000'
 						 }
-				 
-					else
-					{
-						
-						if (row == 0 && col != 0)
-						{
-							def comName  =  test[0][comInt].toString()							
-							if(comName.length() > 31)
-							{
-							 comName = comName.substring(0, 30);
-							}							
-							rownames =rownames + '<td class="row-header">' +comName+ '</td>'
-						}
-						else if(col != 0 && row !=0)
-						{							
-							def value = test[conInt][comInt];
-							if(value > 90 && value <= 100)
-							{								
-								color = '#FF0000'
-							}
-							else if(80<value && value <= 90)
-							{								
-								color = '#FF3200'
-							}
-							else if(value > 70 && value <= 80)
-							{							
-								color = '#FF4B00'
-							}
-							else if(value > 60 && value <= 70)
-							{								
-								color = '#FF6400'
-							}
-							else if(value > 50 && value <= 60)
-							{								
-								color = '#FF7D00'
-							}
-							else if(value > 40 && value <= 50)
-							{								
-								color = '#FF9600'
-							}
-							else if(value > 30 && value <= 40)
-							{								
-								color = '#FFAF00'
-							}
-							else if(value > 20 && value <= 30)
-							{							
-								color = '#FFC800'
-							}
-							else if(value > 10 && value <= 20)
-							{							
-								color = '#FFE100'
-							}
-							else if(value >0 && value <= 10 )
-							{
-								color = '#FFFF00'
-							}
-							else{
-								color = 'white '
-							}
-							rownames =rownames + '<td><div class="area" style="background-color:'+color+'  ">' +value+ '</div></td>'
-							
-						}
-					
-					
-						}
+						 else if(80<value && value <= 90)
+						 {
+							 color = '#FF3200'
+						 }
+						 else if(value > 70 && value <= 80)
+						 {
+							 color = '#FF4B00'
+						 }
+						 else if(value > 60 && value <= 70)
+						 {
+							 color = '#FF6400'
+						 }
+						 else if(value > 50 && value <= 60)
+						 {
+							 color = '#FF7D00'
+						 }
+						 else if(value > 40 && value <= 50)
+						 {
+							 color = '#FF9600'
+						 }
+						 else if(value > 30 && value <= 40)
+						 {
+							 color = '#FFAF00'
+						 }
+						 else if(value > 20 && value <= 30)
+						 {
+							 color = '#FFC800'
+						 }
+						 else if(value > 10 && value <= 20)
+						 {
+							 color = '#FFE100'
+						 }
+						 else if(value >0 && value <= 10 )
+						 {
+							 color = '#FFFF00'
+						 }
+						 else{
+							 color = 'white '
+						 }
+						 rownames =rownames + '<td><div class="area" style="background-color:'+color+'  ">' +value+ '</div></td>'
+						 
+					 }
+					 
+				 }
+			
 					
 				 
 			 }
-			 //End of loop
-				 if(col !=0)
-				 {
-				 rownames = rownames+'<td><div class="area"> </div></td></tr>'
-				 }
+			
+			
+				
+				
+			 rownames = rownames+'<td><div class="area"> </div></td></tr>'
+			
+/************************************************************************************************/
+		
 			 html2 = html2+rownames;
+			 //End of loop
+				 
 			
 		 }
-		
+		 
+		 def imageFileName = filename.toString().replaceAll(".txt", "_table.png")	
+		 
+		 println("imageFileName is " + imageFileName)	
 		 [html:html,html2:html2,con:con]
-		 forward(action: "clusterStr",params:[html:html,html2:html2,q:q])
+		 forward(action: "clusterStr",params:[html:html,html2:html2,q:q,imageFileName:imageFileName])
 		 
 	 }
 	 
@@ -1875,7 +2177,7 @@ def columns = []
  def clusterStr(){
 	 def con = Concepts.get(params.q.toInteger())
 	
-	 [html:params.html,html2:params.html2,con:con]
+	 [html:params.html,html2:params.html2,con:con,imageFileName:params.imageFileName]
 	 
 	
 	 
@@ -2142,7 +2444,7 @@ def columns = []
  {
 		 
 		 
-	 println("FilterSlider params"+params)
+	println("FilterSlider")
 	 def check = params.check
 	 def q = params.q
 	 def con = Concepts.get(q.toInteger())
@@ -2169,7 +2471,7 @@ def columns = []
 	 }
 	
 		 
-	 println("From controller" + db);
+	// println("From controller" + db);
 	 
 	 
 	 

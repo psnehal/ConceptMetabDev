@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="main" />
-    <title>ConceptMetab</title>
+    <title>${filter.capitalize()} Search Results</title>
   </head>
   <body>
     <g:if test="${flash.message}">
@@ -41,7 +41,7 @@
 	       <table id = "basic">
 		        <g:each in="${searchResults}" status="i" var="comp">
 		        	<tr><td> ${i+1 }. <g:link controller="Compounds" action="show" id="${comp.id}" params="[id2: '0.05', odds: '0',fil:'qval']"><b>${comp.name}</b></g:link>
-		        	<br/><span class="filter-label"> # of Concepts: ${comp.num_concepts}</span><br/><br/></td></tr>
+		        	<br/><span class="filter-label-mod"> # of Concepts: ${comp.num_concepts}</span><br/><br/></td></tr>
 		            
 		        </g:each>
 		 </table>

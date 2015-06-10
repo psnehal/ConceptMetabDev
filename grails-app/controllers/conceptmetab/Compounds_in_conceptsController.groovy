@@ -22,35 +22,19 @@ class Compounds_in_conceptsController {
 		
 		def con = params.q.toLong()
 		def concept = Concepts.get(con)
-		
-		println(concept.concept_types)
-		
 		def ccl =Compounds_in_concepts.createCriteria()
-		
-		def result= ccl.list {
-			
-			eq('concept.id',con)
-			
-			
-		}
-		
-		def id1= result.collect{ ids -> return ids.compound.id}
-		
-		
-		def comp = Compounds.createCriteria()
-			
-		def res = comp.list {
-			
-			'in'("internal_id",id1)	
-		}
-		
-	
-		def download= res.collect{ids ->
-							
-								return [pubid:ids.pubchem_id,name:ids.name, keid : ids.kegg_id, id : ids.internal_id]
-							
+		def result= ccl.list {			
+			eq('concept.id',con)			
 		}		
-		
+		def id1= result.collect{ ids -> return ids.compound.id}		
+		def comp = Compounds.createCriteria()			
+		def res = comp.list {			
+			'in'("internal_id",id1)	
+			order("name", "desc")
+		}	
+		def download= res.collect{ids ->							
+			return [pubid:ids.pubchem_id,name:ids.name, keid : ids.kegg_id, id : ids.internal_id]							
+		}				
 		def colName
 		if(concept.concept_types.fullname.contains("MeSH"))
 		{
@@ -61,57 +45,41 @@ class Compounds_in_conceptsController {
 			colName = "kegg"
 		}
 		
-		println("Download is " + download)
-		 
 		def map = [:]
-		String names
-		download.each {
-			
-			if(map.containsKey(it.id))
-			{
-				 names= map.get(it.id).names				 
-				names = names+"; "+ it.name
-				
+		String names		
+			download.each {				
+				 def urlKegg =""
+				 def urlPubchem =""				
+				 names = it.name
+				 def keggid = it.keid.split(";")				
+				 for(int i=0; i < keggid.size(); i++)
+				 {
+					 urlKegg= urlKegg+'<a href= "http://www.kegg.jp/dbget-bin/www_bget?cpd:'+keggid.getAt(i)+'" target="_blank">'+keggid.getAt(i)+'</a>; '
+				 }
+				 def pubchemid = it.pubid.split(";")				
+				for(int i=0; i < pubchemid.size(); i++)
+				{
+					urlPubchem= urlPubchem+'<a href= "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid='+pubchemid.getAt(i)+'" target="_blank">'+pubchemid.getAt(i)+'</a>; '
+				}
+				def value = [:]				
+				value.put('names', names)				
+				value.put('pubid', it.pubid)
+				value.put('keid', it.keid)
+				value.put('keidurl', urlKegg)
+				value.put('pubidurl', urlPubchem)
+					
+					map.put(it.id, value)
 			}
-			else
-			{
-				names = it.name
-			}
+			def fields = ["pubid", "name", "keid"]
+			def labels = ["pubid": "Pubchem_id", "name": "name","keid" :"kegg_id"]
 			
-			
-		def value = [:]
-		println("names" + names)
-		value.put('names', names)	
-		
-		value.put('pubid', it.pubid)
-		value.put('keid', it.keid)
-			
-			map.put(it.id, value)
-		}
-		
-			
-		
-
-	
-	//println("Size of the map"+download.class+ "    " + download)
-	
-	
-	def fields = ["pubid", "name", "keid"]
-	def labels = ["pubid": "Pubchem_id", "name": "name","keid" :"kegg_id"]
-	
-	if(params?.format && params.format != "html")
-	{ 
-		response.contentType = grailsApplication.config.grails.mime.types[params.format] 
-		response.setHeader("Content-disposition", "attachment; filename=Compounds_in_concepts.${params.extension}")		
-		exportService.export(params.format, response.outputStream,download,fields,labels, [:], [:])
-	}
-		
-		
-	//def searchResults = Compounds_in_concepts.executeQuery("select c.compounds_id from Compounds_in_concepts.name c  where concepts_id =1")	
-	//println(SearchResults)
-	//def json = JSON.parse(Item.markings)
-	println("map from the findcomp is"+map.values().keid.join(","))
-		return [download:download,map:map,colName:colName]
+			if(params?.format && params.format != "html")
+			{ 
+				response.contentType = grailsApplication.config.grails.mime.types[params.format] 
+				response.setHeader("Content-disposition", "attachment; filename=Compounds_in_concepts.${params.extension}")		
+				exportService.export(params.format, response.outputStream,download,fields,labels, [:], [:])
+			}	
+		return [download:download,map:map.sort(),colName:colName,concept:concept]
 	}
 
 

@@ -3,7 +3,7 @@
 
 		  
 		<head>
-		<title>heat map test</title>
+		<title>Heatmap overview ${con.name }</title>
 		<meta name="layout" content="main">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	
@@ -32,10 +32,10 @@
     var ang = 90;
     var top = 180;
     console.log('w is' + w + 'h is '+ h);
-    $(".title2").rotate({
-        angle:ang,
-        center: ["40%", "80%"], 
-        });
+    //$(".title2").rotate({
+      //  angle:ang,
+        //center: ["40%", "80%"], 
+        //});
     });
   </script>
 	
@@ -49,8 +49,6 @@
 		<br/>
 		<div id ="title" style="float:none ;border = 1">
 		<center>
-		  <h1>Heat Map</h1>
-		 
 		  <span id="name-label" class="property-label">Data for the heatmap can be downloaded :<g:link action="downloadFile" params="[filename: "${textimage}"]">here.</g:link></span>		  
 		  <g:form action="detailedHeatmap" method="get">
 	 	  <g:submitButton name="submit" value="Click here for Interactive Heatmap" class="myButton" onclick="displayMsg()"/>
@@ -59,18 +57,22 @@
             <g:hiddenField name="network"  value="network"/>
             <g:hiddenField name="q" value="${params.q}" />
             <g:hiddenField name="id2" value="${params.id2}" />
+             <g:hiddenField name="comlen" value="${comlen}" />
+              <g:hiddenField name="conlen" value="${conlen}" />
             </center>
 		  </div>
 		  
 	  
 		  <table>
 		  <tr>
-		  <td colspan="3"> <span class="property-label">Legends</span></td>
+		  <h1>Legend</h1>
+				  <span class="footnote">(Numbers indicate % of enriched concepts containing the compound)</span>
 		  </tr>
 		  <tr>
 			  <td>
 			   <div style="width:300px">
 			   <br/>
+			    
 				<table class="legend">
 				<tr>
 					<td bgcolor="white"></td> <!--0-->
@@ -101,15 +103,15 @@
 			</table>
 		</div>
 		 </td>
-		  <td> <span class="property-label">X-axis : Concepts </span></td>
-		  <td> <span class="property-label">Y-axis : Compounds</span> </td>
+		  <td> <span class="property-label">X-axis : Compounds </span></td>
+		  <td> <span class="property-label">Y-axis : Concepts</span> </td>
 		  </tr>
 		  </table>
 		  
-		  ${bimage }
-		<div class="title2" id ="title2"> 
+		
+		<center>
 		<ii:imageTag indirect-imagename="${bimage}"  /> 
-		</div>
+		</center>
 		
 		
 		<% 

@@ -94,8 +94,8 @@
     <div id ="title" style="width: 676px; height: 200px;float:center ;border = 1">
     <span class="formTextHeader">Concept  Information</span>
       			<ol class="property-list concepts">
-	            <li class= "fieldcontain"><span class="property-label">Concept name:</span> <span class="property-value">${con.name.capitalize()} </span></li>
-	             <li class= "fieldcontain"><span class="property-label">Concept Id:</span><span class="property-value">${con.original_id} </span></li>
+	            <li class= "fieldcontain"><span class="property-label">Concept Name:</span> <span class="property-value">${con.name.capitalize()} </span></li>
+	             <li class= "fieldcontain"><span class="property-label">Concept ID:</span><span class="property-value">${con.original_id} </span></li>
 	             <li class= "fieldcontain"><span class="property-label">Concept Type:</span> <span class="property-value">${con.concept_types.getFullname()} </span></li>
 	             <li class= "fieldcontain"><span class="property-label"># of compounds:</span> <span class="property-value">${con.num_compounds} </span></li>
 	          	 </ol>

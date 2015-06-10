@@ -16,11 +16,12 @@ environments {
         dataSource {
            //  dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
             //url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
-		    url = "jdbc:mysql://sartor-webdev.bicc.med.umich.edu:3306/conceptmetab?useUnicode=yes&characterEncoding=UTF-8"
+		    url = "jdbc:mysql://metabtest.med.umich.edu:3306/conceptmetab?useUnicode=yes&characterEncoding=UTF-8"
 			//url = "jdbc:mysql://localhost/conceptmetab?useUnicode=yes&characterEncoding=UTF-8"
 			//url = "jdbc:mysql://127.0.0.1:33066/test?useUnicode=yes&characterEncoding=UTF-8"
-			username = "snehal"
-			password = "snehal"
+			username = "conceptmetab"
+			password = "conceptmetab"
+			
 			//logSql    = true
 			//formatSql = true
 			 properties {
@@ -39,12 +40,14 @@ environments {
     }
     production {
         dataSource {
-			url = "jdbc:mysql://sartor-webdev.bicc.med.umich.edu:3306/conceptmetab?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
+			url = "jdbc:mysql://localhost:3306/conceptmetab?useUnicode=yes&characterEncoding=UTF-8&autoReconnect=true"
 			//url = "jdbc:mysql://127.0.0.1:33066/conceptmetab?useUnicode=yes&characterEncoding=UTF-8"
-			username = "snehal"
-			password = "snehal"
+			username = "conceptmetab"
+			password = "conceptmetab"
 			logSql    = false
 			formatSql = false
+			
+			
 			 properties {
 				maxActive   = 50
 				maxIdle     = 25

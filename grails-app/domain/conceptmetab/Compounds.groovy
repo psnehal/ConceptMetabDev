@@ -5,8 +5,6 @@ class Compounds {
 	String name 
 	String kegg_id
 	String pubchem_id
-	String kegg_preferred_name
-	String pubchem_preferred_name
 	Long num_concepts
 	
 	static hasMany = [compounds_in_concepts:Compounds_in_concepts]

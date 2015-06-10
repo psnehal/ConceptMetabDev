@@ -1,6 +1,7 @@
 package conceptmetab
 
 import org.springframework.dao.DataIntegrityViolationException
+import grails.converters.JSON
 
 class CompoundsController {
 	
@@ -10,7 +11,7 @@ class CompoundsController {
 	
 	
 	def beforeInterceptor =
-	[action:this.&auth, except:["index", "list", "show", "atom", "search","create"]]
+	[action:this.&auth, except:["index", "list", "show", "atom", "search","create","conceptCompleteNetwork","displayMsg","displayEdge"]]
 
  def search = {
   // render Compounds.search(params.q, params)
@@ -48,6 +49,7 @@ class CompoundsController {
 
     def show(Long id) {
 		
+		
 		println(params)
         def compoundsInstance = Compounds.get(id)
 		def conceptsInstance
@@ -67,7 +69,7 @@ class CompoundsController {
 			eq('compound.id',compoundsInstance.internal_id)			
 		}
 		
-		println("result size fromCompounds_in_concepts"+result.size());		
+		//println("result size fromCompounds_in_concepts"+result.size());		
 		if(result.size() == 0)
 		{
 			
@@ -77,10 +79,10 @@ class CompoundsController {
 		else
 		{			
 			def concept = result.collect { ids -> return (ids.concept.id)}
-			println(concept)
+			//println(concept)
 			def conRes= Concepts.createCriteria()
 			 conceptsInstance = conRes.list {'in' ('id', concept) }
-			println( "No of concepts compounds belong to"+ conceptsInstance)
+			//println( "No of concepts compounds belong to"+ conceptsInstance)
 			
 		}
 		
@@ -89,23 +91,25 @@ class CompoundsController {
 			if(ids.concept_types.fullname.toString().contains("MeSH")){								 
 				
 				def meshid2treenumInstance = Meshid2treenum.findAllWhere(mesh_id : ids.original_id)
+				
 				if(meshid2treenumInstance.size() !=0 )
 				{
-					return[ id:ids.id, name:ids.name, conid: meshid2treenumInstance.get(0).tree_id, numCom: ids.num_compounds, numEnc: ids.num_enriched, conTyp: ids.concept_types.fullname]
+					return[ id:ids.id, name:ids.name,oriid:ids.original_id, conid: meshid2treenumInstance.get(0).tree_id, numCom: ids.num_compounds, numEnc: ids.num_enriched, conTyp: ids.concept_types.fullname]
 				}	
 				else
 				{
-					return[ id:ids.id, name:ids.name, conid: ids.original_id, numCom: ids.num_compounds, numEnc: ids.num_enriched, conTyp: ids.concept_types.fullname]
+					return[ id:ids.id, name:ids.name,oriid:ids.original_id, conid: ids.original_id, numCom: ids.num_compounds, numEnc: ids.num_enriched, conTyp: ids.concept_types.fullname]
 				}	
 		}
 			else
 			{
-				return[ id:ids.id, name:ids.name, conid: ids.original_id, numCom: ids.num_compounds, numEnc: ids.num_enriched, conTyp: ids.concept_types.fullname]
+				return[ id:ids.id, name:ids.name,oriid:ids.original_id, conid: ids.original_id, numCom: ids.num_compounds, numEnc: ids.num_enriched, conTyp: ids.concept_types.fullname]
 			}
+			
 		}
 		
 		def fields = ["name", "conid", "numCom","numEnc","conTyp"]
-		def labels = ["name": "Concept name","conid": "Concept ID", "numCom" :"Concept Size","numEnc" :"# of Enrichments","conType": "Concept Types"]
+		def labels = ["name": "Concept name","conid": "Concept ID", "numCom" :"Concept Size","numEnc" :"# of Enrichments","conTyp": "Concept Types"]
 		
 		
 		if(params?.format && params.format != "html"){ 
@@ -115,9 +119,183 @@ class CompoundsController {
 			exportService.export(params.format, response.outputStream,conMod,fields,labels, [:], [:])
 		}
 		
-		
-        [compoundsInstance: compoundsInstance,conceptsInstance: conMod ]
+		//println(conMod.oriid)
+		def keggid = compoundsInstance.kegg_id.split(";")
+			//println(keggid.getClass())
+		def urlKegg =""	
+		for(int i=0; i < keggid.size(); i++)
+		{
+			urlKegg= urlKegg+'<a href= "http://www.kegg.jp/dbget-bin/www_bget?cpd:'+keggid.getAt(i)+'" target="_blank">'+keggid.getAt(i)+'</a>; '
+		}
+	
+			def pubchemid = compoundsInstance.pubchem_id.split(";")
+			println("****************************************"+pubchemid)
+		def urlPubchem =""
+		for(int i=0; i < pubchemid.size(); i++)
+		{
+			urlPubchem= urlPubchem+'<a href= "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid='+pubchemid.getAt(i)+'" target="_blank">'+pubchemid.getAt(i)+'</a>; '
+		}
+		//println(urlKegg)
+        [compoundsInstance: compoundsInstance,conceptsInstance: conMod.sort{a,b -> a.conTyp <=> b.conTyp ?: a.name <=> b.name},urlKegg:urlKegg,urlPubchem:urlPubchem ]
     }
+	
+	def conceptCompleteNetwork()
+	{
+		print "*********************************************"
+		print params
+		def fil= 'qval'
+		
+		
+		print "1"
+		def db = []
+		
+		if(params.statement instanceof java.lang.String)
+		{
+		   println("Statement is only one string")
+		   db.add(params.statement);
+		}
+		else
+		{
+			db = params.statement.toList()
+		}
+		 print db;
+		 
+		 List re =[]
+		 List conceptList =[]
+		 def res
+		 for (int i = 0; i<db.size(); i++)
+		 {
+			 re.add(db.get(i).toLong())
+			 def conceptInstance =Concepts.get(db.get(i));
+			 conceptList.add(conceptInstance)
+				 
+			 
+		 }
+		 
+		 def allR = conceptList.collect{ids -> return [id:ids.id.toString(),label:ids.name,comNo:ids.num_compounds,conTypes:ids.concept_types.fullname]}
+		 print(allR)
+		 
+		def enrichL =Enrichments.createCriteria()
+		res= enrichL.list {
+			  and  {
+				  'in'('id1.id',re)
+				  'in'('id2.id',re)
+			  }
+			
+			  order('qval')
+		  }
+		
+		print (res.size())		
+		def f2 = res.collect {en ->		
+			 return [source: en.id1.id.toString(), target: en.id2.id.toString(),id: (en.pval.toString()),db_id: en.id.toString(),thick: (en.intersection),label: (Concepts.get(en.id1.id).getOriginal_id()),rel : en.relation]
+		 //	println(Concepts.get(en.id1.id).getOriginal_id())
+			 //	return [enid: en.id,id:en.id1.id,name:(Concepts.get(en.id1.id).getName()), comNo: (Concepts.get(en.id1.id).getNum_compounds()),eid: (Concepts.get(en.id1.id).getOriginal_id()),ctypes: en.id1.concept_types.getName(),ctfull: en.id1.concept_types.getFullname(),pval: format.format(en.pval),qval:format.format(en.qval),ins:(en.intersection), odds:format2.format(en.odds),rel : en.relation,flag:"id2"]
+		}		
+		print(f2)
+		HashMap jsonMap = new HashMap()
+		jsonMap.nodes = allR
+		jsonMap.edges = f2
+		def check = jsonMap as JSON
+		  print jsonMap
+		  
+		  def compoundsInstance = Compounds.get(params.compoundsId)
+		print ("compoundsInstance"+ compoundsInstance)
+		
+		[check:check,compoundsInstance:compoundsInstance,db:db,resultcount:check.toString().length(),fil:fil]
+		
+	}
+	
+	def displayMsg()
+	{
+		def msg  = params.q;
+	println(params)
+			println(" ************************************************************id is"+msg + msg.class)
+		ArrayList arM;
+	   //[msg:msg]
+			def conceptsInstance = Concepts.get(msg.toLong())
+			if(conceptsInstance.concept_types.fullname.contains('MeSH'))
+			{
+				
+				def meshid2treenumInstance = Meshid2treenum.findAllWhere(mesh_id : conceptsInstance?.original_id )
+				//println("meshid2treenumInstance" + meshid2treenumInstance)
+				//conceptsInstance.original_id = meshid2treenumInstance.tree_id
+				 
+			}
+			
+		
+			println("got the instance" +  conceptsInstance.original_id)
+		[conceptsInstance: conceptsInstance]
+		
+	}
+//*****************************************************************DisplayEdge**************************************************************************
+	
+	def displayEdge()
+	{
+		def msg  = params.q;
+		def con = params.con
+		println(params)
+		
+		def enrichInstance = Enrichments.get(msg.toLong())
+		
+		//println(enrichInstance.id1.compounds_in_concepts.compound.id)
+		List id1_com=enrichInstance.id1.compounds_in_concepts.compound.id
+		List id2_com=enrichInstance.id2.compounds_in_concepts.compound.id
+		
+		
+		List inter = id1_com.intersect(id2_com)
+		//println("intesection"+inter)
+		
+		def comp = Compounds.createCriteria()
+		
+		def res = comp.list {
+			
+			'in'("internal_id",inter)
+		}
+	
+		//println(res)
+		
+		def comIns = res.collect { ids ->
+								return [pubid:ids.pubchem_id,name:ids.name, keid : ids.kegg_id, id : ids.internal_id]
+				}
+		
+		def map = [:]
+		String names
+		comIns.each {
+			def urlKegg =""
+			def urlPubchem =""
+			names = it.name
+			def keggid = it.keid.split(";")
+			//names = '<g:link controller="Compounds" action="show" id="'+it.id+'"><b>'+it.name+'</b></g:link>'
+			for(int i=0; i < keggid.size(); i++)
+			{
+				urlKegg= urlKegg+'<a href= "http://www.kegg.jp/dbget-bin/www_bget?cpd:'+keggid.getAt(i)+'" target="_blank">'+keggid.getAt(i)+'</a>; '
+			}
+			def pubchemid = it.pubid.split(";")
+		   for(int i=0; i < pubchemid.size(); i++)
+		   {
+			   urlPubchem= urlPubchem+'<a href= "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid='+pubchemid.getAt(i)+'" target="_blank">'+pubchemid.getAt(i)+'</a>; '
+		   }
+		   def value = [:]
+		   value.put('names', names)
+		   value.put('pubid', it.pubid)
+		   value.put('keid', it.keid)
+		   value.put('keidurl', urlKegg)
+		   value.put('pubidurl', urlPubchem)
+		   value.put('cid', it.id)
+			   
+			   map.put(it.id, value)
+	   }
+		
+		//BigDecimal pval = intersection.pval
+		
+		
+		//println ("comins"+comIns)
+		[enrichInstance:enrichInstance,map:map]
+		
+	}
+	
+	
+	
 
     def edit(Long id) {
         def compoundsInstance = Compounds.get(id)
