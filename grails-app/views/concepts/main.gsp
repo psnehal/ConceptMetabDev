@@ -128,12 +128,16 @@
 		</div>
 		<div class="nav" role="navigation">
 			<ul>
-					<li><a class="intro"  href="${createLink(uri:'/concepts/intro')}">About</a></li>
+			 <li><a class="intro"  href="${createLink(uri:'/concepts/intro')}">About</a></li>
 			 <li><a class="intro"  href="${createLink(uri:'/concepts/demo')}">Reference</a></li>
-					<!--	<li><a class="intro"  href="${createLink(uri:'/concepts/intro')}">Contact Us</a></li>- -->		
+			<!-- -  <li><a class="intro"  href="${createLink(uri:'/concepts/contact_us')}">Contact Us</a></li>-->
+			 <li><a class="intro"  href="${createLink(uri:'/concepts/tutorial')}">Manual</a></li>
 			</ul>
 		</div>
-		<br/><br/>
+		<br/>
+		<span class="text" STYLE="font-size: 10pt;margin-left: 0.5cm;"> For support and questions email: conceptmetab-help@umich.edu</span> 
+		<br/>
+		<span class="text" STYLE="font-size: 10pt;margin-left: 0.5cm;"> Version Updates <a class="log"  href="${createLink(uri:'/concepts/log')}">log:</a></span>
 		<center>	
 		<img src="${resource(dir: 'images', file: 'dcmb.jpg')}" alt="DCMB"/>	<br />	<br />
 					

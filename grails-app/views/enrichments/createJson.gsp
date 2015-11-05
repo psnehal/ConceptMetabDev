@@ -163,7 +163,6 @@ window.onload=function() {
 	                          	{ attrValue: "Chemical Clusters", value: "#ffab9b" },
 								{ attrValue: "MeSH Anatomy", value: "#7B3F00 " },
 								{ attrValue: "MeSH Diseases", value: "#F47D00" },
-								{ attrValue: "MeSH Chem and Drug", value: "#FFB86D" },
 								{ attrValue: "MeSH Organisms", value: "#FCDC3B" },
 								{ attrValue: "MeSH Phen and Proc", value: "#0000FF" },
 								{ attrValue: "MeSH Psy and Psy", value: "#00F5FF" },
@@ -493,8 +492,7 @@ vis.draw(draw_options);
 						  <tr><td>GO Cellular Component</td><td> <div class="foo" style="background-color:#98E6CA"></div></td></tr>
 						  <tr><td>GO Molecular Function  </td><td> <div class="foo" style="background-color:#49FFB9"></div></td></tr> 						 
 						  <tr><td>KEGG Pathway  </td><td> <div class="foo" style="background-color:#CC2EFA"></div></td></tr>
-						  <tr><td>MeSH Anatomy </td><td> <div class="foo" style="background-color:#7B3F00"></div></td></tr>
-					      <tr><td>MeSH Chemicals and Drugs </td><td> <div class="foo" style="background-color:#FFB86D"></div></td></tr>
+						  <tr><td>MeSH Anatomy </td><td> <div class="foo" style="background-color:#7B3F00"></div></td></tr>					     
 						  <tr><td>MeSH Diseases </td><td> <div class="foo" style="background-color:#F47D00"></div></td></tr>
 						  <tr><td>MeSH Organisms</td><td> <div class="foo" style="background-color:#FCDC3B"></div></td></tr>
 						  <tr><td>MeSH Phenomena and Processes  </td><td> <div class="foo" style="background-color:#0000FF"></div></td></tr> 

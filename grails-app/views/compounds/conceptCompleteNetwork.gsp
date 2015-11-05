@@ -69,7 +69,18 @@ function alertForData (){
 }
 
 </script>
-
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#spinner").bind("ajaxSend", function() {
+        $(this).show();
+    }).bind("ajaxStop", function() {
+        $(this).hide();
+    }).bind("ajaxError", function() {
+        $(this).hide();
+    });
+ 
+     });
+</script>
 
  
 
@@ -134,9 +145,9 @@ window.onload=function() {
                  	attrName: "conTypes",
                      entries: [
 
-                             { attrValue: "GOBP", value: "#227207"},
-	                            { attrValue: "GOCC", value: "#98E6CA" },
-	                            { attrValue: "GOMF", value: "#49FFB9" },
+                             { attrValue: "GO Biological Process", value: "#227207"},
+	                            { attrValue: "GO Cellular Component", value: "#98E6CA" },
+	                            { attrValue: "GO Molecular Function", value: "#49FFB9" },
 	                            { attrValue: "Enzyme", value: "#BE3A40" },
 	                            { attrValue: "KEGG Pathway", value: "#CC2EFA"},
 	                          	{ attrValue: "Chemical Clusters", value: "#ffab9b" },
@@ -144,9 +155,9 @@ window.onload=function() {
 								{ attrValue: "MeSH Diseases", value: "#F47D00" },
 								{ attrValue: "MeSH Chem and Drug", value: "#FFB86D" },
 								{ attrValue: "MeSH Organisms", value: "#FCDC3B" },
-								{ attrValue: "MeSH Phen and Proc", value: "#0000FF" },
-								{ attrValue: "MeSH Psy and Psy", value: "#00F5FF" },
-								{ attrValue: "MeSH Tech", value: "#00C5CD" }
+								{ attrValue: "MeSH Phenomena and Processes", value: "#0000FF" },
+								{ attrValue: "MeSH Psychology and Psychiatry", value: "#00F5FF" },
+								{ attrValue: "MeSH Technology, Industry, and Agriculture", value: "#00C5CD" }
                      ]
                  }
              },
@@ -155,9 +166,9 @@ window.onload=function() {
                  	attrName: "conTypes",
                      entries: [
 
-                             { attrValue: "GOBP", value: "#227207"},
-	                            { attrValue: "GOCC", value: "#98E6CA" },
-	                            { attrValue: "GOMF", value: "#49FFB9" },
+                             { attrValue: "GO Biological Process", value: "#227207"},
+	                            { attrValue: "GO Cellular Component", value: "#98E6CA" },
+	                            { attrValue: "GO Molecular Function", value: "#49FFB9" },
 	                            { attrValue: "Enzyme", value: "#BE3A40" },
 	                            { attrValue: "KEGG Pathway", value: "#CC2EFA"},
 	                          	{ attrValue: "Chemical Clusters", value: "#ffab9b" },
@@ -165,9 +176,9 @@ window.onload=function() {
 								{ attrValue: "MeSH Diseases", value: "#F47D00" },
 								{ attrValue: "MeSH Chem and Drug", value: "#FFB86D" },
 								{ attrValue: "MeSH Organisms", value: "#FCDC3B" },
-								{ attrValue: "MeSH Phen and Proc", value: "#0000FF" },
-								{ attrValue: "MeSH Psy and Psy", value: "#00F5FF" },
-								{ attrValue: "MeSH Tech", value: "#00C5CD" }
+								{ attrValue: "MeSH Phenomena and Processes", value: "#0000FF" },
+								{ attrValue: "MeSH Psychology and Psychiatry", value: "#00F5FF" },
+								{ attrValue: "MeSH Technology, Industry, and Agriculture", value: "#00C5CD" }
                      ]
                  }
              },
@@ -417,7 +428,31 @@ vis.draw(draw_options);
 				<tr><td>Compound PUBCHEM-ID:</td><td> ${compoundsInstance.pubchem_id}</td><tr>
 				<tr><td>Compound Number Of Compounds:</td><td> ${compoundsInstance.num_concepts}</td><tr>
 				</table>
-			</div>
+		</div>
+		<div id="spinner" class="spinner" style="display:none;">
+               <img id="img-spinner" src="spinner.gif" alt="Loading"/>
+        </div>
+		<div id ="fieldpanel" >  
+		         	<span class="formTextHeader">Legend</span> 
+			  		<table id="result">
+							<tr><td>Enriched Concept</td> <td> <img src="${resource(dir: 'images', file: 'norel.png')}" alt="Grails"  style="max-height: 50px; max-width:50px;"/></td></tr>
+							<tr><td>Subset -superset</td> <td> <img src="${resource(dir: 'images', file: 'rel1.png')}" alt="Grails"  style="max-height: 50px; max-width:50px;"/></td></tr>
+							<tr><td>Identical sets</td> <td> <img src="${resource(dir: 'images', file: 'rel3.png')}" alt="Grails"  style="max-height: 50px; max-width:50px;"/></td></tr>
+					</table>		
+					<table id = "result">
+					      <tr><td>Enzyme  </td><td> <div class="foo" style="background-color:#BE3A40"></div></td></tr>
+ 						  <tr><td>GO Biological Process  </td><td> <div class="foo" style="background-color:#227207"></div></td></tr>
+						  <tr><td>GO Cellular Component</td><td> <div class="foo" style="background-color:#98E6CA"></div></td></tr>
+						  <tr><td>GO Molecular Function  </td><td> <div class="foo" style="background-color:#49FFB9"></div></td></tr> 						 
+						  <tr><td>KEGG Pathway  </td><td> <div class="foo" style="background-color:#CC2EFA"></div></td></tr>
+						  <tr><td>MeSH Anatomy </td><td> <div class="foo" style="background-color:#7B3F00"></div></td></tr>
+					      <tr><td>MeSH Diseases </td><td> <div class="foo" style="background-color:#F47D00"></div></td></tr>
+						  <tr><td>MeSH Organisms</td><td> <div class="foo" style="background-color:#FCDC3B"></div></td></tr>
+						  <tr><td>MeSH Phenomena and Processes  </td><td> <div class="foo" style="background-color:#0000FF"></div></td></tr> 
+						  <tr><td>MeSH Psychology and Psychiatry  </td><td> <div class="foo" style="background-color:#00F5FF"></div></td></tr> 
+						  <tr><td>MeSH Technology, Industry, and Agriculture </td><td> <div class="foo" style="background-color:#00C5CD"></div></td></tr>
+					</table> 	
+         		</div>
 	
 	</div>
 </div>	

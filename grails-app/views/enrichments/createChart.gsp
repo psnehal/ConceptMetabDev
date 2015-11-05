@@ -49,7 +49,7 @@
     }
 
 
-    function validation(source)
+    function validation2(source)
     {
 
     	checkboxes = document.getElementsByName('statement');
@@ -62,13 +62,19 @@
 			  {
 
 				check = false;
+				console.log(check);
 			  }
 		  }
-
+		
 		  if(check)
 			  {
-
-				alert("Please atlest select one database to see results");
+				alert("Please atleast select one database to see results");
+				return false;
+				
+			  }
+		  else
+			  {
+			  return true;
 			  }
 
         }
@@ -117,13 +123,12 @@
 
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         chart.draw(data, options);
-
         google.visualization.events.addListener(chart, 'select', explodeSlide);
-
+        
         document.getElementById('update').onclick = function() {
 
 
-        	 var myArray = [];
+          var myArray = [];
        	  var wanted=[];
        	  var unwanted=[];
        	  var count = 0;
@@ -293,7 +298,7 @@
     	  var count = 0;
     	  var count2 = 0;
     	  var data = new google.visualization.DataTable(${dbc});
-
+		 
     	  var options = {
     	        	
             	   title: 'Concept Distribution by Type from explosion',
@@ -340,7 +345,7 @@
   	    	  			}
   	    	  		
   	    		}     	  
-  		 chart.draw(data, options);
+  		 //chart.draw(data, options);
 
           }
 
@@ -348,6 +353,7 @@
 
       function onclick()
       {
+          alert("inside onclick function");
     	  explodeSlide();
 
           }
@@ -358,7 +364,7 @@
   <body>
    
   
-   <g:form action="redirectView" method="get" id="myform">   
+   <g:form action="redirectView" method="get" id="myform"  onsubmit="return validation2()">   
    <div  style="height:100%;border:1px;">  
  
 	<div style=" width: 450px ;float:left;border:1px; ">
@@ -403,9 +409,9 @@
 	   <g:hiddenField name="q" value="${params.q}" />
 	   <g:hiddenField name="odds" value="${params.odds}" />
 	   <g:hiddenField name="fil" value="${params.fil}" />
-	   <g:submitButton name="network" value="Star Network" class="submit"/>	
+	   <g:submitButton name="network" value="Star Network" class="submit" />	
 	   <g:submitButton name="CompleteNetwork" value="Complete Network" class="submit"/>
-	   <g:submitButton name="table" value="Table" class="submit" onclick="validation(this);"/>
+	   <g:submitButton name="table" value="Table" class="submit"/>
 	   <g:submitButton name="heatmap" value="Heatmap" class="submit"/>
 	  
 	  <!-- --  <g:submitButton name="testHeatMapInR" value="testHeatMapInR" class="submit"/>-->

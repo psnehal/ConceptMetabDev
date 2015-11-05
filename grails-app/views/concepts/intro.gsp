@@ -56,7 +56,7 @@
 		
 		<div id="paraPanel">
 		<h3>Medical Subject Headings</h3>
-		We leveraged the database developed for Metab2MeSH (4), which uses Fisher's Exact Test to annotate PubChem compounds to concepts defined in MeSH, the National Library of Medicine's controlled vocabulary for biology and medicine used to manually index articles for MEDLINE/PubMed. We elected to consider the top-level MeSH categories for Anatomy, Chemicals and Drugs, Diseases, Organisms, Phenomena and Processes, Psychiatry and Psychology, and Agriculture and Technology. MeSH has a tree structure, and a MeSH term may appear in different branches of the tree. To remove the ambiguity of which top-level category a term should be considered a part of, we prioritized membership thus: Diseases, Phenomena and Process, Psychiatry and Psychology, Chemicals and Drugs, Anatomy, Organisms, Technology and Agriculture. See the table below for the number of concepts in each top-level MeSH category.
+		We leveraged the database developed for Metab2MeSH (4), which uses Fisher's Exact Test to annotate PubChem compounds to concepts defined in MeSH, the National Library of Medicine's controlled vocabulary for biology and medicine used to manually index articles for MEDLINE/PubMed. We elected to consider the top-level MeSH categories for Anatomy, Diseases, Organisms, Phenomena and Processes, Psychiatry and Psychology, and Agriculture and Technology. MeSH has a tree structure, and a MeSH term may appear in different branches of the tree. To remove the ambiguity of which top-level category a term should be considered a part of, we prioritized membership thus: Diseases, Phenomena and Process, Psychiatry and Psychology, Anatomy, Organisms, Technology and Agriculture. See the table below for the number of concepts in each top-level MeSH category.
 		</div>
 		
 		<div id="paraPanel">
@@ -70,24 +70,24 @@
 				</tr>
 				<tr>
 				<td>Enzyme</td>
-				<td>176</td>
+				<td>175</td>
 				<td>11</td>
 				<td>874</td>
 				</tr>
 				<tr>
 				<td>GO Biological Process </td>
-				<td>3385</td>
-				<td>55</td>
-				<td>1216</td>
+				<td>3712</td>
+				<td>56</td>
+				<td>1220</td>
 				</tr><tr>
 				<td>GO Cellular Component</td>
-				<td>300</td>
-				<td>109</td>
-				<td>1207</td>
+				<td>346</td>
+				<td>117</td>
+				<td>1213</td>
 				</tr><tr>
 				<td>GO Molecular Function</td>
-				<td>839</td>
-				<td>47</td>
+				<td>864</td>
+				<td>48</td>
 				<td>1226</td>
 				</tr><tr>
 				<td>KEGG Pathway</td>
@@ -97,45 +97,39 @@
 				</tr>
 				<tr>
 				<td>MeSH Anatomy</td>
-				<td>1509</td>
-				<td>402</td>
-				<td>43042</td>
-				</tr>
-				<tr>
-				<td>MeSH Chemicals and Drugs</td>
-				<td>8832</td>
-				<td>373</td>
-				<td>96164</td>
+				<td>1506</td>
+				<td>357</td>
+				<td>37706</td>
 				</tr>
 				<tr>
 				<td>MeSH Diseases</td>
-				<td>4107</td>
-				<td>205</td>
-				<td>37302</td>
+				<td>4089</td>
+				<td>182</td>
+				<td>33074</td>
 				</tr>
 					<tr>
 				<td>MeSH Organisms</td>
-				<td>3037</td>
-				<td>177</td>
-				<td>55980</td>
+				<td>3011</td>
+				<td>150</td>
+				<td>48688</td>
 				</tr>
 					<tr>
 				<td>MeSH Phenomena and Processes</td>
-				<td>1449</td>
-				<td>463</td>
-				<td>48843</td>
+				<td>1443</td>
+				<td>404</td>
+				<td>43016</td>
 				</tr>
 					<tr>
 				<td>MeSH Psychiatry and Psychology</td>
-				<td>520</td>
-				<td>195</td>
-				<td>10484</td>
+				<td>519</td>
+				<td>180</td>
+				<td>9188</td>
 				</tr>
 					<tr>
 				<td>MeSH Technology, Industry, and Agriculture</td>
-				<td>163</td>
-				<td>11281td>
-				<td>11299</td>
+				<td>330</td>
+				<td>280</td>
+				<td>15721</td>
 				</tr>
 		
 		</table>

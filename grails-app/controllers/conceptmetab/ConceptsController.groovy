@@ -7,7 +7,7 @@ class ConceptsController {
 	
 	
 	def beforeInterceptor =
-	[action:this.&auth, except:["main2","index", "list", "show", "create","atom","getName", "search","opt","ajaxFindCity","checkQ","main","intro","dbspecific","demo"]]
+	[action:this.&auth, except:["main2","index", "list", "show", "create","atom","getName", "search","opt","ajaxFindCity","checkQ","main","intro","dbspecific","demo","contact_us","log","tutorial"]]
 
 	 def search = {
 		  //render Entry.search(params.q, params)
@@ -46,7 +46,12 @@ class ConceptsController {
 							 }
 						 
 						  def forcount=  c2 {
-							 ilike 'name', params.q 
+							 or{
+								 ilike 'name', '%'+ params.q + '%'
+								 ilike 'kegg_id', '%'+ params.q + '%'
+								 ilike 'pubchem_id', '%'+ params.q + '%'
+							 }
+							 
 							 }
 						 
 						 resultCount= forcount.size()
@@ -72,7 +77,12 @@ class ConceptsController {
 					 else
 					 {
 						 searchResults=  c.list (max: max2, offset: offset) {
-							 ilike 'name', '%'+ params.q + '%'
+							 or{
+								 ilike 'name', '%'+ params.q + '%'
+								 ilike 'kegg_id', '%'+ params.q + '%'
+								 ilike 'pubchem_id', '%'+ params.q + '%'
+							 }
+							 
 							 order("name", "asc")
 							 }
 						 
@@ -153,14 +163,12 @@ class ConceptsController {
 		
 	}
 	
-	def intro = {
+	def intro = {}
+	def demo = {}	
+	def log = {}	
+	def contact_us={}	
+	def tutorial={}
 	
-	
-}
-	def demo = {
-	
-	
-}
 	
 	def main ={
 		
@@ -233,7 +241,7 @@ class ConceptsController {
 	
 	def ajaxFindCity = {
 						println("From ajax find city and params are"+params)
-					   log.debug "Find city:${params.term}"
+					  // log.debug "Find city:${params.term}"
 					   
 					  def filter = params.radio.toString()
 					  
@@ -249,8 +257,12 @@ class ConceptsController {
 					  }
 					  else
 					  {
-						  def foundComp = Compounds.withCriteria {
-							  ilike 'name', params.term + '%'
+						  def foundComp = Compounds.withCriteria {							 
+							  or{
+								  ilike 'name', '%'+ params.term + '%'
+								  ilike 'kegg_id', '%'+ params.term + '%'
+								  ilike 'pubchem_id', '%'+ params.term + '%'
+							  }
 							  order("name", "asc")	 }
 
 						  render (foundComp?.'name' as JSON)

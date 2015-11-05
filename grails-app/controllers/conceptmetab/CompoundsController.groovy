@@ -142,23 +142,23 @@ class CompoundsController {
 	def conceptCompleteNetwork()
 	{
 		print "*********************************************"
-		print params
+		//print params
 		def fil= 'qval'
 		
 		
-		print "1"
+		//print "1"
 		def db = []
 		
-		if(params.statement instanceof java.lang.String)
+		if(params.cname instanceof java.lang.String)
 		{
 		   println("Statement is only one string")
-		   db.add(params.statement);
+		   db.add(params.cname);
 		}
 		else
 		{
-			db = params.statement.toList()
+			db = params.cname.toList()
 		}
-		 print db;
+		 //print db;
 		 
 		 List re =[]
 		 List conceptList =[]
@@ -168,12 +168,10 @@ class CompoundsController {
 			 re.add(db.get(i).toLong())
 			 def conceptInstance =Concepts.get(db.get(i));
 			 conceptList.add(conceptInstance)
-				 
-			 
 		 }
 		 
 		 def allR = conceptList.collect{ids -> return [id:ids.id.toString(),label:ids.name,comNo:ids.num_compounds,conTypes:ids.concept_types.fullname]}
-		 print(allR)
+		 //print(allR)
 		 
 		def enrichL =Enrichments.createCriteria()
 		res= enrichL.list {
@@ -191,14 +189,14 @@ class CompoundsController {
 		 //	println(Concepts.get(en.id1.id).getOriginal_id())
 			 //	return [enid: en.id,id:en.id1.id,name:(Concepts.get(en.id1.id).getName()), comNo: (Concepts.get(en.id1.id).getNum_compounds()),eid: (Concepts.get(en.id1.id).getOriginal_id()),ctypes: en.id1.concept_types.getName(),ctfull: en.id1.concept_types.getFullname(),pval: format.format(en.pval),qval:format.format(en.qval),ins:(en.intersection), odds:format2.format(en.odds),rel : en.relation,flag:"id2"]
 		}		
-		print(f2)
+		//print(f2)
 		HashMap jsonMap = new HashMap()
 		jsonMap.nodes = allR
 		jsonMap.edges = f2
 		def check = jsonMap as JSON
-		  print jsonMap
+		  //print jsonMap
 		  
-		  def compoundsInstance = Compounds.get(params.compoundsId)
+		def compoundsInstance = Compounds.get(params.compoundsId)
 		print ("compoundsInstance"+ compoundsInstance)
 		
 		[check:check,compoundsInstance:compoundsInstance,db:db,resultcount:check.toString().length(),fil:fil]

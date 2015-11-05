@@ -333,7 +333,7 @@ function favBrowser()
             console.log("test"+test)
             var testlink = 'displayEdge?q='+id
             var con = getUrlVars()["q"];
-            var ed =window.open('${createLink(action:'displayEdge')}?q='+ id+'&con='+con,"_blank",'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no, width=620,height=500,top=23');
+            var ed =window.open('${createLink(action:'displayEdge')}?q='+ id+'&con='+con,"_blank",'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no, width=670,height=500,top=23');
             ed.onload = function() { this.document.title = "Edge Information"; } 
             
        }
@@ -494,8 +494,7 @@ function showDiv() {
 						  <tr><td>GO Cellular Component</td><td> <div class="foo" style="background-color:#98E6CA"></div></td></tr>
 						  <tr><td>GO Molecular Function  </td><td> <div class="foo" style="background-color:#49FFB9"></div></td></tr> 						 
 						  <tr><td>KEGG Pathway  </td><td> <div class="foo" style="background-color:#CC2EFA"></div></td></tr>
-						  <tr><td>MeSH Anatomy </td><td> <div class="foo" style="background-color:#7B3F00"></div></td></tr>
-					      <tr><td>MeSH Chemicals and Drugs </td><td> <div class="foo" style="background-color:#FFB86D"></div></td></tr>
+						  <tr><td>MeSH Anatomy </td><td> <div class="foo" style="background-color:#7B3F00"></div></td></tr>					     
 						  <tr><td>MeSH Diseases </td><td> <div class="foo" style="background-color:#F47D00"></div></td></tr>
 						  <tr><td>MeSH Organisms</td><td> <div class="foo" style="background-color:#FCDC3B"></div></td></tr>
 						  <tr><td>MeSH Phenomena and Processes  </td><td> <div class="foo" style="background-color:#0000FF"></div></td></tr> 

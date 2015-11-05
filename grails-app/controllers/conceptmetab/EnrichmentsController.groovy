@@ -272,7 +272,7 @@ class EnrichmentsController {
 		//println(res)
 		
 		def comIns = res.collect { ids ->						
-								return [pubid:ids.pubchem_id,name:ids.name, keid : ids.kegg_id, id : ids.internal_id]
+								return [name:ids.name, pubid:ids.pubchem_id,keid : ids.kegg_id, id : ids.internal_id, noc : ids.num_concepts,sid:ids.id]
 				}
 		
 		def map = [:]
@@ -291,21 +291,29 @@ class EnrichmentsController {
 		   {
 			   urlPubchem= urlPubchem+'<a href= "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid='+pubchemid.getAt(i)+'" target="_blank">'+pubchemid.getAt(i)+'</a>; '
 		   }
+		   
 		   def value = [:]
 		   value.put('names', names)
 		   value.put('pubid', it.pubid)
 		   value.put('keid', it.keid)
 		   value.put('keidurl', urlKegg)
 		   value.put('pubidurl', urlPubchem)
+		   value.put('noc', it.noc)
+		   value.put('sid', it.sid)
 			   
 			   map.put(it.id, value)
 	   }
 		
-		//BigDecimal pval = intersection.pval
+		def fields = ["name", "pubid", "keid","noc"]
+		def labels = ["Name": "Compound name","pubid": "Pubchem ID","keid": "KEGG ID","noc" :"# of Concepts"]
+		if(params?.format && params.format != "html"){
+			response.contentType = grailsApplication.config.grails.mime.types[params.format]
+			response.setHeader("Content-disposition", "attachment; filename=books.${params.extension}")			
+			exportService.export(params.format, response.outputStream,comIns,fields,labels, [:], [:])
+			}
 		
 		
-		//println ("comins"+comIns)
-		[enrichInstance:enrichInstance,map:map]
+		[enrichInstance:enrichInstance,map:map.entrySet().sort {it.value.names}]
 		
 	}
 	
@@ -1054,7 +1062,7 @@ def columns = []
 	 
 	 map = createEnrichedConceptService.showEnrichedConcepts(filter, con,  id1, id2,odds, db)
 	 //[enid:3138797, id:2722, name:ketone body biosynthetic process, comNo:13, eid:GO:0046951, ctypes:GOBP, ctfull:GO Biological Process, pval:5.533E-9, qval:7.682E-8, ins:5, odds:999999999],
-	 println("After the call"+map)
+	 
 	 def html
 	def allR =map.collect {
 			ids -> 
@@ -1076,11 +1084,8 @@ def columns = []
 			 
 	      }
 	 }
-	 println(allR.getClass() )
-	 println( "ALL R is  class is " + allR)
-	 
-	 
-	 
+	
+	
 	 def fields = ["name", "conid", "conTypes","pval","qval","ins","odds"]
 	 def labels = ["name": "Concept name","conid": "Concept ID", "conTypes": "Concept Types","pval" :"P-Value","qval" :"Q-Value","ins" :"Overlap","odds" :"Odds ratio"]
 	 
@@ -1091,9 +1096,10 @@ def columns = []
 		 exportService.export(params.format, response.outputStream,allR,fields,labels, [:], [:]) }
 	 
 	
-	println("conceptInstance is "+ conceptInstance.original_id )
-	 	 
-	 [conceptInstance:conceptInstance,allR:allR]
+	//println("conceptInstance is "+ conceptInstance.original_id )
+	//println("After the call"+ allR)	 	 
+	 [conceptInstance:conceptInstance,allR:allR.sort{it.name}]
+	 
 	 
  }
  

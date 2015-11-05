@@ -35,6 +35,7 @@
 
 				    
 			        $("#myTable").tablesorter({
+			        	sortList: [[1,0],[3,0]],
 			        			 headers: {
 				        			 3: {
 				        				 filter: true
@@ -49,7 +50,7 @@
 			        			            sorter: 'rangesort'
 			        			        }
 			        		 		},
-			        		 		widthFixed : true,
+			        		 		
 			        		 	    widgets: ["filter"],
 						        	    widgetOptions: {
 						        	      filter_functions: {
@@ -179,9 +180,7 @@
 	<br />
 	<br />
 	</div>
-		<center>			
-	
-			</center>
+
 
 		
 		<div  style="width: 250px;float:left;">
